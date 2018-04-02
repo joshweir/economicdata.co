@@ -1,0 +1,42 @@
+[
+  {
+    "_id": "united-states|gdp",
+    "country": "united-states",
+    "countryDisplay": "United States",
+    "indicator": "gdp",
+    "indicatorDisplay": "GDP",
+    "importance": "high",
+    "source": "<a href=\"http://example.com\">The Source</a>",
+    "description": "<p>Gross Domestic Product (GDP) measures the annualized change in the inflation-adjusted value of all goods and services produced by the economy. It is the broadest measure of economic activity and the primary indicator of the economy's health.</p><p><b>Usual Effect: </b>Actual &gt; Forecast = Good for currency<br>Frequency: Released monthly. There are 3 versions of GDP released a month apart - Advance, second release and Final. Both the advance the second release are tagged as preliminary in the economic calendar.</p>"
+  },
+  {
+    "_id": "united-states|new-home-sales-mom",
+    "country": "united-states",
+    "countryDisplay": "United States",
+    "indicator": "new-home-sales-mom",
+    "indicatorDisplay": "New Home Sales MoM",
+    "importance": "medium",
+    "source": "<a href=\"http://example.com\">Another Source</a>",
+    "description": "<p>New Home Sales measures the change in percenatge of the new home sales, A new home sale is considered to be any deposit or contract signing either in the year the house was built or the year after it was built. A strong number would indicate a strong housing activity, and therefore a strong economy. A higher than expected number should be taken as positive to the USD, while a lower than expected number as negative.</p>"
+  },
+  {
+    "_id": "australia|gdp-qoq",
+    "country": "australia",
+    "countryDisplay": "Australia",
+    "indicator": "gdp-qoq",
+    "indicatorDisplay": "GDP QoQ",
+    "importance": "high",
+    "source": "<a href=\"http://example.com\">The Source</a>",
+    "description": "<p>Gross Domestic Product (GDP) measures the annualized change in the inflation-adjusted value of all goods and services produced by the economy. It is the broadest measure of economic activity and the primary indicator of the economy's health.</p><p><b>Usual Effect: </b>Actual &gt; Forecast = Good for currency<br>Frequency: Released monthly. There are 3 versions of GDP released a month apart - Advance, second release and Final. Both the advance the second release are tagged as preliminary in the economic calendar.</p>"
+  },
+  {
+    "_id": "australia|house-price-index-qoq",
+    "country": "australia",
+    "countryDisplay": "Australia",
+    "indicator": "house-price-index-qoq",
+    "indicatorDisplay": "House Price Index QoQ",
+    "importance": "medium",
+    "source": "<a href=\"http://example.com\">Another Source</a>",
+    "description": "<p>The Australian House Price Index (HPI) measures the change in the selling price of homes in the nation's eight state capitals. It is a leading indicator of health in the housing sector.</p><p>A higher than expected reading should be taken as positive/bullish for the AUD, while a lower than expected reading should be taken as negative/bearish for the AUD.</p>"
+  }
+]

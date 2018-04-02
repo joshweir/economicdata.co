@@ -1,0 +1,114 @@
+.link-spacer {
+  margin: 1em;
+}
+
+.g-bg-img-about {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.table-responsive {
+  background: white;
+}
+
+.table {
+  text-align: left;
+}
+
+.table .l {
+  padding-right: 2em;
+}
+
+.table .f {
+  padding-left: 1.5em;
+}
+
+.table .r {
+  width: 170px;
+}
+
+.u-btn-outline-lightgray:hover {
+    color: white;
+    background-color: #4e4e4e;
+}
+
+.val-col {
+  text-align: right;
+  width: 100px;
+}
+
+.select2-wrapper.trans .select2-selection {
+  background: transparent;
+  border-radius: inherit;
+}
+
+.select2-wrapper.trans .select2-selection__rendered,
+.select2-wrapper.trans .select2-selection__placeholder {
+  color: white;
+}
+
+.select2-wrapper.trans .select2-selection__arrow b {
+  border-color: white transparent transparent transparent;
+}
+
+.u-header__logo {
+  width: 340px !important;
+}
+
+.ind-bio {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.latest-rel {
+  border-right: 1px solid #dadada;
+}
+
+.latest-rel .k {
+  font-weight: 700;
+}
+
+.latest-rel .v {
+  display: block;
+}
+
+.latest-rel .vals > div {
+  padding-left: 20px;
+}
+
+.ind-bio .info .l {
+  min-width: 74px;
+  display: inline-block;
+}
+
+.ind-bio .info .high {
+  color: red;
+}
+
+.ind-bio .info .medium {
+  color: #b1770c;
+}
+
+.ind-bio .info .low {
+  color: gold;
+}
+
+a:focus, a:hover {
+    color: #5077ab;
+}
+
+@media (max-width: 767px) {
+  .u-header__logo {
+    width: 280px !important;
+  }
+
+  .latest-rel {
+    border-right: none;
+  }
+}

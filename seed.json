@@ -1,0 +1,6 @@
+{
+	"undefined": "localhost/EconomicData_Dev",
+	"dev": "localhost/EconomicData_Dev",
+	"test": "localhost/EconomicData_Test",
+	"prod": "localhost/EconomicData"
+}
