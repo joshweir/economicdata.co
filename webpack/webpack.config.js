@@ -57,7 +57,7 @@ module.exports = (env = {}) => {
   const devBrowserRender = {
     devtool: 'eval',
     context: PATHS.app,
-    entry: { app: ['babel-polyfill', './client', hotMiddlewareScript] },
+    entry: { app: ['./client', hotMiddlewareScript] },
     node,
     output: {
       path: PATHS.assets,
@@ -72,7 +72,7 @@ module.exports = (env = {}) => {
   const devServerRender = {
     devtool: 'sourcemap',
     context: PATHS.app,
-    entry: { server: ['babel-polyfill', '../server/index'] },
+    entry: { server: ['../server/index'] },
     target: 'node',
     node,
     externals,
