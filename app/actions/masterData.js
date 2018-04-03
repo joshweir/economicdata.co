@@ -1,4 +1,5 @@
 import { push } from 'react-router-redux'
+import { createAction } from 'redux-actions';
 import * as types from '../types';
 import { masterDataService, countryIndicatorService } from '../services';
 
@@ -49,6 +50,12 @@ export function setCountrySelected(country) {
       })));
   };
 }
+// this will replace the above function:
+export const selectCountry = createAction(types.SELECT_COUNTRY);
+export const fetchCountryIndicatorsSuccess =
+  createAction(types.FETCH_COUNTRY_INDICATORS_SUCCESS);
+export const fetchCountryIndicatorsFailure =
+  createAction(types.FETCH_COUNTRY_INDICATORS_FAILURE);
 
 export function setCountryIndicatorSelected(countryIndicator) {
   return (dispatch, getState) => {

@@ -1,9 +1,11 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
+import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import rootReducer from '../reducers';
 import { isClient, isDebug } from '../../config/app';
+import rootSaga from '../sagas/index';
 
 /*
  * @param {Object} initial state to bootstrap our stores with for server-side rendering
@@ -13,7 +15,8 @@ import { isClient, isDebug } from '../../config/app';
  */
 export default function configureStore(initialState, history) {
   // Installs hooks that always keep react-router and redux store in sync
-  const middleware = [thunk, routerMiddleware(history)];
+  const sagaMiddleware = createSagaMiddleware();
+  const middleware = [sagaMiddleware, thunk, routerMiddleware(history)];
   let store;
 
   if (isClient && isDebug) {
@@ -34,6 +37,6 @@ export default function configureStore(initialState, history) {
       store.replaceReducer(nextReducer);
     });
   }
-
+  sagaMiddleware.run(rootSaga);
   return store;
 }

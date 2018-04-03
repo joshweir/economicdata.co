@@ -29,7 +29,7 @@ const countrySelected = (
 ) => {
   switch (action.type) {
     case types.SELECT_COUNTRY:
-      return action.data.country;
+      return action.payload;
     case types.FETCH_COUNTRY_INDICATOR_SUCCESS:
       return action.data.countrySelected;
     default:
@@ -42,8 +42,10 @@ const countrySelectedIndicators = (
   action
 ) => {
   switch (action.type) {
-    case types.SELECT_COUNTRY:
-      return action.data.countryIndicators;
+    // case types.SELECT_COUNTRY:
+    //  return action.data.countryIndicators;
+    case types.FETCH_COUNTRY_INDICATORS_SUCCESS:
+      return action.payload.countryIndicators;
     case types.FETCH_COUNTRY_INDICATOR_SUCCESS:
       return action.data.countrySelectedIndicators;
     default:
