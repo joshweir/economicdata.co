@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Page from '../pages/Page';
 import CountryIndicatorContainer from '../containers/CountryIndicator';
+import { handleFetchCountryIndicatorData } from '../sagas/countryIndicators';
 
 class CountryIndicator extends Component {
   getMetaData() {
@@ -48,5 +49,13 @@ function mapStateToProps(state) {
     indicatorData: state.countryIndicator.indicatorData
   };
 }
+
+function preload(indicatorInfo) {
+  const { country, indicator } = indicatorInfo;
+  return [
+    [handleFetchCountryIndicatorData, {payload: {country, indicator}}]
+  ];
+}
+CountryIndicator.preload = preload;
 
 export default connect(mapStateToProps, {})(CountryIndicator);

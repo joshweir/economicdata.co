@@ -7,6 +7,7 @@ import pageRenderer from './pageRenderer';
 import fetchDataForRoute from '../../app/utils/fetchDataForRoute';
 import { sessionId } from '../../config/secrets';
 import { masterDataService } from '../../app/services';
+import waitAll from '../../app/sagas/waitAll';
 
 /*
  * Export render function to be used in server/config/routes.js
@@ -64,6 +65,7 @@ export default function render(req, res) {
       } else if (props) {
         // This method waits for all render component
         // promises to resolve before returning to browser
+        /*
         fetchDataForRoute(props, store)
           .then((data) => {
             const html = pageRenderer(store, props);
@@ -73,6 +75,21 @@ export default function render(req, res) {
             console.error(err);
             res.status(500).json(err);
           });
+        */
+        const preloaders = props.components
+        .filter(component => component && component.preload)
+        .map(component => component.preload(props.params, req))
+        .reduce((result, preloader) => result.concat(preloader), []);
+
+        const runTasks = store.runSaga(waitAll(preloaders));
+
+        runTasks.done.then(() => {
+          const html = pageRenderer(store, props);
+          res.status(200).send(html);
+        }).catch((e) => {
+          console.error(e);
+          res.status(500).json(e);
+        });
       } else {
         res.sendStatus(404);
       }

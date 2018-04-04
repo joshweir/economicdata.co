@@ -5,7 +5,6 @@ import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import rootReducer from '../reducers';
 import { isClient, isDebug } from '../../config/app';
-import rootSaga from '../sagas/index';
 
 /*
  * @param {Object} initial state to bootstrap our stores with for server-side rendering
@@ -37,6 +36,8 @@ export default function configureStore(initialState, history) {
       store.replaceReducer(nextReducer);
     });
   }
-  sagaMiddleware.run(rootSaga);
+  //sagaMiddleware.run(rootSaga);
+  store.runSaga = sagaMiddleware.run;
+  store.close = () => store.dispatch(END);
   return store;
 }

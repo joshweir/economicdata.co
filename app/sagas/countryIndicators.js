@@ -6,8 +6,15 @@ import { countryIndicatorService } from '../services';
 import { fetchCountryIndicatorDataSuccess,
          fetchCountryIndicatorDataFailure } from '../actions/countryIndicators';
 
-function* handleFetchCountryIndicatorData({ payload: indicator }) {
-  const country = yield select(state => state.masterData.countrySelected);
+export function* handleFetchCountryIndicatorData({ payload }) {
+  let country;
+  let indicator;
+  if (typeof payload === 'object') {
+    ({ country, indicator } = payload);
+  } else {
+    country = yield select(state => state.masterData.countrySelected);
+    indicator = payload;
+  }
   try {
     const { data } = yield call(countryIndicatorService().getCountryIndicator,
                             { country, indicator });

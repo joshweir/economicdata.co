@@ -41,7 +41,6 @@ export default (store) => {
       <Route
         path="data/:country/:indicator"
         component={CountryIndicator}
-        fetchData={fetchCountryIndicatorData}
       />
       <Route path="data/:country" component={Country} fetchData={fetchCountryData} />
     </Route>

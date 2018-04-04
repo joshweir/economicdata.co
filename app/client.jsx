@@ -9,6 +9,7 @@ import * as types from './types';
 import configureStore from './store/configureStore';
 import fetchDataForRoute from './utils/fetchDataForRoute';
 import Startup from './containers/Startup';
+import rootSaga from './sagas/index';
 
 // Grab the state from a global injected into
 // server-generated HTML
@@ -17,6 +18,7 @@ const initialState = window.__INITIAL_STATE__;
 const store = configureStore(initialState, browserHistory);
 const history = syncHistoryWithStore(browserHistory, store);
 const routes = createRoutes(store);
+store.runSaga(rootSaga);
 
 /**
  * Callback function handling frontend route changes.
