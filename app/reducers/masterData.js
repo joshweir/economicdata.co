@@ -30,8 +30,8 @@ const countrySelected = (
   switch (action.type) {
     case types.SELECT_COUNTRY:
       return action.payload;
-    case types.FETCH_COUNTRY_INDICATOR_SUCCESS:
-      return action.data.countrySelected;
+    case types.FETCH_COUNTRY_INDICATOR_DATA_SUCCESS:
+      return action.payload.countrySelected;
     default:
       return state;
   }
@@ -46,8 +46,8 @@ const countrySelectedIndicators = (
     //  return action.data.countryIndicators;
     case types.FETCH_COUNTRY_INDICATORS_SUCCESS:
       return action.payload;
-    case types.FETCH_COUNTRY_INDICATOR_SUCCESS:
-      return action.data.countrySelectedIndicators;
+    case types.FETCH_COUNTRY_INDICATOR_DATA_SUCCESS:
+      return action.payload.countrySelectedIndicators;
     default:
       return state;
   }
@@ -60,8 +60,8 @@ const countryIndicatorSelected = (
   switch (action.type) {
     case types.SELECT_COUNTRY:
       return null;
-    case types.FETCH_COUNTRY_INDICATOR_SUCCESS:
-      return action.data.countryIndicatorSelected;
+    case types.FETCH_COUNTRY_INDICATOR_DATA_SUCCESS:
+      return action.payload.countryIndicatorSelected;
     default:
       return state;
   }

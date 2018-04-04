@@ -6,8 +6,8 @@ const indicatorInfo = (
   action
 ) => {
   switch (action.type) {
-    case types.FETCH_COUNTRY_INDICATOR_SUCCESS:
-      return action.data.indicatorInfo;
+    case types.FETCH_COUNTRY_INDICATOR_DATA_SUCCESS:
+      return action.payload.indicatorInfo;
     default:
       return state;
   }
@@ -18,8 +18,8 @@ const indicatorData = (
   action
 ) => {
   switch (action.type) {
-    case types.FETCH_COUNTRY_INDICATOR_SUCCESS:
-      return action.data.indicatorData;
+    case types.FETCH_COUNTRY_INDICATOR_DATA_SUCCESS:
+      return action.payload.indicatorData;
     default:
       return state;
   }

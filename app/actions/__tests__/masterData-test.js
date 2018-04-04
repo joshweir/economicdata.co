@@ -92,7 +92,7 @@ describe('MasterData Actions', () => {
     });
 
     describe('on error', () => {
-      it('dispatches FETCH_COUNTRY_INDICATOR_FAILURE action', (done) => {
+      it('dispatches FETCH_COUNTRIES_LIST_FAILURE action', (done) => {
         const store = mockStore(initialState);
         const expectedActions = [
           {
@@ -221,12 +221,12 @@ describe('MasterData Actions', () => {
     };
 
     describe('on success', () => {
-      it('dispatches FETCH_COUNTRY_INDICATOR and ' +
-        'FETCH_COUNTRY_INDICATOR_SUCCESS actions', (done) => {
+      it('dispatches FETCH_COUNTRY_INDICATOR_DATA and ' +
+        'FETCH_COUNTRY_INDICATOR_DATA_SUCCESS actions', (done) => {
         const store = mockStore(initialStateWithCountrySelected);
         const expectedActions = [
           {
-            type: types.FETCH_COUNTRY_INDICATOR
+            type: types.FETCH_COUNTRY_INDICATOR_DATA
           },
           {
             type: '@@router/CALL_HISTORY_METHOD',
@@ -236,7 +236,7 @@ describe('MasterData Actions', () => {
             }
           },
           {
-            type: types.FETCH_COUNTRY_INDICATOR_SUCCESS,
+            type: types.FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
             data: {
               countryIndicatorSelected: indicator,
               countrySelected: country
@@ -274,10 +274,10 @@ describe('MasterData Actions', () => {
         const store = mockStore(initialStateWithCountrySelected);
         const expectedActions = [
           {
-            type: types.FETCH_COUNTRY_INDICATOR
+            type: types.FETCH_COUNTRY_INDICATOR_DATA
           },
           {
-            type: types.FETCH_COUNTRY_INDICATOR_FAILURE,
+            type: types.FETCH_COUNTRY_INDICATOR_DATA_FAILURE,
             error: new Error('the error')
           }
         ];

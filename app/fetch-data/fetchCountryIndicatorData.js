@@ -2,15 +2,15 @@ import { countryIndicatorService } from '../services';
 import * as types from '../types';
 
 const fetchData = (params, store) => {
-  store.dispatch({ type: types.FETCH_COUNTRY_INDICATOR });
+  store.dispatch({ type: types.FETCH_COUNTRY_INDICATOR_DATA });
   return countryIndicatorService().getCountryIndicator(params)
   .then(({data}) => {
-    store.dispatch({ type: types.FETCH_COUNTRY_INDICATOR_SUCCESS, data });
+    store.dispatch({ type: types.FETCH_COUNTRY_INDICATOR_DATA_SUCCESS, data });
     return data;
   })
   .catch((error) => {
     console.log('error!!!!', error);
-    return store.dispatch({ type: types.FETCH_COUNTRY_INDICATOR_FAILURE, error });
+    return store.dispatch({ type: types.FETCH_COUNTRY_INDICATOR_DATA_FAILURE, error });
     /*
     if (error.response) {
             // The request was made and the server responded with a status code

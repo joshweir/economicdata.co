@@ -1,7 +1,6 @@
-import { push } from 'react-router-redux'
 import { createAction } from 'redux-actions';
 import * as types from '../types';
-import { masterDataService, countryIndicatorService } from '../services';
+import { masterDataService } from '../services';
 
 const extractCountriesListFailure = (data) => {
   return {
@@ -56,22 +55,3 @@ export const fetchCountryIndicatorsSuccess =
   createAction(types.FETCH_COUNTRY_INDICATORS_SUCCESS);
 export const fetchCountryIndicatorsFailure =
   createAction(types.FETCH_COUNTRY_INDICATORS_FAILURE);
-
-export function setCountryIndicatorSelected(countryIndicator) {
-  return (dispatch, getState) => {
-    dispatch({ type: types.FETCH_COUNTRY_INDICATOR });
-    return countryIndicatorService().getCountryIndicator({
-      country: getState().masterData.countrySelected,
-      indicator: countryIndicator
-    })
-    .then(({data}) => {
-      const { countrySelected, countryIndicatorSelected } = data;
-      dispatch(push(`/data/${countrySelected}/${countryIndicatorSelected}`));
-      dispatch({ type: types.FETCH_COUNTRY_INDICATOR_SUCCESS, data });
-      return data;
-    })
-    .catch((error) => {
-      return dispatch({ type: types.FETCH_COUNTRY_INDICATOR_FAILURE, error });
-    });
-  };
-}

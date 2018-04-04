@@ -5,14 +5,15 @@ import BackgroundImage from '../images/fx.jpeg';
 import CountryIndicatorInfo from '../components/CountryIndicatorInfo';
 import CountryIndicatorSelection from '../components/CountryIndicatorSelection';
 import { setCountrySelected,
-         setCountryIndicatorSelected,
          selectCountry } from '../actions/masterData';
+import { setCountryIndicatorSelected,
+         fetchCountryIndicatorData } from '../actions/countryIndicators';
 
 class CountryIndicator extends Component {
   render() {
     const { indicatorData, setCountrySelected, setCountryIndicatorSelected,
       selectCountry, indicatorInfo, countries, countrySelectedIndicators,
-      countrySelected } = this.props;
+      countrySelected, fetchCountryIndicatorData } = this.props;
     const { country, indicator } = indicatorInfo;
 
     return (
@@ -29,7 +30,7 @@ class CountryIndicator extends Component {
                   countryIndicator={indicator}
                   countryIndicators={countrySelectedIndicators}
                   changeCountry={selectCountry}
-                  changeCountryIndicator={setCountryIndicatorSelected}
+                  changeCountryIndicator={fetchCountryIndicatorData}
                 />
                 <CountryIndicatorInfo
                   indicatorInfo={indicatorInfo}
@@ -76,7 +77,8 @@ CountryIndicator.propTypes = {
   ).isRequired,
   setCountrySelected: PropTypes.func.isRequired,
   setCountryIndicatorSelected: PropTypes.func.isRequired,
-  selectCountry: PropTypes.func.isRequired
+  selectCountry: PropTypes.func.isRequired,
+  fetchCountryIndicatorData: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -92,4 +94,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps,
   { setCountrySelected,
     setCountryIndicatorSelected,
-    selectCountry })(CountryIndicator);
+    selectCountry,
+    fetchCountryIndicatorData })(CountryIndicator);
