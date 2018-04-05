@@ -6,8 +6,6 @@ import expect from 'expect';
 import sinon from 'sinon';
 import * as actions from '../../actions/masterData';
 import * as types from '../../types';
-import createCountryIndicatorServiceStub
-  from '../../tests/helpers/createCountryIndicatorServiceStub';
 import createMasterDataServiceStub
     from '../../tests/helpers/createMasterDataServiceStub';
 
@@ -198,95 +196,6 @@ describe('MasterData Actions', () => {
           .with(() => Promise.reject(new Error('the error')));
 
         store.dispatch(actions.setCountrySelected(country))
-          .then(() => {
-            expect(store.getActions()).toEqual(expectedActions);
-            done();
-          })
-          .catch(done);
-      });
-    });
-  });
-
-  describe('#setCountryIndicatorSelected', () => {
-    const country = 'united-states';
-    const indicator = 'gdp';
-    const initialStateWithCountrySelected = {
-      masterData: {
-        countriesIndicators: [],
-        countries: [],
-        countrySelected: country,
-        countrySelectedIndicators: [],
-        countryIndicatorSelected: null
-      }
-    };
-
-    describe('on success', () => {
-      it('dispatches FETCH_COUNTRY_INDICATOR_DATA and ' +
-        'FETCH_COUNTRY_INDICATOR_DATA_SUCCESS actions', (done) => {
-        const store = mockStore(initialStateWithCountrySelected);
-        const expectedActions = [
-          {
-            type: types.FETCH_COUNTRY_INDICATOR_DATA
-          },
-          {
-            type: '@@router/CALL_HISTORY_METHOD',
-            payload: {
-              method: 'push',
-              args: [`/data/${country}/${indicator}`]
-            }
-          },
-          {
-            type: types.FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
-            data: {
-              countryIndicatorSelected: indicator,
-              countrySelected: country
-            }
-          }
-        ];
-
-        const getCountryIndicator = () => Promise.resolve({
-          data: {
-            countrySelected: country,
-            countryIndicatorSelected: indicator
-          }
-        });
-
-        const spyGetCountryIndicator = sinon.spy(getCountryIndicator);
-        sandbox = createCountryIndicatorServiceStub()
-          .replace('getCountryIndicator')
-          .with(spyGetCountryIndicator);
-
-        store.dispatch(actions.setCountryIndicatorSelected(indicator))
-          .then(() => {
-            expect(store.getActions()).toEqual(expectedActions);
-            expect(
-              spyGetCountryIndicator
-              .withArgs({indicator, country}).calledOnce
-            ).toEqual(true);
-            done();
-          })
-          .catch(done);
-      });
-    });
-
-    describe('on error', () => {
-      it('dispatches FETCH_COUNTRY_INDICATOR_FAILURE action', (done) => {
-        const store = mockStore(initialStateWithCountrySelected);
-        const expectedActions = [
-          {
-            type: types.FETCH_COUNTRY_INDICATOR_DATA
-          },
-          {
-            type: types.FETCH_COUNTRY_INDICATOR_DATA_FAILURE,
-            error: new Error('the error')
-          }
-        ];
-
-        sandbox = createCountryIndicatorServiceStub()
-          .replace('getCountryIndicator')
-          .with(() => Promise.reject(new Error('the error')));
-
-        store.dispatch(actions.setCountryIndicatorSelected(indicator))
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
             done();
