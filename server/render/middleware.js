@@ -2,9 +2,7 @@ import { createMemoryHistory, match } from 'react-router';
 import axios from 'axios';
 import createRoutes from '../../app/routes';
 import configureStore from '../../app/store/configureStore';
-import * as types from '../../app/types';
 import pageRenderer from './pageRenderer';
-import fetchDataForRoute from '../../app/utils/fetchDataForRoute';
 import { sessionId } from '../../config/secrets';
 import { masterDataService } from '../../app/services';
 import waitAll from '../../app/sagas/waitAll';
@@ -65,17 +63,6 @@ export default function render(req, res) {
       } else if (props) {
         // This method waits for all render component
         // promises to resolve before returning to browser
-        /*
-        fetchDataForRoute(props, store)
-          .then((data) => {
-            const html = pageRenderer(store, props);
-            res.status(200).send(html);
-          })
-          .catch((err) => {
-            console.error(err);
-            res.status(500).json(err);
-          });
-        */
         const preloaders = props.components
         .filter(component => component && component.preload)
         .map(component => component.preload(props.params, req))

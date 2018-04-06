@@ -28,7 +28,7 @@ function* handleFetchCountriesList({ payload: from }) {
   } catch (error) {
     yield put(fetchCountriesListFailure(
       'Oops! Something went wrong and we couldn\'t ' +
-      'fetch the list of country indicators'
+        'initialize the list of countries'
     ));
   }
 }

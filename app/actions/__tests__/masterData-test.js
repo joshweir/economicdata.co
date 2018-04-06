@@ -99,13 +99,15 @@ describe('masterData Actions', () => {
     describe('on error', () => {
       it('dispatches FETCH_COUNTRIES_LIST_FAILURE action', (done) => {
         const store = mockStore(initialState);
+        sagaMiddleware.run(rootSaga);
         const expectedActions = [
           {
-            type: types.FETCH_COUNTRIES_LIST
+            type: types.FETCH_COUNTRIES_LIST,
+            payload: countriesIndicators
           },
           {
             type: types.FETCH_COUNTRIES_LIST_FAILURE,
-            error: 'Oops! Something went wrong and we couldn\'t ' +
+            payload: 'Oops! Something went wrong and we couldn\'t ' +
               'initialize the list of countries'
           }
         ];
@@ -114,12 +116,22 @@ describe('masterData Actions', () => {
           .replace('extractCountriesList')
           .with(() => Promise.reject(new Error('the error')));
 
+        /*
         store.dispatch(actions.extractCountriesList(countriesIndicators))
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
             done();
           })
           .catch(done);
+        */
+        store.subscribe(() => {
+          const actualActions = store.getActions();
+          if (actualActions.length >= expectedActions.length) {
+            expect(actualActions).toEqual(expectedActions);
+            done();
+          }
+        });
+        store.dispatch(actions.fetchCountriesList(countriesIndicators));
       });
     });
   });

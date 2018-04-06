@@ -5,9 +5,7 @@ import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import createRoutes from './routes';
-import * as types from './types';
 import configureStore from './store/configureStore';
-import fetchDataForRoute from './utils/fetchDataForRoute';
 import Startup from './containers/Startup';
 import rootSaga from './sagas/index';
 
@@ -35,7 +33,7 @@ function onUpdate() {
     return;
   }
 
-  fetchDataForRoute(this.state, store);
+  // fetchDataForRoute(this.state, store);
 }
 
 // Router converts <Route> element hierarchy to a route config:

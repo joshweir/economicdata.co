@@ -1,7 +1,5 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
-import { fetchCountryData, fetchDefaultCountryData,
-  fetchCountryIndicatorData } from './fetch-data';
 import { About, App, Contact, Country, CountryIndicator,
          LoginOrRegister } from './pages';
 
@@ -34,7 +32,7 @@ export default (store) => {
 
   return (
     <Route path="/" component={App}>
-      <IndexRoute component={Country} fetchData={fetchDefaultCountryData} />
+      <IndexRoute component={Country} />
       <Route path="login" component={LoginOrRegister} onEnter={redirectAuth} />
       <Route path="about" component={About} />
       <Route path="contact-us" component={Contact} />
@@ -42,7 +40,7 @@ export default (store) => {
         path="data/:country/:indicator"
         component={CountryIndicator}
       />
-      <Route path="data/:country" component={Country} fetchData={fetchCountryData} />
+      <Route path="data/:country" component={Country} />
     </Route>
   );
 };
