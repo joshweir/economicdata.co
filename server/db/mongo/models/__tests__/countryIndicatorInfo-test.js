@@ -5,7 +5,7 @@ let CountryIndicatorInfo;
 
 describe('CountryIndicatorInfo model', () => {
   before(() => {
-    CountryIndicatorInfo = mongoose.models.countryIndicatorInfo ||
+    CountryIndicatorInfo = mongoose.models.CountryIndicatorInfo ||
       require('../countryIndicatorInfo').default();
   });
 
