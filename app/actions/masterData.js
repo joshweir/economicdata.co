@@ -2,16 +2,10 @@ import { createAction } from 'redux-actions';
 import * as types from '../types';
 import { masterDataService } from '../services';
 
+/*
 const extractCountriesListFailure = (data) => {
   return {
     type: types.FETCH_COUNTRIES_LIST_FAILURE,
-    error: data.error
-  };
-};
-
-const extractCountryIndicatorsFailure = (data) => {
-  return {
-    type: types.FETCH_COUNTRY_INDICATORS_FAILURE,
     error: data.error
   };
 };
@@ -30,26 +24,13 @@ export function extractCountriesList(countriesIndicators) {
       })));
   };
 }
+*/
+export const fetchCountriesList = createAction(types.FETCH_COUNTRIES_LIST);
+export const fetchCountriesListSuccess =
+  createAction(types.FETCH_COUNTRIES_LIST_SUCCESS);
+export const fetchCountriesListFailure =
+  createAction(types.FETCH_COUNTRIES_LIST_FAILURE);
 
-export function setCountrySelected(country) {
-  return (dispatch, getState) => {
-    return masterDataService()
-      .extractCountryIndicatorsList({
-        from: getState().masterData.countriesIndicators, country
-      })
-      .then(data => dispatch({
-        type: types.SELECT_COUNTRY,
-        data: {
-          country, countryIndicators: data
-        }
-      }))
-      .catch(() => dispatch(extractCountryIndicatorsFailure({
-        error: 'Oops! Something went wrong and we couldn\'t ' +
-          'fetch the list of country indicators'
-      })));
-  };
-}
-// this will replace the above function:
 export const selectCountry = createAction(types.SELECT_COUNTRY);
 export const fetchCountryIndicatorsSuccess =
   createAction(types.FETCH_COUNTRY_INDICATORS_SUCCESS);

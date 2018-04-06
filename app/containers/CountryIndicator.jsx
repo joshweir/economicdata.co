@@ -4,17 +4,15 @@ import { connect } from 'react-redux';
 import BackgroundImage from '../images/fx.jpeg';
 import CountryIndicatorInfo from '../components/CountryIndicatorInfo';
 import CountryIndicatorSelection from '../components/CountryIndicatorSelection';
-import { setCountrySelected,
-         selectCountry } from '../actions/masterData';
-import { setCountryIndicatorSelected,
-         fetchCountryIndicatorData } from '../actions/countryIndicators';
+import { selectCountry } from '../actions/masterData';
+import { fetchCountryIndicatorData } from '../actions/countryIndicators';
 
 class CountryIndicator extends Component {
   render() {
-    const { indicatorData, setCountrySelected, setCountryIndicatorSelected,
-      selectCountry, indicatorInfo, countries, countrySelectedIndicators,
-      countrySelected, fetchCountryIndicatorData } = this.props;
-    const { country, indicator } = indicatorInfo;
+    const { indicatorData, selectCountry, indicatorInfo, countries,
+      countrySelectedIndicators, countrySelected,
+      fetchCountryIndicatorData } = this.props;
+    const { indicator } = indicatorInfo;
 
     return (
       <section id="home">
@@ -75,8 +73,6 @@ CountryIndicator.propTypes = {
       value: PropTypes.string.isRequired
     })
   ).isRequired,
-  setCountrySelected: PropTypes.func.isRequired,
-  setCountryIndicatorSelected: PropTypes.func.isRequired,
   selectCountry: PropTypes.func.isRequired,
   fetchCountryIndicatorData: PropTypes.func.isRequired
 };
@@ -92,7 +88,5 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps,
-  { setCountrySelected,
-    setCountryIndicatorSelected,
-    selectCountry,
+  { selectCountry,
     fetchCountryIndicatorData })(CountryIndicator);

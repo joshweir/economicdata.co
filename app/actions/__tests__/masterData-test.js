@@ -1,17 +1,20 @@
 /* eslint no-unused-vars: 0 */ // since fetch is needed but not used
 import configureStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import createSagaMiddleware from 'redux-saga';
 import { polyfill } from 'es6-promise';
+import 'babel-polyfill';
 import expect from 'expect';
 import sinon from 'sinon';
 import * as actions from '../../actions/masterData';
+import rootSaga from '../../sagas/masterData';
 import * as types from '../../types';
 import createMasterDataServiceStub
-    from '../../tests/helpers/createMasterDataServiceStub';
+  from '../../tests/helpers/createMasterDataServiceStub';
 
 polyfill();
 
-const middlewares = [thunk];
+const sagaMiddleware = createSagaMiddleware();
+const middlewares = [sagaMiddleware];
 const mockStore = configureStore(middlewares);
 
 const initialState = {
@@ -24,7 +27,7 @@ const initialState = {
   }
 };
 
-describe('MasterData Actions', () => {
+describe('masterData Actions', () => {
   let sandbox;
 
   afterEach(() => {
@@ -59,13 +62,15 @@ describe('MasterData Actions', () => {
       it('dispatches FETCH_COUNTRIES_LIST and ' +
         'FETCH_COUNTRIES_LIST_SUCCESS actions', (done) => {
         const store = mockStore(initialState);
+        sagaMiddleware.run(rootSaga);
         const expectedActions = [
           {
-            type: types.FETCH_COUNTRIES_LIST
+            type: types.FETCH_COUNTRIES_LIST,
+            payload: countriesIndicators
           },
           {
             type: types.FETCH_COUNTRIES_LIST_SUCCESS,
-            data: expectedCountriesList
+            payload: expectedCountriesList
           }
         ];
 
@@ -76,16 +81,18 @@ describe('MasterData Actions', () => {
           .replace('extractCountriesList')
           .with(spyExtractCountriesList);
 
-        store.dispatch(actions.extractCountriesList(countriesIndicators))
-          .then(() => {
-            expect(store.getActions()).toEqual(expectedActions);
+        store.subscribe(() => {
+          const actualActions = store.getActions();
+          if (actualActions.length >= expectedActions.length) {
+            expect(actualActions).toEqual(expectedActions);
             expect(
               spyExtractCountriesList
               .withArgs({from: countriesIndicators}).calledOnce
             ).toEqual(true);
             done();
-          })
-          .catch(done);
+          }
+        });
+        store.dispatch(actions.fetchCountriesList(countriesIndicators));
       });
     });
 
@@ -117,8 +124,9 @@ describe('MasterData Actions', () => {
     });
   });
 
-  describe('#setCountrySelected', () => {
+  describe('#selectCountry', () => {
     const country = 'united-states';
+    const payload = country;
     const expectedCountryIndicators = [
       {value: 'gdp', label: 'GDP'},
       {value: 'cpi', label: 'CPI'}
@@ -148,13 +156,15 @@ describe('MasterData Actions', () => {
     describe('on success', () => {
       it('dispatches SELECT_COUNTRY action', (done) => {
         const store = mockStore(initialStateWithCountriesIndicators);
+        sagaMiddleware.run(rootSaga);
         const expectedActions = [
           {
             type: types.SELECT_COUNTRY,
-            data: {
-              country,
-              countryIndicators: expectedCountryIndicators
-            }
+            payload: country
+          },
+          {
+            type: types.FETCH_COUNTRY_INDICATORS_SUCCESS,
+            payload: expectedCountryIndicators
           }
         ];
 
@@ -167,26 +177,33 @@ describe('MasterData Actions', () => {
           .replace('extractCountryIndicatorsList')
           .with(spyExtractCountryIndicatorsList);
 
-        store.dispatch(actions.setCountrySelected(country))
-          .then(() => {
-            expect(store.getActions()).toEqual(expectedActions);
+        store.subscribe(() => {
+          const actualActions = store.getActions();
+          if (actualActions.length >= expectedActions.length) {
+            expect(actualActions).toEqual(expectedActions);
             expect(
               spyExtractCountryIndicatorsList
               .withArgs({from: countriesIndicators, country}).calledOnce
             ).toEqual(true);
             done();
-          })
-          .catch(done);
+          }
+        });
+        store.dispatch(actions.selectCountry(payload));
       });
     });
 
     describe('on error', () => {
       it('dispatches FETCH_COUNTRY_INDICATORS_FAILURE action', (done) => {
         const store = mockStore(initialStateWithCountriesIndicators);
+        sagaMiddleware.run(rootSaga);
         const expectedActions = [
           {
+            type: types.SELECT_COUNTRY,
+            payload: country
+          },
+          {
             type: types.FETCH_COUNTRY_INDICATORS_FAILURE,
-            error: 'Oops! Something went wrong and we couldn\'t ' +
+            payload: 'Oops! Something went wrong and we couldn\'t ' +
               'fetch the list of country indicators'
           }
         ];
@@ -195,12 +212,14 @@ describe('MasterData Actions', () => {
           .replace('extractCountryIndicatorsList')
           .with(() => Promise.reject(new Error('the error')));
 
-        store.dispatch(actions.setCountrySelected(country))
-          .then(() => {
-            expect(store.getActions()).toEqual(expectedActions);
+        store.subscribe(() => {
+          const actualActions = store.getActions();
+          if (actualActions.length >= expectedActions.length) {
+            expect(actualActions).toEqual(expectedActions);
             done();
-          })
-          .catch(done);
+          }
+        });
+        store.dispatch(actions.selectCountry(payload));
       });
     });
   });

@@ -17,7 +17,7 @@ const countries = (
 ) => {
   switch (action.type) {
     case types.FETCH_COUNTRIES_LIST_SUCCESS:
-      return action.data;
+      return action.payload;
     default:
       return state;
   }
