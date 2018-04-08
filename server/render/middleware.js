@@ -64,12 +64,11 @@ export default function render(req, res) {
         // This method waits for all render component
         // promises to resolve before returning to browser
         const preloaders = props.components
-        .filter(component => component && component.preload)
-        .map(component => component.preload(props.params, req))
+        .filter(component => component && component.preloadStatic)
+        .map(component => component.preloadStatic(props.params, req))
         .reduce((result, preloader) => result.concat(preloader), []);
 
         const runTasks = store.runSaga(waitAll(preloaders));
-
         runTasks.done.then(() => {
           const html = pageRenderer(store, props);
           res.status(200).send(html);

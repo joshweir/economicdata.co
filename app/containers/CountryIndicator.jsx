@@ -6,6 +6,7 @@ import CountryIndicatorInfo from '../components/CountryIndicatorInfo';
 import CountryIndicatorSelection from '../components/CountryIndicatorSelection';
 import { selectCountry } from '../actions/masterData';
 import { fetchCountryIndicatorData } from '../actions/countryIndicators';
+import { preloadDynamic, paramsHaveChanged } from '../utils/preloadDynamic';
 
 class CountryIndicator extends Component {
   render() {

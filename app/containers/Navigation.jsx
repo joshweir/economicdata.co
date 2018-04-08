@@ -29,6 +29,16 @@ const Navigation = ({ user, logOut }) => {
                 <div className="navbar-collapse align-items-center flex-sm-row">
                   <ul className="js-scroll-nav navbar-nav text-uppercase g-font-weight-700 g-font-size-13 g-py-20 g-py-0--lg">
                     <NavItem to="/" onlyActiveOnIndex index={true}>Data</NavItem>
+                    <NavItem
+                      to="/data/united-states/gdp"
+                      onlyActiveOnIndex
+                      index={true}
+                    >USA - GDP</NavItem>
+                    <NavItem
+                      to="/data/australia/gdp-qoq"
+                      onlyActiveOnIndex
+                      index={true}
+                    >AUS - GDP</NavItem>
                     <NavItem to="/about">About</NavItem>
                     { true && (user.authenticated ? (
                       <NavItem
