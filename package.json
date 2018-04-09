@@ -14,15 +14,16 @@
     "build:dev": "cross-env NODE_ENV=development npm run webpack -- --env.server",
     "build": "npm run clean && cross-env NODE_ENV=production npm run webpack -- --env.browser && cross-env NODE_ENV=production npm run webpack -- --env.server",
     "webpack": "webpack --colors --display-error-details --config ./webpack/webpack.config.js",
-    "test": "mocha ./app/tests/setup.js --compilers css:./app/tests/compilers/css ./app/**/*-test.js ./server/**/*-test.js",
-    "test:coverage": "nyc mocha ./app/tests/setup.js --compilers css:./app/tests/compilers/css ./app/**/*-test.js ./server/**/*-test.js",
-    "test:travis": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "test:watch": "mocha ./app/tests/setup.js --watch --compilers css:./app/tests/compilers/css ./app/**/*-test.js ./server/**/*-test.js"
+    "test": "mocha --require babel-register --require ./app/tests/setup.js --compilers css:./app/tests/compilers/css ./app/**/*-test.js ./server/**/*-test.js",
+    "test:coverage": "cross-env NODE_ENV=nyc nyc -all -e .jsx mocha --require ./app/tests/setup.js --compilers css:./app/tests/compilers/css ./app/**/*-test.js ./server/**/*-test.js",
+    "test:travis": "npm run test:coverage && nyc report --reporter=text-lcov | coveralls",
+    "test:watch": "mocha --require babel-register --require ./app/tests/setup.js --watch --compilers css:./app/tests/compilers/css ./app/**/*-test.js ./server/**/*-test.js"
   },
   "author": "joshweir",
   "license": "MIT",
   "devDependencies": {
     "babel-eslint": "^7.2.1",
+    "babel-plugin-istanbul": "^4.1.6",
     "babel-register": "^6.24.0",
     "coveralls": "^3.0.0",
     "enzyme": "^2.8.0",
@@ -133,6 +134,10 @@
     "webpack-manifest-plugin": "^1.1.0"
   },
   "nyc": {
+    "include": [
+      "app/**",
+      "server/db/mongo/models/**"
+    ],
     "exclude": [
       "coverage/**",
       "test/**",
@@ -143,10 +148,30 @@
       "app/tests/**",
       "app/store/**"
     ],
-    "include": [
-      "app/**",
-      "server/db/mongo/models/**"
+    "reporter": [
+      "text",
+      "text-summary",
+      "lcov",
+      "html"
     ],
-    "all": true
+    "require": [
+      "babel-register"
+    ],
+    "sourceMap": false,
+    "instrument": false
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "react",
+      "stage-0"
+    ],
+    "env": {
+      "nyc": {
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
   }
 }
