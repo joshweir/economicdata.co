@@ -1,8 +1,6 @@
 import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
-import entity from '../reducers/entity';
 import user from '../reducers/user';
-import topic from '../reducers/topic';
 import message from '../reducers/message';
 import masterData from '../reducers/masterData';
 import countryIndicator from '../reducers/countryIndicator';
@@ -27,8 +25,6 @@ const isFetching = (state = false, action) => {
 // router state
 const rootReducer = combineReducers({
   isFetching,
-  topic,
-  entity,
   user,
   message,
   routing,

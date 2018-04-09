@@ -12,7 +12,7 @@ import mongoose from 'mongoose';
  User Schema
  */
 
-const UserSchema = new mongoose.Schema({
+export const UserSchema = new mongoose.Schema({
   email: { type: String, unique: true, lowercase: true },
   password: String,
   tokens: Array,
@@ -28,23 +28,25 @@ const UserSchema = new mongoose.Schema({
   google: {}
 });
 
-function encryptPassword(next) {
-  const user = this;
-  if (!user.isModified('password')) return next();
-  return bcrypt.genSalt(5, (saltErr, salt) => {
-    if (saltErr) return next(saltErr);
-    return bcrypt.hash(user.password, salt, null, (hashErr, hash) => {
-      if (hashErr) return next(hashErr);
-      user.password = hash;
-      return next();
+UserSchema._middlewareFunctions = {
+  encryptPassword(next) {
+    const user = this;
+    if (!user.isModified('password')) return next();
+    return bcrypt.genSalt(5, (saltErr, salt) => {
+      if (saltErr) return next(saltErr);
+      return bcrypt.hash(user.password, salt, null, (hashErr, hash) => {
+        if (hashErr) return next(hashErr);
+        user.password = hash;
+        return next();
+      });
     });
-  });
-}
+  },
+};
 
 /**
  * Password hash middleware.
  */
-UserSchema.pre('save', encryptPassword);
+UserSchema.pre('validate', UserSchema._middlewareFunctions.encryptPassword);
 
 /*
  Defining our own custom document instance method
