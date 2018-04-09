@@ -15,7 +15,7 @@
     "build": "npm run clean && cross-env NODE_ENV=production npm run webpack -- --env.browser && cross-env NODE_ENV=production npm run webpack -- --env.server",
     "webpack": "webpack --colors --display-error-details --config ./webpack/webpack.config.js",
     "test": "mocha ./app/tests/setup.js --compilers css:./app/tests/compilers/css ./app/**/*-test.js ./server/**/*-test.js",
-    "test:coverage": "nyc npm test",
+    "test:coverage": "cross-env BABEL_ENV=nyc nyc mocha --require ./app/tests/setup.js --compilers css:./app/tests/compilers/css ./app/**/*-test.js ./server/**/*-test.js",
     "test:travis": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
     "test:travistmp": "npm test:coverage && nyc report",
     "test:watch": "mocha ./app/tests/setup.js --watch --compilers css:./app/tests/compilers/css ./app/**/*-test.js ./server/**/*-test.js"
@@ -158,7 +158,7 @@
   "babel": {
     "presets": ["es2015", "react", "stage-0"],
     "env": {
-      "development": {
+      "nyc": {
         "plugins": ["istanbul"]
       }
     }
