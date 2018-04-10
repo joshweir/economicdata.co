@@ -3,14 +3,15 @@ import mongoose from 'mongoose';
 import sinon from 'sinon';
 import bcrypt from 'bcrypt-nodejs';
 import _bind from 'lodash/bind';
-import { UserSchema } from '../user';
 
 let User;
+let UserSchema;
 
 describe('User model', () => {
   before(() => {
     User = mongoose.models.User ||
       require('../user').default();
+    UserSchema = mongoose.models.User.schema;
   });
 
   it('returns the model instance', () => {
@@ -75,28 +76,83 @@ describe('User model', () => {
 
     it('will return next with the hash error if bcrypt.hash returns ' +
        'error', () => {
-
+      const thisUser = {
+        email: 'email@example.com',
+        isModified: () => true
+      };
+      const theError = 'an error!';
+      sandbox = sinon.sandbox.create();
+      sandbox.stub(bcrypt, 'genSalt')
+      .callsFake((num, callback) => callback(null, 'dummy_val'));
+      sandbox.stub(bcrypt, 'hash')
+      .callsFake((dummy1, dummy2, dummy3, callback) => {
+        callback(theError, null);
+      });
+      const boundMiddlewareFunc = _bind(
+          UserSchema._middlewareFunctions.encryptPassword, thisUser);
+      const nextSpy = sinon.spy();
+      boundMiddlewareFunc(nextSpy);
+      expect(nextSpy.withArgs(theError).calledOnce).toBeTruthy();
     });
   });
 
   describe('#comparePassword', () => {
-    it('will return falsey error and truthy isMatch if the input password ' +
-       'matches user password', () => {
+    let sandbox;
 
+    afterEach(() => {
+      if (sandbox) {
+        sandbox.restore();
+      }
     });
 
-    it('will return the error and falsey isMatch if bcrypt.compare returns ' +
-       'an error', () => {
+    it('will return falsy error and truthy isMatch if the input password ' +
+       'matches user password', (done) => {
+      const thePassword = 'thePassword';
+      const u = new mongoose.models.User({
+        password: thePassword
+      });
+      u.validate(() => {
+        u.comparePassword(thePassword, (passErr, isMatch) => {
+          expect(isMatch).toBeTruthy();
+          done();
+        });
+      });
+    });
 
+    it('will return falsy isMatch if input password does not match user ' +
+       'password', (done) => {
+      const thePassword = 'thePassword';
+      const notThePassword = 'notThePassword';
+      const u = new mongoose.models.User({
+        password: thePassword
+      });
+      u.validate(() => {
+        u.comparePassword(notThePassword, (passErr, isMatch) => {
+          expect(isMatch).toBeFalsy();
+          done();
+        });
+      });
+    });
+
+    it('will return the error and falsy isMatch if bcrypt.compare returns ' +
+       'an error', (done) => {
+      const theError = 'an error!';
+      sandbox = sinon.sandbox.create();
+      sandbox.stub(bcrypt, 'compare')
+      .callsFake((dummy1, dummy2, callback) => callback(theError, null));
+
+      const thePassword = 'thePassword';
+      const notThePassword = 'notThePassword';
+      const u = new mongoose.models.User({
+        password: thePassword
+      });
+      u.validate(() => {
+        u.comparePassword(notThePassword, (passErr, isMatch) => {
+          expect(isMatch).toBeFalsy();
+          expect(passErr).toEqual(theError);
+          done();
+        });
+      });
     });
   });
-
-  /*
-  user.comparePassword(password, (passErr, isMatch) => {
-    if (isMatch) {
-      return done(null, user);
-    }
-    return done(null, false, { message: 'Your email or password combination is not correct.' });
-  })
-   */
 });
