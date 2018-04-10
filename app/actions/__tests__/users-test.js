@@ -1,6 +1,5 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { polyfill } from 'es6-promise';
 import expect from 'expect';
 import * as actions from '../../actions/users';
 import * as types from '../../types';
@@ -20,30 +19,13 @@ describe('Users Async Actions', () => {
     authenticated: false
   };
 
-  const response = {
-    data: {
-      message: 'Success'
-    },
-    status: 200
-  };
-
   const data = {
     email: 'hello@world.com',
     password: '2BeOrNot2Be'
   };
 
-  const errMsg = {
-    response: {
-      data: {
-        message: 'Oops! Something went wrong!'
-      }
-    }
-  };
-
   describe('manualLogin', () => {
-
     describe('on success', () => {
-
       beforeEach(() => {
         stub = createAuthServiceStub().replace('login').with(() => Promise.resolve({ status: 200 }));
         store = mockStore(initialState);
@@ -53,14 +35,14 @@ describe('Users Async Actions', () => {
         stub.restore();
       });
 
-      it('should dispatch MANUAL_LOGIN_USER, LOGIN_SUCCESS_USER and route path change actions', done => {
+      it('should dispatch MANUAL_LOGIN_USER, LOGIN_SUCCESS_USER and route path change actions', (done) => {
         const expectedActions = [
           {
             type: types.MANUAL_LOGIN_USER
           },
           {
             type: types.LOGIN_SUCCESS_USER,
-            message: "You have been successfully logged in"
+            message: 'You have been successfully logged in'
           },
           {
             payload: {
@@ -78,10 +60,9 @@ describe('Users Async Actions', () => {
           })
           .catch(done);
       });
-
     });
-    describe('on failure', () => {
 
+    describe('on failure', () => {
       beforeEach(() => {
         stub = createAuthServiceStub().replace('login').with(() => Promise.reject({ status: 401 }));
         store = mockStore(initialState);
@@ -110,12 +91,10 @@ describe('Users Async Actions', () => {
           .catch(done);
       });
     });
-
   });
 
   describe('signUp', () => {
     describe('on success', () => {
-
       beforeEach(() => {
         stub = createAuthServiceStub().replace('signUp').with(() => Promise.resolve({ status: 200 }));
         store = mockStore(initialState);
@@ -125,7 +104,7 @@ describe('Users Async Actions', () => {
         stub.restore();
       });
 
-      it('should dispatch SIGNUP_USER, SIGNUP_SUCCESS_USER and route path change actions', done => {
+      it('should dispatch SIGNUP_USER, SIGNUP_SUCCESS_USER and route path change actions', (done) => {
         const expectedActions = [
           {
             type: types.SIGNUP_USER
@@ -150,10 +129,9 @@ describe('Users Async Actions', () => {
           })
           .catch(done);
       });
-
     });
-    describe('on failure', () => {
 
+    describe('on failure', () => {
       beforeEach(() => {
         stub = createAuthServiceStub().replace('signUp').with(() => Promise.reject({ status: 401 }));
         store = mockStore(initialState);
@@ -185,33 +163,76 @@ describe('Users Async Actions', () => {
   });
 
   describe('logOut', () => {
-    beforeEach(() => {
-      stub = createAuthServiceStub().replace('logOut').with(() => Promise.resolve({ status: 200 }));
+    describe('on success', () => {
+      beforeEach(() => {
+        stub = createAuthServiceStub().replace('logOut').with(() => Promise.resolve({ status: 200 }));
+        store = mockStore(initialState);
+      });
+
+      afterEach(() => {
+        stub.restore();
+      });
+
+      it('should dispatch LOGOUT_USER, LOGOUT_SUCCESS_USER', (done) => {
+        const expectedActions = [
+          {
+            type: types.LOGOUT_USER
+          },
+          {
+            type: types.LOGOUT_SUCCESS_USER
+          }
+        ];
+
+        store.dispatch(actions.logOut(data))
+          .then(() => {
+            expect(store.getActions()).toEqual(expectedActions);
+            done();
+          })
+          .catch(done);
+      });
+    });
+
+    describe('on failure', () => {
+      beforeEach(() => {
+        stub = createAuthServiceStub().replace('logOut').with(() => Promise.reject({ status: 401 }));
+        store = mockStore(initialState);
+      });
+
+      afterEach(() => {
+        stub.restore();
+      });
+
+      it('should dispatch LOGOUT_USER, LOGOUT_ERROR_USER', (done) => {
+        const expectedActions = [
+          {
+            type: types.LOGOUT_USER
+          },
+          {
+            type: types.LOGOUT_ERROR_USER
+          }
+        ];
+
+        store.dispatch(actions.logOut(data))
+          .then(() => {
+            expect(store.getActions()).toEqual(expectedActions);
+            done();
+          })
+          .catch(done);
+      });
+    });
+  });
+
+  describe('toggleLoginMode', () => {
+    it('should dispatch TOGGLE_LOGIN_MODE', () => {
       store = mockStore(initialState);
-    });
-
-    afterEach(() => {
-      stub.restore();
-    });
-
-    it('should dispatch LOGOUT_USER, LOGOUT_SUCCESS_USER', done => {
       const expectedActions = [
         {
-          type: types.LOGOUT_USER
-        },
-        {
-          type: types.LOGOUT_SUCCESS_USER
+          type: types.TOGGLE_LOGIN_MODE
         }
       ];
 
-      store.dispatch(actions.logOut(data))
-        .then(() => {
-          expect(store.getActions()).toEqual(expectedActions);
-          done();
-        })
-        .catch(done);
+      store.dispatch(actions.toggleLoginMode());
+      expect(store.getActions()).toEqual(expectedActions);
     });
-
   });
-
 });
