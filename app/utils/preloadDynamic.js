@@ -19,9 +19,5 @@ export const preloadDynamic = (actions) => {
   if (!inBrowser() || resetServerStateAndCheckIsFirstLoad()) {
     return;
   }
-  console.log('here!!!!');
-  actions.forEach((action) => {
-    console.log('doing dynamic fetch!!! params: ', ' action: ', action.action, ' args: ', action.args);
-    action.action(action.args);
-  });
+  actions.forEach(action => action.action(action.args));
 };

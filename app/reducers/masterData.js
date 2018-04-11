@@ -1,15 +1,7 @@
 import { combineReducers } from 'redux';
 import * as types from '../types';
 
-const countriesIndicators = (
-  state = [],
-  action
-) => {
-  switch (action.type) {
-    default:
-      return state;
-  }
-};
+const countriesIndicators = (state = []) => state;
 
 const countries = (
   state = [],
