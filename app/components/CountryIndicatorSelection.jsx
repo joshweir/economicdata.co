@@ -5,13 +5,6 @@ import 'react-select/dist/react-select.css';
 
 const CountryIndicatorSelection = ({ country, countries, countryIndicator,
     countryIndicators, changeCountry, changeCountryIndicator }) => {
-  const onChangeCountry = (selectedCountry) => {
-    changeCountry(selectedCountry);
-  };
-  const onChangeCountryIndicator = (selectedIndicator) => {
-    changeCountryIndicator(selectedIndicator);
-  };
-
   return (
     <div className="row">
       <div className="col-md-6">
@@ -22,7 +15,7 @@ const CountryIndicatorSelection = ({ country, countries, countryIndicator,
             simpleValue
             name="country"
             value={country}
-            onChange={onChangeCountry}
+            onChange={changeCountry}
             searchable
             clearable={false}
             placeholder="Country.."
@@ -37,7 +30,7 @@ const CountryIndicatorSelection = ({ country, countries, countryIndicator,
             simpleValue
             name="indicator"
             value={countryIndicator}
-            onChange={onChangeCountryIndicator}
+            onChange={changeCountryIndicator}
             searchable
             clearable={false}
             placeholder="Indicator.."

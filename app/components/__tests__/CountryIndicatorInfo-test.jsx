@@ -15,7 +15,7 @@ describe('<CountryIndicatorInfo />', () => {
       );
     }
     return mountedComponent;
-  }
+  };
 
   beforeEach(() => {
     props = {

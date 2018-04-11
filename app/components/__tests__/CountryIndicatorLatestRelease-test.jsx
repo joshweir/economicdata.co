@@ -13,7 +13,7 @@ describe('<CountryIndicatorLatestRelease />', () => {
       );
     }
     return mountedComponent;
-  }
+  };
 
   beforeEach(() => {
     props = {
