@@ -20,7 +20,7 @@ const About = () => {
           <p className="g-mb-30 g-color-white">
             EconomicData.co provides you with a full, downloadable history of economic data for a number of indicators accross a range of countries for free - no registration, no strings attached, just download the data.
           </p>
-          <p className="g-mb-30 g-color-white">It's hard to find a full history of data for economic data, some sites will provide you
+          <p className="g-mb-30 g-color-white">It is hard to find a full history of data for economic data, some sites will provide you
             with back to a certain date but if you want the full history, you often need to pay. We don't see why you need to pay!
             Providing a range of economic indicators accross the countries and regions that make up the forex currency majors (ie. USA, Euro Zone, Great Britain, Canada, Australia, New Zealand), you can
             do your forex trading data analysis without having to jump through hoops to obtain the data.
