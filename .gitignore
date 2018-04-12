@@ -8,3 +8,4 @@ compiled
 .vscode
 .nyc_output/
 coverage/
+yarn-error.log
