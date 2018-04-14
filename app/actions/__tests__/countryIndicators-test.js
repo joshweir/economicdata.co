@@ -26,14 +26,6 @@ const initialState = {
 };
 
 describe('countryIndicators Actions', () => {
-  let sandbox;
-
-  afterEach(() => {
-    if (sandbox) {
-      sandbox.restore();
-    }
-  });
-
   describe('#fetchCountryIndicatorData', () => {
     const country = 'united-states';
     const indicator = 'gdp';
@@ -105,7 +97,7 @@ describe('countryIndicators Actions', () => {
           getCountryIndicator: () => Promise.reject(new Error('the error'))
         };
       });
-    }
+    };
 
     describe('when called with primitive payload (user selects indicator in UI)', () => {
       const payload = indicator;

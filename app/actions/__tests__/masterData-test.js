@@ -2,14 +2,12 @@
 import configureStore from 'redux-mock-store';
 import createSagaMiddleware from 'redux-saga';
 import { polyfill } from 'es6-promise';
-import 'babel-polyfill';
-import sinon from 'sinon';
 import * as actions from '../../actions/masterData';
 import rootSaga from '../../sagas/masterData';
 import * as types from '../../types';
-import createMasterDataServiceStub
-  from '../../tests/helpers/createMasterDataServiceStub';
+import createMasterDataService from '../../services/masterData';
 
+jest.mock('../../services/masterData');
 polyfill();
 
 const sagaMiddleware = createSagaMiddleware();
@@ -27,12 +25,6 @@ const initialState = {
 };
 
 describe('masterData Actions', () => {
-  let sandbox;
-
-  afterEach(() => {
-    sandbox.restore();
-  });
-
   describe('#extractCountriesList', () => {
     const countriesIndicators = [
       {
@@ -73,21 +65,21 @@ describe('masterData Actions', () => {
           }
         ];
 
-        const extractCountriesList = () => Promise.resolve(expectedCountriesList);
-
-        const spyExtractCountriesList = sinon.spy(extractCountriesList);
-        sandbox = createMasterDataServiceStub()
-          .replace('extractCountriesList')
-          .with(spyExtractCountriesList);
+        const extractCountriesListSpy = jest.fn()
+        .mockImplementation(() => Promise.resolve(expectedCountriesList));
+        createMasterDataService.mockImplementation(() => {
+          return {
+            extractCountriesList: extractCountriesListSpy
+          };
+        });
 
         store.subscribe(() => {
           const actualActions = store.getActions();
           if (actualActions.length >= expectedActions.length) {
             expect(actualActions).toEqual(expectedActions);
-            expect(
-              spyExtractCountriesList
-              .withArgs({from: countriesIndicators}).calledOnce
-            ).toEqual(true);
+            expect(extractCountriesListSpy)
+            .toHaveBeenCalledWith({from: countriesIndicators});
+            expect(extractCountriesListSpy).toHaveBeenCalledTimes(1);
             done();
           }
         });
@@ -111,18 +103,12 @@ describe('masterData Actions', () => {
           }
         ];
 
-        sandbox = createMasterDataServiceStub()
-          .replace('extractCountriesList')
-          .with(() => Promise.reject(new Error('the error')));
+        createMasterDataService.mockImplementation(() => {
+          return {
+            extractCountriesList: () => Promise.reject(new Error('the error'))
+          };
+        });
 
-        /*
-        store.dispatch(actions.extractCountriesList(countriesIndicators))
-          .then(() => {
-            expect(store.getActions()).toEqual(expectedActions);
-            done();
-          })
-          .catch(done);
-        */
         store.subscribe(() => {
           const actualActions = store.getActions();
           if (actualActions.length >= expectedActions.length) {
@@ -179,23 +165,21 @@ describe('masterData Actions', () => {
           }
         ];
 
-        const extractCountryIndicatorsList =
-          () => Promise.resolve(expectedCountryIndicators);
-
-        const spyExtractCountryIndicatorsList =
-          sinon.spy(extractCountryIndicatorsList);
-        sandbox = createMasterDataServiceStub()
-          .replace('extractCountryIndicatorsList')
-          .with(spyExtractCountryIndicatorsList);
+        const extractCountryIndicatorsListSpy = jest.fn()
+        .mockImplementation(() => Promise.resolve(expectedCountryIndicators));
+        createMasterDataService.mockImplementation(() => {
+          return {
+            extractCountryIndicatorsList: extractCountryIndicatorsListSpy
+          };
+        });
 
         store.subscribe(() => {
           const actualActions = store.getActions();
           if (actualActions.length >= expectedActions.length) {
             expect(actualActions).toEqual(expectedActions);
-            expect(
-              spyExtractCountryIndicatorsList
-              .withArgs({from: countriesIndicators, country}).calledOnce
-            ).toEqual(true);
+            expect(extractCountryIndicatorsListSpy)
+            .toHaveBeenCalledWith({from: countriesIndicators, country});
+            expect(extractCountryIndicatorsListSpy).toHaveBeenCalledTimes(1);
             done();
           }
         });
@@ -219,9 +203,11 @@ describe('masterData Actions', () => {
           }
         ];
 
-        sandbox = createMasterDataServiceStub()
-          .replace('extractCountryIndicatorsList')
-          .with(() => Promise.reject(new Error('the error')));
+        createMasterDataService.mockImplementation(() => {
+          return {
+            extractCountryIndicatorsList: () => Promise.reject(new Error('the error'))
+          };
+        });
 
         store.subscribe(() => {
           const actualActions = store.getActions();
