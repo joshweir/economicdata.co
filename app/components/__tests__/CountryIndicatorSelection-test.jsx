@@ -1,5 +1,4 @@
 import React from 'react';
-import expect from 'expect';
 import { mount } from 'enzyme';
 import Select from 'react-select';
 import CountryIndicatorSelection
@@ -48,7 +47,7 @@ describe('<CountryIndicatorSelection />', () => {
     mountedComponent = undefined;
   });
 
-  it('renders the country <Select> with props', () => {
+  test('renders the country <Select> with props', () => {
     const [firstSelect] = component().find(Select);
     const componentProps = firstSelect.props;
     expect(componentProps.options).toBe(props.countries);
@@ -56,7 +55,7 @@ describe('<CountryIndicatorSelection />', () => {
     expect(componentProps.onChange).toBe(props.changeCountry);
   });
 
-  it('renders the country indicator <Select> with props', () => {
+  test('renders the country indicator <Select> with props', () => {
     const [, secondSelect] = component().find(Select);
     const componentProps = secondSelect.props;
     expect(componentProps.options).toBe(props.countryIndicators);

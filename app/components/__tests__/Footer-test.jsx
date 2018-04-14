@@ -1,5 +1,4 @@
 import React from 'react';
-import expect from 'expect';
 import { mount } from 'enzyme';
 import { Link } from 'react-router';
 import Footer
@@ -23,7 +22,7 @@ describe('<Footer />', () => {
     mountedComponent = undefined;
   });
 
-  it('renders the about and contact <Link>', () => {
+  test('renders the about and contact <Link>', () => {
     const [aboutLink, contactLink] = component().find(Link);
     expect(aboutLink.props.to).toBe('/about');
     expect(contactLink.props.to).toBe('/contact-us');

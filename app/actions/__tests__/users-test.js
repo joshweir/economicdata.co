@@ -1,6 +1,5 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import expect from 'expect';
 import * as actions from '../../actions/users';
 import * as types from '../../types';
 import createAuthServiceStub from '../../tests/helpers/createAuthServiceStub';
@@ -35,31 +34,34 @@ describe('Users Async Actions', () => {
         stub.restore();
       });
 
-      it('should dispatch MANUAL_LOGIN_USER, LOGIN_SUCCESS_USER and route path change actions', (done) => {
-        const expectedActions = [
-          {
-            type: types.MANUAL_LOGIN_USER
-          },
-          {
-            type: types.LOGIN_SUCCESS_USER,
-            message: 'You have been successfully logged in'
-          },
-          {
-            payload: {
-              args: ['/'],
-              method: 'push'
+      test(
+        'should dispatch MANUAL_LOGIN_USER, LOGIN_SUCCESS_USER and route path change actions',
+        (done) => {
+          const expectedActions = [
+            {
+              type: types.MANUAL_LOGIN_USER
             },
-            type: '@@router/CALL_HISTORY_METHOD'
-          }
-        ];
+            {
+              type: types.LOGIN_SUCCESS_USER,
+              message: 'You have been successfully logged in'
+            },
+            {
+              payload: {
+                args: ['/'],
+                method: 'push'
+              },
+              type: '@@router/CALL_HISTORY_METHOD'
+            }
+          ];
 
-        store.dispatch(actions.manualLogin(data))
-          .then(() => {
-            expect(store.getActions()).toEqual(expectedActions);
-            done();
-          })
-          .catch(done);
-      });
+          store.dispatch(actions.manualLogin(data))
+            .then(() => {
+              expect(store.getActions()).toEqual(expectedActions);
+              done();
+            })
+            .catch(done);
+        }
+      );
     });
 
     describe('on failure', () => {
@@ -72,7 +74,7 @@ describe('Users Async Actions', () => {
         stub.restore();
       });
 
-      it('should dispatch MANUAL_LOGIN_USER and LOGIN_ERROR_USER', (done) => {
+      test('should dispatch MANUAL_LOGIN_USER and LOGIN_ERROR_USER', (done) => {
         const expectedActions = [
           {
             type: types.MANUAL_LOGIN_USER
@@ -104,31 +106,34 @@ describe('Users Async Actions', () => {
         stub.restore();
       });
 
-      it('should dispatch SIGNUP_USER, SIGNUP_SUCCESS_USER and route path change actions', (done) => {
-        const expectedActions = [
-          {
-            type: types.SIGNUP_USER
-          },
-          {
-            type: types.SIGNUP_SUCCESS_USER,
-            message: 'You have successfully registered an account!'
-          },
-          {
-            payload: {
-              args: ['/'],
-              method: 'push'
+      test(
+        'should dispatch SIGNUP_USER, SIGNUP_SUCCESS_USER and route path change actions',
+        (done) => {
+          const expectedActions = [
+            {
+              type: types.SIGNUP_USER
             },
-            type: '@@router/CALL_HISTORY_METHOD'
-          }
-        ];
+            {
+              type: types.SIGNUP_SUCCESS_USER,
+              message: 'You have successfully registered an account!'
+            },
+            {
+              payload: {
+                args: ['/'],
+                method: 'push'
+              },
+              type: '@@router/CALL_HISTORY_METHOD'
+            }
+          ];
 
-        store.dispatch(actions.signUp(data))
-          .then(() => {
-            expect(store.getActions()).toEqual(expectedActions);
-            done();
-          })
-          .catch(done);
-      });
+          store.dispatch(actions.signUp(data))
+            .then(() => {
+              expect(store.getActions()).toEqual(expectedActions);
+              done();
+            })
+            .catch(done);
+        }
+      );
     });
 
     describe('on failure', () => {
@@ -141,7 +146,7 @@ describe('Users Async Actions', () => {
         stub.restore();
       });
 
-      it('should dispatch MANUAL_LOGIN_USER and LOGIN_ERROR_USER', (done) => {
+      test('should dispatch MANUAL_LOGIN_USER and LOGIN_ERROR_USER', (done) => {
         const expectedActions = [
           {
             type: types.SIGNUP_USER
@@ -173,7 +178,7 @@ describe('Users Async Actions', () => {
         stub.restore();
       });
 
-      it('should dispatch LOGOUT_USER, LOGOUT_SUCCESS_USER', (done) => {
+      test('should dispatch LOGOUT_USER, LOGOUT_SUCCESS_USER', (done) => {
         const expectedActions = [
           {
             type: types.LOGOUT_USER
@@ -202,7 +207,7 @@ describe('Users Async Actions', () => {
         stub.restore();
       });
 
-      it('should dispatch LOGOUT_USER, LOGOUT_ERROR_USER', (done) => {
+      test('should dispatch LOGOUT_USER, LOGOUT_ERROR_USER', (done) => {
         const expectedActions = [
           {
             type: types.LOGOUT_USER
@@ -223,7 +228,7 @@ describe('Users Async Actions', () => {
   });
 
   describe('toggleLoginMode', () => {
-    it('should dispatch TOGGLE_LOGIN_MODE', () => {
+    test('should dispatch TOGGLE_LOGIN_MODE', () => {
       store = mockStore(initialState);
       const expectedActions = [
         {

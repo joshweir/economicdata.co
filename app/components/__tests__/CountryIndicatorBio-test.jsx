@@ -1,5 +1,4 @@
 import React from 'react';
-import expect from 'expect';
 import { mount } from 'enzyme';
 import { Link } from 'react-router';
 import CountryIndicatorBio from '../../components/CountryIndicatorBio';
@@ -31,7 +30,7 @@ describe('<CountryIndicatorBio />', () => {
     mountedComponent = undefined;
   });
 
-  it('renders the importance based on data prop', () => {
+  test('renders the importance based on data prop', () => {
     const { importance } = props.data;
     const importanceDiv = component().find(`.info .${importance}`);
     expect(importanceDiv.length).toBe(1);
@@ -39,13 +38,13 @@ describe('<CountryIndicatorBio />', () => {
       .toBe('High Importance');
   });
 
-  it('renders the country link', () => {
+  test('renders the country link', () => {
     const countryLink = component().find('.info').find(Link).first();
     expect(countryLink.prop('to')).toBe('/united-states');
     expect(countryLink.text()).toBe('United States');
   });
 
-  it('renders the source (sanitized html)', () => {
+  test('renders the source (sanitized html)', () => {
     expect(component().find('.source').first().html())
       .toBe('<span class="source"><a href="a-link" target="_blank">The Source</a></span>');
   });

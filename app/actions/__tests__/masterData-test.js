@@ -3,7 +3,6 @@ import configureStore from 'redux-mock-store';
 import createSagaMiddleware from 'redux-saga';
 import { polyfill } from 'es6-promise';
 import 'babel-polyfill';
-import expect from 'expect';
 import sinon from 'sinon';
 import * as actions from '../../actions/masterData';
 import rootSaga from '../../sagas/masterData';
@@ -59,7 +58,7 @@ describe('masterData Actions', () => {
     ];
 
     describe('on success', () => {
-      it('dispatches FETCH_COUNTRIES_LIST and ' +
+      test('dispatches FETCH_COUNTRIES_LIST and ' +
         'FETCH_COUNTRIES_LIST_SUCCESS actions', (done) => {
         const store = mockStore(initialState);
         sagaMiddleware.run(rootSaga);
@@ -97,7 +96,7 @@ describe('masterData Actions', () => {
     });
 
     describe('on error', () => {
-      it('dispatches FETCH_COUNTRIES_LIST_FAILURE action', (done) => {
+      test('dispatches FETCH_COUNTRIES_LIST_FAILURE action', (done) => {
         const store = mockStore(initialState);
         sagaMiddleware.run(rootSaga);
         const expectedActions = [
@@ -166,7 +165,7 @@ describe('masterData Actions', () => {
     };
 
     describe('on success', () => {
-      it('dispatches SELECT_COUNTRY action', (done) => {
+      test('dispatches SELECT_COUNTRY action', (done) => {
         const store = mockStore(initialStateWithCountriesIndicators);
         sagaMiddleware.run(rootSaga);
         const expectedActions = [
@@ -205,7 +204,7 @@ describe('masterData Actions', () => {
     });
 
     describe('on error', () => {
-      it('dispatches FETCH_COUNTRY_INDICATORS_FAILURE action', (done) => {
+      test('dispatches FETCH_COUNTRY_INDICATORS_FAILURE action', (done) => {
         const store = mockStore(initialStateWithCountriesIndicators);
         sagaMiddleware.run(rootSaga);
         const expectedActions = [

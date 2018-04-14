@@ -1,4 +1,3 @@
-import expect from 'expect';
 import reducer from '../../reducers/user';
 import * as types from '../../types';
 
@@ -10,13 +9,13 @@ describe('Users reducer', () => {
     authenticated: false
   };
 
-  it('returns the initial state', () => {
+  test('returns the initial state', () => {
     expect(
       reducer(undefined, {})
     ).toEqual(initialState);
   });
 
-  it('handles MANUAL_LOGIN_USER', () => {
+  test('handles MANUAL_LOGIN_USER', () => {
     expect(
       reducer(undefined, {type: types.MANUAL_LOGIN_USER})
     ).toEqual({
@@ -26,7 +25,7 @@ describe('Users reducer', () => {
     });
   });
 
-  it('handles LOGIN_SUCCESS_USER', () => {
+  test('handles LOGIN_SUCCESS_USER', () => {
     expect(
       reducer(undefined, {type: types.LOGIN_SUCCESS_USER})
     ).toEqual({
@@ -37,7 +36,7 @@ describe('Users reducer', () => {
     });
   });
 
-  it('handles LOGIN_ERROR_USER', () => {
+  test('handles LOGIN_ERROR_USER', () => {
     const message = 'Success';
     expect(
       reducer(undefined, {type: types.LOGIN_ERROR_USER, message})
@@ -49,7 +48,7 @@ describe('Users reducer', () => {
     });
   });
 
-  it('handles SIGNUP_USER', () => {
+  test('handles SIGNUP_USER', () => {
     expect(
       reducer(undefined, {type: types.SIGNUP_USER})
     ).toEqual({
@@ -59,7 +58,7 @@ describe('Users reducer', () => {
     });
   });
 
-  it('handles SIGNUP_SUCCESS_USER', () => {
+  test('handles SIGNUP_SUCCESS_USER', () => {
     expect(
       reducer(undefined, {type: types.SIGNUP_SUCCESS_USER})
     ).toEqual({
@@ -69,7 +68,7 @@ describe('Users reducer', () => {
     });
   });
 
-  it('handles SIGNUP_ERROR_USER', () => {
+  test('handles SIGNUP_ERROR_USER', () => {
     const message = 'Oops! Something went wrong!';
     expect(
       reducer(undefined, {type: types.SIGNUP_ERROR_USER, message})
@@ -81,7 +80,7 @@ describe('Users reducer', () => {
     });
   });
 
-  it('handles LOGOUT_USER', () => {
+  test('handles LOGOUT_USER', () => {
     expect(
       reducer(undefined, {type: types.LOGOUT_USER})
     ).toEqual({
@@ -91,7 +90,7 @@ describe('Users reducer', () => {
     });
   });
 
-  it('handles LOGOUT_SUCCESS_USER', () => {
+  test('handles LOGOUT_SUCCESS_USER', () => {
     expect(
       reducer(undefined, {type: types.LOGOUT_SUCCESS_USER})
     ).toEqual({
@@ -101,7 +100,7 @@ describe('Users reducer', () => {
     });
   });
 
-  it('handles LOGOUT_ERROR_USER', () => {
+  test('handles LOGOUT_ERROR_USER', () => {
     expect(
       reducer(undefined, {type: types.LOGOUT_ERROR_USER})
     ).toEqual({
@@ -112,7 +111,7 @@ describe('Users reducer', () => {
     });
   });
 
-  it('handles TOGGLE_LOGIN_MODE', () => {
+  test('handles TOGGLE_LOGIN_MODE', () => {
     expect(
       reducer(undefined, {type: types.TOGGLE_LOGIN_MODE})
     ).toEqual({

@@ -1,10 +1,7 @@
-/*
 import React from 'react';
-import expect from 'expect';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 import About from '../../containers/About';
-import * as AboutImage from '../../images/fx2.jpg';
 
 describe('<About />', () => {
   let props;
@@ -31,12 +28,6 @@ describe('<About />', () => {
   });
 
   it('renders the <About> container', () => {
-    console.log('image!!!', AboutImage);
-    const spy = sinon.spy(() => '../images/fx2.jpg');
-    sandbox
-    .stub(AboutImage, 'default')
-    .callsFake(spy);
-    //expect(component()).toExist();
+    expect(component()).toBeDefined();
   });
 });
-*/

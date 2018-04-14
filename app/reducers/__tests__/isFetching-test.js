@@ -1,11 +1,10 @@
-import expect from 'expect';
 import reducer from '../../reducers/isFetching';
 import * as types from '../../types';
 
 describe('isFetching reducer', () => {
   const initialState = false;
 
-  it('returns the initial state', () => {
+  test('returns the initial state', () => {
     expect(
       reducer(undefined, {})
     ).toEqual(initialState);
@@ -17,7 +16,7 @@ describe('isFetching reducer', () => {
     ).toEqual(expectedValue);
   };
 
-  it('handles FETCH_COUNTRY_INDICATOR_DATA, FETCH_COUNTRIES_LIST ' +
+  test('handles FETCH_COUNTRY_INDICATOR_DATA, FETCH_COUNTRIES_LIST ' +
      '(isFetching is true)', () => {
     const expectedValue = true;
     [
@@ -26,7 +25,7 @@ describe('isFetching reducer', () => {
     ].forEach(type => expectIsFetching({expectedValue, type}));
   });
 
-  it('handles FETCH_COUNTRY_INDICATOR_DATA_SUCCESS, ' +
+  test('handles FETCH_COUNTRY_INDICATOR_DATA_SUCCESS, ' +
      'FETCH_COUNTRY_INDICATOR_DATA_FAILURE, ' +
      'FETCH_COUNTRIES_LIST_SUCCESS, ' +
      'FETCH_COUNTRIES_LIST_FAILURE ' +

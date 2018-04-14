@@ -3,7 +3,6 @@ import configureStore from 'redux-mock-store';
 import createSagaMiddleware from 'redux-saga';
 import { polyfill } from 'es6-promise';
 import 'babel-polyfill';
-import expect from 'expect';
 import sinon from 'sinon';
 import * as actions from '../../actions/countryIndicators';
 import rootSaga from '../../sagas/countryIndicators';
@@ -101,7 +100,7 @@ describe('countryIndicators Actions', () => {
     describe('when called with primitive payload (user selects indicator in UI)', () => {
       const payload = indicator;
       describe('on success', () => {
-        it('dispatches FETCH_COUNTRY_INDICATOR_DATA and ' +
+        test('dispatches FETCH_COUNTRY_INDICATOR_DATA and ' +
           'FETCH_COUNTRY_INDICATOR_DATA_SUCCESS actions', (done) => {
           const store = mockStore(initialStateWithCountrySelected);
           sagaMiddleware.run(rootSaga);
@@ -125,7 +124,7 @@ describe('countryIndicators Actions', () => {
       });
 
       describe('on error', () => {
-        it('dispatches FETCH_COUNTRY_INDICATOR_FAILURE action', (done) => {
+        test('dispatches FETCH_COUNTRY_INDICATOR_FAILURE action', (done) => {
           const store = mockStore(initialStateWithCountrySelected);
           sagaMiddleware.run(rootSaga);
           const expectedActions = expectedActionsError({payload});
@@ -149,7 +148,7 @@ describe('countryIndicators Actions', () => {
     describe('when called with object payload (SSR)', () => {
       const payload = {indicator, country};
       describe('on success', () => {
-        it('dispatches FETCH_COUNTRY_INDICATOR_DATA and ' +
+        test('dispatches FETCH_COUNTRY_INDICATOR_DATA and ' +
           'FETCH_COUNTRY_INDICATOR_DATA_SUCCESS actions', (done) => {
           const store = mockStore(initialState);
           sagaMiddleware.run(rootSaga);
@@ -173,7 +172,7 @@ describe('countryIndicators Actions', () => {
       });
 
       describe('on error', () => {
-        it('dispatches FETCH_COUNTRY_INDICATOR_FAILURE action', (done) => {
+        test('dispatches FETCH_COUNTRY_INDICATOR_FAILURE action', (done) => {
           const store = mockStore(initialStateWithCountrySelected);
           sagaMiddleware.run(rootSaga);
           const expectedActions = expectedActionsError({payload});

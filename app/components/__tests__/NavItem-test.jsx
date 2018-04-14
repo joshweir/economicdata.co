@@ -1,5 +1,4 @@
 import React from 'react';
-import expect from 'expect';
 import { mount } from 'enzyme';
 import { Link, IndexLink } from 'react-router';
 import sinon from 'sinon';
@@ -46,7 +45,7 @@ describe('<NavItem />', () => {
   });
 
   describe('when the index prop is truthy', () => {
-    it('renders an <IndexLink> with to prop and children', () => {
+    test('renders an <IndexLink> with to prop and children', () => {
       const routerIsActiveSpy = sinon.spy(() => false);
       props = {
         ...props,
@@ -65,7 +64,7 @@ describe('<NavItem />', () => {
   });
 
   describe('when the index prop is falsy', () => {
-    it('renders a <Link> with to prop and children', () => {
+    test('renders a <Link> with to prop and children', () => {
       const routerIsActiveSpy = sinon.spy(() => false);
       props = {...props, router: mockRouterWithSpies({isActive: routerIsActiveSpy})};
       const comp = component().find(Link).first();
@@ -80,7 +79,7 @@ describe('<NavItem />', () => {
   });
 
   describe('when router.isActive is truthy', () => {
-    it('renders the link component parent with "active" class', () => {
+    test('renders the link component parent with "active" class', () => {
       const routerIsActiveSpy = sinon.spy(() => true);
       props = {...props, router: mockRouterWithSpies({isActive: routerIsActiveSpy})};
       expect(component().find('li.nav-item').hasClass('active')).toBeTruthy();
@@ -88,7 +87,7 @@ describe('<NavItem />', () => {
   });
 
   describe('when router.isActive is falsy', () => {
-    it('renders the link component parent without "active" class', () => {
+    test('renders the link component parent without "active" class', () => {
       const routerIsActiveSpy = sinon.spy(() => false);
       props = {...props, router: mockRouterWithSpies({isActive: routerIsActiveSpy})};
       expect(component().find('li.nav-item').hasClass('active')).toBeFalsy();

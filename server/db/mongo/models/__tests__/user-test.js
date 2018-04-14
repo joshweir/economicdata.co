@@ -1,4 +1,3 @@
-import expect from 'expect';
 import mongoose from 'mongoose';
 import sinon from 'sinon';
 import bcrypt from 'bcrypt-nodejs';
@@ -8,43 +7,43 @@ let User;
 let UserSchema;
 
 describe('User model', () => {
-  before(() => {
+  beforeAll(() => {
     User = mongoose.models.User ||
       require('../user').default();
     UserSchema = mongoose.models.User.schema;
   });
 
-  it('returns the model instance', () => {
+  test('returns the model instance', () => {
     expect(
       User
-    ).toExist();
+    ).toBeTruthy();
   });
 
-  it('adds the model to mongoose.models', () => {
+  test('adds the model to mongoose.models', () => {
     expect(
       typeof mongoose.models.User
     ).toEqual('function');
   });
 
-  it('defaults the profile fields to empty string', (done) => {
+  test('defaults the profile fields to empty string', (done) => {
     const u = new mongoose.models.User();
     const { gender, location, name, picture, website } = u.profile;
     expect([gender, location, name, picture, website])
     .toEqual(['', '', '', '', '']);
     u.validate((error) => {
-      expect(error).toNotExist();
+      expect(error).toBeFalsy();
       done();
     });
   });
 
-  it('encrypts the password on create', (done) => {
+  test('encrypts the password on create', (done) => {
     const thePassword = 'thePassword';
     const u = new mongoose.models.User({
       password: thePassword
     });
     u.validate((error) => {
-      expect(error).toNotExist();
-      expect(u.password).toNotEqual(thePassword);
+      expect(error).toBeFalsy();
+      expect(u.password).not.toEqual(thePassword);
       expect(u.password.length).toBeGreaterThan(0);
       done();
     });
@@ -57,7 +56,7 @@ describe('User model', () => {
       sandbox.restore();
     });
 
-    it('will return next with the salt error if bcrypt.genSalt ' +
+    test('will return next with the salt error if bcrypt.genSalt ' +
        'returns error', () => {
       const thisUser = {
         email: 'email@example.com',
@@ -74,7 +73,7 @@ describe('User model', () => {
       expect(nextSpy.withArgs(theError).calledOnce).toBeTruthy();
     });
 
-    it('will return next with the hash error if bcrypt.hash returns ' +
+    test('will return next with the hash error if bcrypt.hash returns ' +
        'error', () => {
       const thisUser = {
         email: 'email@example.com',
@@ -105,7 +104,7 @@ describe('User model', () => {
       }
     });
 
-    it('will return falsy error and truthy isMatch if the input password ' +
+    test('will return falsy error and truthy isMatch if the input password ' +
        'matches user password', (done) => {
       const thePassword = 'thePassword';
       const u = new mongoose.models.User({
@@ -119,7 +118,7 @@ describe('User model', () => {
       });
     });
 
-    it('will return falsy isMatch if input password does not match user ' +
+    test('will return falsy isMatch if input password does not match user ' +
        'password', (done) => {
       const thePassword = 'thePassword';
       const notThePassword = 'notThePassword';
@@ -134,7 +133,7 @@ describe('User model', () => {
       });
     });
 
-    it('will return the error and falsy isMatch if bcrypt.compare returns ' +
+    test('will return the error and falsy isMatch if bcrypt.compare returns ' +
        'an error', (done) => {
       const theError = 'an error!';
       sandbox = sinon.sandbox.create();

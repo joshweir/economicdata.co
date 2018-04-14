@@ -14,10 +14,10 @@
     "build:dev": "cross-env NODE_ENV=development npm run webpack -- --env.server",
     "build": "npm run clean && cross-env NODE_ENV=production npm run webpack -- --env.browser && cross-env NODE_ENV=production npm run webpack -- --env.server",
     "webpack": "webpack --colors --display-error-details --config ./webpack/webpack.config.js",
-    "test": "mocha --require babel-register --require ./app/tests/setup.js --compilers css:./app/tests/compilers/css ./app/**/*-test.js* ./server/**/*-test.js",
-    "test:coverage": "cross-env NODE_ENV=nyc nyc -all -e .jsx mocha --require ./app/tests/setup.js --compilers css:./app/tests/compilers/css ./app/**/*-test.js* ./server/**/*-test.js",
-    "test:travis": "npm run test:coverage && nyc report --reporter=text-lcov | coveralls",
-    "test:watch": "mocha --require babel-register --require ./app/tests/setup.js --watch --compilers css:./app/tests/compilers/css ./app/**/*-test.js* ./server/**/*-test.js"
+    "test": "jest",
+    "test:coverage": "npm run test -- --coverage ",
+    "test:travis": "npm run test:coverage && cat ./coverage/lcov.info | coveralls",
+    "test:watch": "jest --watch"
   },
   "author": "joshweir",
   "license": "MIT",
@@ -50,6 +50,7 @@
     "axios": "^0.16.2",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
+    "babel-jest": "^22.4.3",
     "babel-loader": "^7.0.0",
     "babel-plugin-react-html-attrs": "^2.1.0",
     "babel-plugin-react-transform": "^2.0.2",
@@ -81,6 +82,7 @@
     "extract-text-webpack-plugin": "^2.1.0",
     "file-loader": "^0.11.1",
     "helmet": "^3.5.0",
+    "jest": "^22.4.3",
     "json-loader": "^0.5.4",
     "lodash": "^4.16.2",
     "match-sorter": "^2.2.0",
@@ -132,6 +134,18 @@
     "webpack-dev-middleware": "^1.10.1",
     "webpack-hot-middleware": "^2.18.0",
     "webpack-manifest-plugin": "^1.1.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tools/assetsTransformer.js",
+      "\\.(css)$": "<rootDir>/tools/assetsTransformer.js"
+    },
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "app/**/*.js*",
+      "!app/tests/**",
+      "!app/store/**"
+    ]
   },
   "nyc": {
     "include": [

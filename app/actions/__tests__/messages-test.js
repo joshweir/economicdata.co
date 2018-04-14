@@ -1,6 +1,5 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import expect from 'expect';
 import * as actions from '../../actions/messages';
 import * as types from '../../types';
 
@@ -18,7 +17,7 @@ describe('Messages Actions', () => {
   };
 
   describe('dismissMessage', () => {
-    it('should dispatch DISMISS_MESSAGE', () => {
+    test('should dispatch DISMISS_MESSAGE', () => {
       store = mockStore(initialState);
       const expectedActions = [
         {

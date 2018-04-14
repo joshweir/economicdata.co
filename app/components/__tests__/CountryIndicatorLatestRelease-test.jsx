@@ -1,5 +1,4 @@
 import React from 'react';
-import expect from 'expect';
 import { mount } from 'enzyme';
 import CountryIndicatorLatestRelease from '../../components/CountryIndicatorLatestRelease';
 
@@ -27,23 +26,23 @@ describe('<CountryIndicatorLatestRelease />', () => {
     mountedComponent = undefined;
   });
 
-  it('renders the releaseDate', () => {
+  test('renders the releaseDate', () => {
     expect(component().find('.rel-dt .v').text())
       .toBe(props.data.releaseDate);
   });
 
-  it('renders the actual', () => {
+  test('renders the actual', () => {
     expect(component().find('.rel-a .v').text())
       .toBe(props.data.actual);
   });
 
   describe('With forecast and previous data points', () => {
-    it('renders the forecast', () => {
+    test('renders the forecast', () => {
       expect(component().find('.rel-f .v').text())
         .toBe(props.data.forecast);
     });
 
-    it('renders the previous', () => {
+    test('renders the previous', () => {
       expect(component().find('.rel-p .v').text())
         .toBe(props.data.previous);
     });
@@ -59,12 +58,12 @@ describe('<CountryIndicatorLatestRelease />', () => {
       };
     });
 
-    it('renders the forecast', () => {
+    test('renders the forecast', () => {
       expect(component().find('.rel-f .v').text())
         .toBe('');
     });
 
-    it('renders the previous', () => {
+    test('renders the previous', () => {
       expect(component().find('.rel-p .v').text())
         .toBe('');
     });

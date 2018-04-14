@@ -1,4 +1,3 @@
-import expect from 'expect';
 import reducer from '../../reducers';
 
 describe('Root reducer', () => {
@@ -30,7 +29,7 @@ describe('Root reducer', () => {
     }
   };
 
-  it('returns the initial state', () => {
+  test('returns the initial state', () => {
     expect(
       reducer(undefined, {})
     ).toEqual(initialState);

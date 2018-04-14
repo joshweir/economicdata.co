@@ -1,27 +1,26 @@
-import expect from 'expect';
 import mongoose from 'mongoose';
 
 let CountryIndicatorInfo;
 
 describe('CountryIndicatorInfo model', () => {
-  before(() => {
+  beforeAll(() => {
     CountryIndicatorInfo = mongoose.models.CountryIndicatorInfo ||
       require('../countryIndicatorInfo').default();
   });
 
-  it('returns the model instance', () => {
+  test('returns the model instance', () => {
     expect(
       CountryIndicatorInfo
-    ).toExist();
+    ).toBeTruthy();
   });
 
-  it('adds the model to mongoose.models', () => {
+  test('adds the model to mongoose.models', () => {
     expect(
       typeof mongoose.models.CountryIndicatorInfo
     ).toEqual('function');
   });
 
-  it('is invalid if _id is empty', (done) => {
+  test('is invalid if _id is empty', (done) => {
     const c = new mongoose.models.CountryIndicatorInfo();
     c.validate((error) => {
       expect(error.errors['_id'].message).toMatch(/`_id` is required/);
@@ -29,7 +28,7 @@ describe('CountryIndicatorInfo model', () => {
     });
   });
 
-  it('is invalid if country, countryDisplay, indicator, indicatorDisplay, ' +
+  test('is invalid if country, countryDisplay, indicator, indicatorDisplay, ' +
     'importance, source, description is empty', (done) => {
     const c = new mongoose.models.CountryIndicatorInfo({
       _id: 'test_id'
@@ -46,7 +45,7 @@ describe('CountryIndicatorInfo model', () => {
     });
   });
 
-  it('is valid if all required fields are populated', (done) => {
+  test('is valid if all required fields are populated', (done) => {
     const c = new mongoose.models.CountryIndicatorInfo({
       _id: 'test_id',
       country: 'united-states',
@@ -58,7 +57,7 @@ describe('CountryIndicatorInfo model', () => {
       description: 'the description'
     });
     c.validate((error) => {
-      expect(error).toNotExist();
+      expect(error).toBeFalsy();
       done();
     });
   });

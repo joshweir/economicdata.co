@@ -1,4 +1,3 @@
-import expect from 'expect';
 import reducer from '../../reducers/masterData';
 import * as types from '../../types';
 
@@ -18,13 +17,13 @@ describe('masterData reducer', () => {
   const countrySelectedIndicators = ['gdp', 'cpi'];
   const countryIndicatorSelected = 'gdp';
 
-  it('returns the initial state', () => {
+  test('returns the initial state', () => {
     expect(
       reducer(undefined, {})
     ).toEqual(initialState);
   });
 
-  it('handles FETCH_COUNTRIES_LIST_SUCCESS', () => {
+  test('handles FETCH_COUNTRIES_LIST_SUCCESS', () => {
     const countries = ['usa', 'aus'];
     expect(
       reducer(undefined, {
@@ -36,7 +35,7 @@ describe('masterData reducer', () => {
     });
   });
 
-  it('handles SELECT_COUNTRY', () => {
+  test('handles SELECT_COUNTRY', () => {
     expect(
       reducer(initialStateWithIndicatorSelected, {
         type: types.SELECT_COUNTRY,
@@ -47,7 +46,7 @@ describe('masterData reducer', () => {
     });
   });
 
-  it('handles FETCH_COUNTRY_INDICATOR_DATA_SUCCESS', () => {
+  test('handles FETCH_COUNTRY_INDICATOR_DATA_SUCCESS', () => {
     expect(
       reducer(undefined, {
         type: types.FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
@@ -65,7 +64,7 @@ describe('masterData reducer', () => {
     });
   });
 
-  it('handles FETCH_COUNTRY_INDICATORS_SUCCESS', () => {
+  test('handles FETCH_COUNTRY_INDICATORS_SUCCESS', () => {
     expect(
       reducer(undefined, {
         type: types.FETCH_COUNTRY_INDICATORS_SUCCESS,

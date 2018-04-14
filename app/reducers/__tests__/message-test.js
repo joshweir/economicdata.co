@@ -1,4 +1,3 @@
-import expect from 'expect';
 import reducer from '../../reducers/message';
 import * as types from '../../types';
 
@@ -13,13 +12,13 @@ describe('Message reducer', () => {
     type: 'SUCCESS'
   };
 
-  it('returns the initial state', () => {
+  test('returns the initial state', () => {
     expect(
       reducer(undefined, {})
     ).toEqual(initialState);
   });
 
-  it('handles LOGIN_SUCCESS_USER', () => {
+  test('handles LOGIN_SUCCESS_USER', () => {
     const message = 'the message';
     expect(
       reducer(undefined, {type: types.LOGIN_SUCCESS_USER, message})
@@ -29,7 +28,7 @@ describe('Message reducer', () => {
     });
   });
 
-  it('handles SIGNUP_SUCCESS_USER', () => {
+  test('handles SIGNUP_SUCCESS_USER', () => {
     const message = 'the message';
     expect(
       reducer(undefined, {type: types.SIGNUP_SUCCESS_USER, message})
@@ -39,7 +38,7 @@ describe('Message reducer', () => {
     });
   });
 
-  it('handles DISMISS_MESSAGE', () => {
+  test('handles DISMISS_MESSAGE', () => {
     expect(
       reducer(stateWithMessage, {type: types.DISMISS_MESSAGE})
     ).toEqual(initialState);
