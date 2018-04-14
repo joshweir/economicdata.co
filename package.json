@@ -9,14 +9,14 @@
     "lint": "eslint --ext .js,.jsx app server",
     "lint:fix": "eslint --ext .js,.jsx app server --fix",
     "clean": "rimraf public && rimraf compiled",
-    "start": "npm run build && cross-env NODE_ENV=production node compiled/server.js",
+    "start": "yarn run build && cross-env NODE_ENV=production node compiled/server.js",
     "dev": "cross-env NODE_ENV=development nodemon",
     "build:dev": "cross-env NODE_ENV=development npm run webpack -- --env.server",
     "build": "npm run clean && cross-env NODE_ENV=production npm run webpack -- --env.browser && cross-env NODE_ENV=production npm run webpack -- --env.server",
     "webpack": "webpack --colors --display-error-details --config ./webpack/webpack.config.js",
     "test": "jest",
-    "test:coverage": "npm run test -- --coverage ",
-    "test:travis": "npm run test:coverage && cat ./coverage/lcov.info | coveralls",
+    "test:coverage": "yarn run test -- --coverage ",
+    "test:travis": "yarn run test:coverage && cat ./coverage/lcov.info | coveralls",
     "test:watch": "jest --watch"
   },
   "author": "joshweir",
@@ -146,33 +146,6 @@
       "!app/tests/**",
       "!app/store/**"
     ]
-  },
-  "nyc": {
-    "include": [
-      "app/**",
-      "server/db/mongo/models/**"
-    ],
-    "exclude": [
-      "coverage/**",
-      "test/**",
-      "test{,-*}.js",
-      "**/*.test.js",
-      "**/__tests__/**",
-      "**/node_modules/**",
-      "app/tests/**",
-      "app/store/**"
-    ],
-    "reporter": [
-      "text",
-      "text-summary",
-      "lcov",
-      "html"
-    ],
-    "require": [
-      "babel-register"
-    ],
-    "sourceMap": false,
-    "instrument": false
   },
   "babel": {
     "presets": [

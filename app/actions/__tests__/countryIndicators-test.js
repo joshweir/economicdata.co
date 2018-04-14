@@ -2,13 +2,12 @@
 import configureStore from 'redux-mock-store';
 import createSagaMiddleware from 'redux-saga';
 import { polyfill } from 'es6-promise';
-import 'babel-polyfill';
-import sinon from 'sinon';
 import * as actions from '../../actions/countryIndicators';
 import rootSaga from '../../sagas/countryIndicators';
 import * as types from '../../types';
-import createCountryIndicatorServiceStub
-  from '../../tests/helpers/createCountryIndicatorServiceStub';
+import createCountryIndicatorService from '../../services/countryIndicator';
+
+jest.mock('../../services/countryIndicator');
 
 polyfill();
 
@@ -30,7 +29,9 @@ describe('countryIndicators Actions', () => {
   let sandbox;
 
   afterEach(() => {
-    sandbox.restore();
+    if (sandbox) {
+      sandbox.restore();
+    }
   });
 
   describe('#fetchCountryIndicatorData', () => {
@@ -83,39 +84,46 @@ describe('countryIndicators Actions', () => {
       ];
     };
 
-    const stubApiSuccess = () => {
-      const getCountryIndicator = () => Promise.resolve({
+    const mockApiForSuccess = () => {
+      const spy = jest.fn().mockImplementation(() => Promise.resolve({
         data: {
           countrySelected: country,
           countryIndicatorSelected: indicator
         }
+      }));
+      createCountryIndicatorService.mockImplementation(() => {
+        return {
+          getCountryIndicator: spy
+        };
       });
-      const spyGetCountryIndicator = sinon.spy(getCountryIndicator);
-      sandbox = createCountryIndicatorServiceStub()
-        .replace('getCountryIndicator')
-        .with(spyGetCountryIndicator);
-      return spyGetCountryIndicator;
+      return spy;
     };
+
+    const mockApiForError = () => {
+      createCountryIndicatorService.mockImplementation(() => {
+        return {
+          getCountryIndicator: () => Promise.reject(new Error('the error'))
+        };
+      });
+    }
 
     describe('when called with primitive payload (user selects indicator in UI)', () => {
       const payload = indicator;
       describe('on success', () => {
         test('dispatches FETCH_COUNTRY_INDICATOR_DATA and ' +
           'FETCH_COUNTRY_INDICATOR_DATA_SUCCESS actions', (done) => {
+          const getCountryIndicatorSpy = mockApiForSuccess();
+
           const store = mockStore(initialStateWithCountrySelected);
           sagaMiddleware.run(rootSaga);
           const expectedActions = expectedActionsSuccess({payload});
-
-          const spyGetCountryIndicator = stubApiSuccess();
 
           store.subscribe(() => {
             const actualActions = store.getActions();
             if (actualActions.length >= expectedActions.length) {
               expect(actualActions).toEqual(expectedActions);
-              expect(
-                spyGetCountryIndicator
-                .withArgs({indicator, country}).calledOnce
-              ).toEqual(true);
+              expect(getCountryIndicatorSpy).toHaveBeenCalledWith({indicator, country});
+              expect(getCountryIndicatorSpy).toHaveBeenCalledTimes(1);
               done();
             }
           });
@@ -129,9 +137,7 @@ describe('countryIndicators Actions', () => {
           sagaMiddleware.run(rootSaga);
           const expectedActions = expectedActionsError({payload});
 
-          sandbox = createCountryIndicatorServiceStub()
-            .replace('getCountryIndicator')
-            .with(() => Promise.reject(new Error('the error')));
+          mockApiForError();
 
           store.subscribe(() => {
             const actualActions = store.getActions();
@@ -150,20 +156,18 @@ describe('countryIndicators Actions', () => {
       describe('on success', () => {
         test('dispatches FETCH_COUNTRY_INDICATOR_DATA and ' +
           'FETCH_COUNTRY_INDICATOR_DATA_SUCCESS actions', (done) => {
+          const getCountryIndicatorSpy = mockApiForSuccess();
           const store = mockStore(initialState);
           sagaMiddleware.run(rootSaga);
           const expectedActions = expectedActionsSuccess({payload});
-
-          const spyGetCountryIndicator = stubApiSuccess();
 
           store.subscribe(() => {
             const actualActions = store.getActions();
             if (actualActions.length >= expectedActions.length) {
               expect(actualActions).toEqual(expectedActions);
-              expect(
-                spyGetCountryIndicator
-                .withArgs({indicator, country}).calledOnce
-              ).toEqual(true);
+              expect(getCountryIndicatorSpy)
+              .toHaveBeenCalledWith({indicator, country});
+              expect(getCountryIndicatorSpy).toHaveBeenCalledTimes(1);
               done();
             }
           });
@@ -177,9 +181,7 @@ describe('countryIndicators Actions', () => {
           sagaMiddleware.run(rootSaga);
           const expectedActions = expectedActionsError({payload});
 
-          sandbox = createCountryIndicatorServiceStub()
-            .replace('getCountryIndicator')
-            .with(() => Promise.reject(new Error('the error')));
+          mockApiForError();
 
           store.subscribe(() => {
             const actualActions = store.getActions();
