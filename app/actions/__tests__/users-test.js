@@ -2,14 +2,15 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as actions from '../../actions/users';
 import * as types from '../../types';
-import createAuthServiceStub from '../../tests/helpers/createAuthServiceStub';
+import authService from '../../services/authentication';
+
+jest.mock('../../services/authentication');
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
 describe('Users Async Actions', () => {
   let store;
-  let stub;
 
   const initialState = {
     isLogin: true,
@@ -26,12 +27,12 @@ describe('Users Async Actions', () => {
   describe('manualLogin', () => {
     describe('on success', () => {
       beforeEach(() => {
-        stub = createAuthServiceStub().replace('login').with(() => Promise.resolve({ status: 200 }));
+        authService.mockImplementation(() => {
+          return {
+            login: () => Promise.resolve({ status: 200 })
+          };
+        });
         store = mockStore(initialState);
-      });
-
-      afterEach(() => {
-        stub.restore();
       });
 
       test(
@@ -66,12 +67,12 @@ describe('Users Async Actions', () => {
 
     describe('on failure', () => {
       beforeEach(() => {
-        stub = createAuthServiceStub().replace('login').with(() => Promise.reject({ status: 401 }));
+        authService.mockImplementation(() => {
+          return {
+            login: () => Promise.reject({ status: 401 })
+          };
+        });
         store = mockStore(initialState);
-      });
-
-      afterEach(() => {
-        stub.restore();
       });
 
       test('should dispatch MANUAL_LOGIN_USER and LOGIN_ERROR_USER', (done) => {
@@ -98,12 +99,12 @@ describe('Users Async Actions', () => {
   describe('signUp', () => {
     describe('on success', () => {
       beforeEach(() => {
-        stub = createAuthServiceStub().replace('signUp').with(() => Promise.resolve({ status: 200 }));
+        authService.mockImplementation(() => {
+          return {
+            signUp: () => Promise.resolve({ status: 200 })
+          };
+        });
         store = mockStore(initialState);
-      });
-
-      afterEach(() => {
-        stub.restore();
       });
 
       test(
@@ -138,12 +139,12 @@ describe('Users Async Actions', () => {
 
     describe('on failure', () => {
       beforeEach(() => {
-        stub = createAuthServiceStub().replace('signUp').with(() => Promise.reject({ status: 401 }));
+        authService.mockImplementation(() => {
+          return {
+            signUp: () => Promise.reject({ status: 401 })
+          };
+        });
         store = mockStore(initialState);
-      });
-
-      afterEach(() => {
-        stub.restore();
       });
 
       test('should dispatch MANUAL_LOGIN_USER and LOGIN_ERROR_USER', (done) => {
@@ -170,12 +171,12 @@ describe('Users Async Actions', () => {
   describe('logOut', () => {
     describe('on success', () => {
       beforeEach(() => {
-        stub = createAuthServiceStub().replace('logOut').with(() => Promise.resolve({ status: 200 }));
+        authService.mockImplementation(() => {
+          return {
+            logOut: () => Promise.resolve({ status: 200 })
+          };
+        });
         store = mockStore(initialState);
-      });
-
-      afterEach(() => {
-        stub.restore();
       });
 
       test('should dispatch LOGOUT_USER, LOGOUT_SUCCESS_USER', (done) => {
@@ -199,12 +200,12 @@ describe('Users Async Actions', () => {
 
     describe('on failure', () => {
       beforeEach(() => {
-        stub = createAuthServiceStub().replace('logOut').with(() => Promise.reject({ status: 401 }));
+        authService.mockImplementation(() => {
+          return {
+            logOut: () => Promise.reject({ status: 401 })
+          };
+        });
         store = mockStore(initialState);
-      });
-
-      afterEach(() => {
-        stub.restore();
       });
 
       test('should dispatch LOGOUT_USER, LOGOUT_ERROR_USER', (done) => {
