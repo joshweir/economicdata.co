@@ -6,7 +6,7 @@ jest.mock('../../utils/createRestApiClient');
 describe('countryIndicator service', () => {
   const mockApi = () => {
     const spy = jest.fn().mockImplementation(() => Promise.resolve({
-      data: 'request response'
+      data: 'response'
     }));
     createRestApiClient.mockImplementation(() => {
       return {
