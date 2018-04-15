@@ -119,6 +119,7 @@
     "redux-logger": "^3.0.1",
     "redux-saga": "^0.12.0",
     "redux-thunk": "^2.0.1",
+    "reselect": "^3.0.1",
     "rimraf": "^2.6.1",
     "sanitize-html": "^1.18.2",
     "sequelize": "^3.30.4",
