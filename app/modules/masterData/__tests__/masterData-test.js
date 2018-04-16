@@ -2,18 +2,19 @@
 import configureStore from 'redux-mock-store';
 import createSagaMiddleware from 'redux-saga';
 import { polyfill } from 'es6-promise';
-import reducer, {
+import reducer from '../reducers';
+import {
   FETCH_COUNTRIES_LIST, FETCH_COUNTRIES_LIST_SUCCESS,
   FETCH_COUNTRIES_LIST_FAILURE, FETCH_COUNTRY_INDICATORS,
   FETCH_COUNTRY_INDICATORS_SUCCESS, FETCH_COUNTRY_INDICATORS_FAILURE,
   FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
   fetchCountriesList, fetchCountriesListSuccess, fetchCountriesListFailure,
   fetchCountryIndicators, fetchCountryIndicatorsSuccess,
-  fetchCountryIndicatorsFailure } from '../../modules/masterData';
-import rootSaga from '../../sagas/masterData';
-import createMasterDataService from '../../services/masterData';
+  fetchCountryIndicatorsFailure } from '../actions';
+import rootSaga from '../sagas';
+import api from '../api';
 
-jest.mock('../../services/masterData');
+jest.mock('../api');
 polyfill();
 
 const sagaMiddleware = createSagaMiddleware();
@@ -74,7 +75,7 @@ describe('masterData Actions', () => {
 
         const extractCountriesListSpy = jest.fn()
         .mockImplementation(() => Promise.resolve(expectedCountriesList));
-        createMasterDataService.mockImplementation(() => {
+        api.mockImplementation(() => {
           return {
             extractCountriesList: extractCountriesListSpy
           };
@@ -110,7 +111,7 @@ describe('masterData Actions', () => {
           }
         ];
 
-        createMasterDataService.mockImplementation(() => {
+        api.mockImplementation(() => {
           return {
             extractCountriesList: () => Promise.reject(new Error('the error'))
           };
@@ -174,7 +175,7 @@ describe('masterData Actions', () => {
 
         const extractCountryIndicatorsListSpy = jest.fn()
         .mockImplementation(() => Promise.resolve(expectedCountryIndicators));
-        createMasterDataService.mockImplementation(() => {
+        api.mockImplementation(() => {
           return {
             extractCountryIndicatorsList: extractCountryIndicatorsListSpy
           };
@@ -210,7 +211,7 @@ describe('masterData Actions', () => {
           }
         ];
 
-        createMasterDataService.mockImplementation(() => {
+        api.mockImplementation(() => {
           return {
             extractCountryIndicatorsList: () => Promise.reject(new Error('the error'))
           };

@@ -1,7 +1,7 @@
-import createRestApiClient from '../../utils/createRestApiClient';
-import createAuthenticationService from '../../services/authentication';
+import createRestApiClient from '../../../utils/createRestApiClient';
+import api from '../api';
 
-jest.mock('../../utils/createRestApiClient');
+jest.mock('../../../utils/createRestApiClient');
 
 describe('authentication service', () => {
   const mockApi = () => {
@@ -24,7 +24,7 @@ describe('authentication service', () => {
   describe('#login', () => {
     test('makes a client POST request to the /sessions endpoint',
     (done) => {
-      createAuthenticationService().login(data)
+      api().login(data)
       .then(() => {
         expect(spy)
         .toHaveBeenCalledWith({
@@ -42,7 +42,7 @@ describe('authentication service', () => {
     test('makes a client POST request to the /users endpoint',
     (done) => {
       spy.mockClear();
-      createAuthenticationService().signUp(data)
+      api().signUp(data)
       .then(() => {
         expect(spy)
         .toHaveBeenCalledWith({
@@ -60,7 +60,7 @@ describe('authentication service', () => {
     test('makes a client DELETE request to the /sessions endpoint',
     (done) => {
       spy.mockClear();
-      createAuthenticationService().logOut()
+      api().logOut()
       .then(() => {
         expect(spy)
         .toHaveBeenCalledWith({

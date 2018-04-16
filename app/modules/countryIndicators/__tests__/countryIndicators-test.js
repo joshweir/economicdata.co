@@ -2,13 +2,16 @@
 import configureStore from 'redux-mock-store';
 import createSagaMiddleware from 'redux-saga';
 import { polyfill } from 'es6-promise';
-import * as actions from '../../actions/countryIndicators';
-import rootSaga from '../../sagas/countryIndicators';
-import * as types from '../../types';
-import createCountryIndicatorService from '../../services/countryIndicator';
+import reducer from '../reducers';
+import {
+  FETCH_COUNTRY_INDICATOR_DATA, FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
+  FETCH_COUNTRY_INDICATOR_DATA_FAILURE,
+  fetchCountryIndicatorData, fetchCountryIndicatorDataSuccess,
+  fetchCountryIndicatorDataFailure } from '../actions';
+import rootSaga from '../sagas';
+import api from '../api';
 
-jest.mock('../../services/countryIndicator');
-
+jest.mock('../api');
 polyfill();
 
 const sagaMiddleware = createSagaMiddleware();
@@ -23,6 +26,10 @@ const initialState = {
     countrySelectedIndicators: [],
     countryIndicatorSelected: null
   }
+};
+const reducerInitialState = {
+  indicatorInfo: {},
+  indicatorData: []
 };
 
 describe('countryIndicators Actions', () => {
@@ -42,7 +49,7 @@ describe('countryIndicators Actions', () => {
     const expectedActionsSuccess = ({payload}) => {
       return [
         {
-          type: types.FETCH_COUNTRY_INDICATOR_DATA,
+          type: FETCH_COUNTRY_INDICATOR_DATA,
           payload
         },
         {
@@ -53,7 +60,7 @@ describe('countryIndicators Actions', () => {
           }
         },
         {
-          type: types.FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
+          type: FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
           payload: {
             countryIndicatorSelected: indicator,
             countrySelected: country
@@ -65,11 +72,11 @@ describe('countryIndicators Actions', () => {
     const expectedActionsError = ({payload}) => {
       return [
         {
-          type: types.FETCH_COUNTRY_INDICATOR_DATA,
+          type: FETCH_COUNTRY_INDICATOR_DATA,
           payload
         },
         {
-          type: types.FETCH_COUNTRY_INDICATOR_DATA_FAILURE,
+          type: FETCH_COUNTRY_INDICATOR_DATA_FAILURE,
           payload: new Error('the error'),
           error: true
         }
@@ -83,7 +90,7 @@ describe('countryIndicators Actions', () => {
           countryIndicatorSelected: indicator
         }
       }));
-      createCountryIndicatorService.mockImplementation(() => {
+      api.mockImplementation(() => {
         return {
           getCountryIndicator: spy
         };
@@ -92,7 +99,7 @@ describe('countryIndicators Actions', () => {
     };
 
     const mockApiForError = () => {
-      createCountryIndicatorService.mockImplementation(() => {
+      api.mockImplementation(() => {
         return {
           getCountryIndicator: () => Promise.reject(new Error('the error'))
         };
@@ -119,7 +126,7 @@ describe('countryIndicators Actions', () => {
               done();
             }
           });
-          store.dispatch(actions.fetchCountryIndicatorData(payload));
+          store.dispatch(fetchCountryIndicatorData(payload));
         });
       });
 
@@ -138,7 +145,7 @@ describe('countryIndicators Actions', () => {
               done();
             }
           });
-          store.dispatch(actions.fetchCountryIndicatorData(payload));
+          store.dispatch(fetchCountryIndicatorData(payload));
         });
       });
     });
@@ -163,7 +170,7 @@ describe('countryIndicators Actions', () => {
               done();
             }
           });
-          store.dispatch(actions.fetchCountryIndicatorData(payload));
+          store.dispatch(fetchCountryIndicatorData(payload));
         });
       });
 
@@ -182,9 +189,30 @@ describe('countryIndicators Actions', () => {
               done();
             }
           });
-          store.dispatch(actions.fetchCountryIndicatorData(payload));
+          store.dispatch(fetchCountryIndicatorData(payload));
         });
       });
+    });
+  });
+});
+
+describe('countryIndicator reducer', () => {
+  test('returns the initial state', () => {
+    expect(
+      reducer(undefined, {type: 'FOO'})
+    ).toEqual(reducerInitialState);
+  });
+
+  test('handles FETCH_COUNTRY_INDICATOR_DATA_SUCCESS', () => {
+    const indicatorInfo = {foo: 'bar'};
+    const indicatorData = ['the', 'data'];
+    expect(
+      reducer(undefined, {
+        type: FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
+        payload: {indicatorInfo, indicatorData}
+      })
+    ).toEqual({
+      ...reducerInitialState, indicatorInfo, indicatorData
     });
   });
 });

@@ -1,23 +1,34 @@
+/* eslint no-unused-vars: 0 */ // since fetch is needed but not used
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import * as actions from '../../actions/users';
-import * as types from '../../types';
-import authService from '../../services/authentication';
+import { polyfill } from 'es6-promise';
+import reducer from '../reducers';
+import {
+  MANUAL_LOGIN_USER, LOGIN_SUCCESS_USER, LOGIN_ERROR_USER, SIGNUP_USER,
+  SIGNUP_SUCCESS_USER, SIGNUP_ERROR_USER, LOGOUT_USER, LOGOUT_SUCCESS_USER,
+  LOGOUT_ERROR_USER, TOGGLE_LOGIN_MODE,
+  manualLogin, beginLogin, signUp, logOut, toggleLoginMode } from '../actions';
+import api from '../api';
 
-jest.mock('../../services/authentication');
+jest.mock('../api');
+polyfill();
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
+const initialState = {
+  isLogin: true,
+  message: '',
+  isWaiting: false,
+  authenticated: false
+};
+const reducerInitialState = {
+  indicatorInfo: {},
+  indicatorData: []
+};
+
 describe('Users Async Actions', () => {
   let store;
-
-  const initialState = {
-    isLogin: true,
-    message: '',
-    isWaiting: false,
-    authenticated: false
-  };
 
   const data = {
     email: 'hello@world.com',
@@ -27,7 +38,7 @@ describe('Users Async Actions', () => {
   describe('manualLogin', () => {
     describe('on success', () => {
       beforeEach(() => {
-        authService.mockImplementation(() => {
+        api.mockImplementation(() => {
           return {
             login: () => Promise.resolve({ status: 200 })
           };
@@ -40,11 +51,11 @@ describe('Users Async Actions', () => {
         (done) => {
           const expectedActions = [
             {
-              type: types.MANUAL_LOGIN_USER
+              type: MANUAL_LOGIN_USER
             },
             {
-              type: types.LOGIN_SUCCESS_USER,
-              message: 'You have been successfully logged in'
+              type: LOGIN_SUCCESS_USER,
+              payload: 'You have been successfully logged in'
             },
             {
               payload: {
@@ -55,7 +66,7 @@ describe('Users Async Actions', () => {
             }
           ];
 
-          store.dispatch(actions.manualLogin(data))
+          store.dispatch(manualLogin(data))
             .then(() => {
               expect(store.getActions()).toEqual(expectedActions);
               done();
@@ -67,7 +78,7 @@ describe('Users Async Actions', () => {
 
     describe('on failure', () => {
       beforeEach(() => {
-        authService.mockImplementation(() => {
+        api.mockImplementation(() => {
           return {
             login: () => Promise.reject({ status: 401 })
           };
@@ -78,15 +89,15 @@ describe('Users Async Actions', () => {
       test('should dispatch MANUAL_LOGIN_USER and LOGIN_ERROR_USER', (done) => {
         const expectedActions = [
           {
-            type: types.MANUAL_LOGIN_USER
+            type: MANUAL_LOGIN_USER
           },
           {
-            type: types.LOGIN_ERROR_USER,
-            message: 'Oops! Invalid username or password'
+            type: LOGIN_ERROR_USER,
+            payload: 'Oops! Invalid username or password'
           }
         ];
 
-        store.dispatch(actions.manualLogin(data))
+        store.dispatch(manualLogin(data))
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
             done();
@@ -99,7 +110,7 @@ describe('Users Async Actions', () => {
   describe('signUp', () => {
     describe('on success', () => {
       beforeEach(() => {
-        authService.mockImplementation(() => {
+        api.mockImplementation(() => {
           return {
             signUp: () => Promise.resolve({ status: 200 })
           };
@@ -112,11 +123,11 @@ describe('Users Async Actions', () => {
         (done) => {
           const expectedActions = [
             {
-              type: types.SIGNUP_USER
+              type: SIGNUP_USER
             },
             {
-              type: types.SIGNUP_SUCCESS_USER,
-              message: 'You have successfully registered an account!'
+              type: SIGNUP_SUCCESS_USER,
+              payload: 'You have successfully registered an account!'
             },
             {
               payload: {
@@ -127,7 +138,7 @@ describe('Users Async Actions', () => {
             }
           ];
 
-          store.dispatch(actions.signUp(data))
+          store.dispatch(signUp(data))
             .then(() => {
               expect(store.getActions()).toEqual(expectedActions);
               done();
@@ -139,7 +150,7 @@ describe('Users Async Actions', () => {
 
     describe('on failure', () => {
       beforeEach(() => {
-        authService.mockImplementation(() => {
+        api.mockImplementation(() => {
           return {
             signUp: () => Promise.reject({ status: 401 })
           };
@@ -150,15 +161,15 @@ describe('Users Async Actions', () => {
       test('should dispatch MANUAL_LOGIN_USER and LOGIN_ERROR_USER', (done) => {
         const expectedActions = [
           {
-            type: types.SIGNUP_USER
+            type: SIGNUP_USER
           },
           {
-            type: types.SIGNUP_ERROR_USER,
-            message: 'Oops! Something went wrong when signing up'
+            type: SIGNUP_ERROR_USER,
+            payload: 'Oops! Something went wrong when signing up'
           }
         ];
 
-        store.dispatch(actions.signUp(data))
+        store.dispatch(signUp(data))
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
             done();
@@ -171,7 +182,7 @@ describe('Users Async Actions', () => {
   describe('logOut', () => {
     describe('on success', () => {
       beforeEach(() => {
-        authService.mockImplementation(() => {
+        api.mockImplementation(() => {
           return {
             logOut: () => Promise.resolve({ status: 200 })
           };
@@ -182,14 +193,14 @@ describe('Users Async Actions', () => {
       test('should dispatch LOGOUT_USER, LOGOUT_SUCCESS_USER', (done) => {
         const expectedActions = [
           {
-            type: types.LOGOUT_USER
+            type: LOGOUT_USER
           },
           {
-            type: types.LOGOUT_SUCCESS_USER
+            type: LOGOUT_SUCCESS_USER
           }
         ];
 
-        store.dispatch(actions.logOut(data))
+        store.dispatch(logOut(data))
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
             done();
@@ -200,7 +211,7 @@ describe('Users Async Actions', () => {
 
     describe('on failure', () => {
       beforeEach(() => {
-        authService.mockImplementation(() => {
+        api.mockImplementation(() => {
           return {
             logOut: () => Promise.reject({ status: 401 })
           };
@@ -211,14 +222,14 @@ describe('Users Async Actions', () => {
       test('should dispatch LOGOUT_USER, LOGOUT_ERROR_USER', (done) => {
         const expectedActions = [
           {
-            type: types.LOGOUT_USER
+            type: LOGOUT_USER
           },
           {
-            type: types.LOGOUT_ERROR_USER
+            type: LOGOUT_ERROR_USER
           }
         ];
 
-        store.dispatch(actions.logOut(data))
+        store.dispatch(logOut(data))
           .then(() => {
             expect(store.getActions()).toEqual(expectedActions);
             done();
@@ -233,12 +244,127 @@ describe('Users Async Actions', () => {
       store = mockStore(initialState);
       const expectedActions = [
         {
-          type: types.TOGGLE_LOGIN_MODE
+          type: TOGGLE_LOGIN_MODE
         }
       ];
 
-      store.dispatch(actions.toggleLoginMode());
+      store.dispatch(toggleLoginMode());
       expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+});
+
+describe('Users reducer', () => {
+  test('returns the initial state', () => {
+    expect(
+      reducer(undefined, {type: 'FOO'})
+    ).toEqual(initialState);
+  });
+
+  test('handles MANUAL_LOGIN_USER', () => {
+    expect(
+      reducer(undefined, {type: MANUAL_LOGIN_USER})
+    ).toEqual({
+      ...initialState,
+      isWaiting: true,
+      message: ''
+    });
+  });
+
+  test('handles LOGIN_SUCCESS_USER', () => {
+    expect(
+      reducer(undefined, {type: LOGIN_SUCCESS_USER})
+    ).toEqual({
+      ...initialState,
+      isWaiting: false,
+      authenticated: true,
+      message: ''
+    });
+  });
+
+  test('handles LOGIN_ERROR_USER', () => {
+    const payload = 'Success';
+    expect(
+      reducer(undefined, {type: LOGIN_ERROR_USER, payload})
+    ).toEqual({
+      ...initialState,
+      isWaiting: false,
+      authenticated: false,
+      message: payload
+    });
+  });
+
+  test('handles SIGNUP_USER', () => {
+    expect(
+      reducer(undefined, {type: SIGNUP_USER})
+    ).toEqual({
+      ...initialState,
+      isWaiting: true,
+      message: ''
+    });
+  });
+
+  test('handles SIGNUP_SUCCESS_USER', () => {
+    expect(
+      reducer(undefined, {type: SIGNUP_SUCCESS_USER})
+    ).toEqual({
+      ...initialState,
+      isWaiting: false,
+      authenticated: true
+    });
+  });
+
+  test('handles SIGNUP_ERROR_USER', () => {
+    const payload = 'Oops! Something went wrong!';
+    expect(
+      reducer(undefined, {type: SIGNUP_ERROR_USER, payload})
+    ).toEqual({
+      ...initialState,
+      isWaiting: false,
+      authenticated: false,
+      message: payload
+    });
+  });
+
+  test('handles LOGOUT_USER', () => {
+    expect(
+      reducer(undefined, {type: LOGOUT_USER})
+    ).toEqual({
+      ...initialState,
+      isWaiting: true,
+      message: ''
+    });
+  });
+
+  test('handles LOGOUT_SUCCESS_USER', () => {
+    expect(
+      reducer(undefined, {type: LOGOUT_SUCCESS_USER})
+    ).toEqual({
+      ...initialState,
+      isWaiting: false,
+      authenticated: false
+    });
+  });
+
+  test('handles LOGOUT_ERROR_USER', () => {
+    const payload = 'Oops! Something went wrong!';
+    expect(
+      reducer(undefined, {type: LOGOUT_ERROR_USER, payload})
+    ).toEqual({
+      ...initialState,
+      isWaiting: false,
+      authenticated: true,
+      isLogin: true,
+      message: payload
+    });
+  });
+
+  test('handles TOGGLE_LOGIN_MODE', () => {
+    expect(
+      reducer(undefined, {type: TOGGLE_LOGIN_MODE})
+    ).toEqual({
+      ...initialState,
+      isLogin: false
     });
   });
 });

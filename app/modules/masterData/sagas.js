@@ -1,16 +1,16 @@
 import { takeLatest } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
-import { masterDataService } from '../services';
+import api from './api';
 import {
   FETCH_COUNTRIES_LIST, FETCH_COUNTRY_INDICATORS,
   fetchCountriesListSuccess, fetchCountriesListFailure,
   fetchCountryIndicatorsSuccess,
-  fetchCountryIndicatorsFailure } from '../modules/masterData';
+  fetchCountryIndicatorsFailure } from './actions';
 
 function* handleSelectCountry({ payload: country }) {
   const from = yield select(state => state.masterData.countriesIndicators);
   try {
-    const data = yield call(masterDataService().extractCountryIndicatorsList,
+    const data = yield call(api().extractCountryIndicatorsList,
                             { from, country });
     yield put(fetchCountryIndicatorsSuccess(data));
   } catch (error) {
@@ -23,7 +23,7 @@ function* handleSelectCountry({ payload: country }) {
 
 function* handleFetchCountriesList({ payload: from }) {
   try {
-    const data = yield call(masterDataService().extractCountriesList, {from});
+    const data = yield call(api().extractCountriesList, {from});
     yield put(fetchCountriesListSuccess(data));
   } catch (error) {
     yield put(fetchCountriesListFailure(

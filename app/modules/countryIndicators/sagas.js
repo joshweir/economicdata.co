@@ -1,10 +1,9 @@
 import { takeLatest } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
-import * as types from '../types';
-import { countryIndicatorService } from '../services';
-import { fetchCountryIndicatorDataSuccess,
-         fetchCountryIndicatorDataFailure } from '../actions/countryIndicators';
+import { countryIndicatorService } from '../../services';
+import { FETCH_COUNTRY_INDICATOR_DATA, fetchCountryIndicatorDataSuccess,
+  fetchCountryIndicatorDataFailure } from './actions';
 
 export function* handleFetchCountryIndicatorData({ payload }) {
   let country;
@@ -26,6 +25,6 @@ export function* handleFetchCountryIndicatorData({ payload }) {
 }
 
 export default function* rootSaga() {
-  yield takeLatest(types.FETCH_COUNTRY_INDICATOR_DATA,
+  yield takeLatest(FETCH_COUNTRY_INDICATOR_DATA,
     handleFetchCountryIndicatorData);
 }

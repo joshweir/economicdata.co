@@ -1,7 +1,7 @@
-import createRestApiClient from '../../utils/createRestApiClient';
-import createMasterDataService from '../../services/masterData';
+import createRestApiClient from '../../../utils/createRestApiClient';
+import api from '../api';
 
-jest.mock('../../utils/createRestApiClient');
+jest.mock('../../../utils/createRestApiClient');
 
 describe('masterData service', () => {
   const mockApi = () => {
@@ -39,7 +39,7 @@ describe('masterData service', () => {
     test('makes a client request to the master data endpoint',
     (done) => {
       const getMasterDataSpy = mockApi();
-      createMasterDataService().getMasterData()
+      api().getMasterData()
       .then(() => {
         expect(getMasterDataSpy)
         .toHaveBeenCalledWith({
@@ -59,7 +59,7 @@ describe('masterData service', () => {
         {value: 'united-states', label: 'United States'},
         {value: 'australia', label: 'Australia'}
       ];
-      createMasterDataService().extractCountriesList({from: masterData})
+      api().extractCountriesList({from: masterData})
       .then((data) => {
         expect(data).toEqual(expected);
         done();
@@ -76,7 +76,7 @@ describe('masterData service', () => {
         {value: 'gdp-2', label: 'GDP-2'},
         {value: 'cpi-2', label: 'CPI-2'}
       ];
-      createMasterDataService()
+      api()
       .extractCountryIndicatorsList({
         from: masterData, country
       })

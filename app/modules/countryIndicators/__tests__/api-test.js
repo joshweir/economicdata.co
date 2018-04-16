@@ -1,7 +1,7 @@
-import createRestApiClient from '../../utils/createRestApiClient';
-import createCountryIndicatorService from '../../services/countryIndicator';
+import createRestApiClient from '../../../utils/createRestApiClient';
+import api from '../api';
 
-jest.mock('../../utils/createRestApiClient');
+jest.mock('../../../utils/createRestApiClient');
 
 describe('countryIndicator service', () => {
   const mockApi = () => {
@@ -26,7 +26,7 @@ describe('countryIndicator service', () => {
         perPage: 20
       };
       const getCountryIndicatorSpy = mockApi();
-      createCountryIndicatorService().getCountryIndicator(params)
+      api().getCountryIndicator(params)
       .then(() => {
         expect(getCountryIndicatorSpy)
         .toHaveBeenCalledWith({

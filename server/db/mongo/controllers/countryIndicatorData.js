@@ -1,6 +1,6 @@
 import CountryIndicatorInfo from '../models/countryIndicatorInfo';
 import CountryIndicatorData from '../models/countryIndicatorData';
-import { MONTH_NAMES } from '../../../../app/types';
+import { MONTH_NAMES } from '../../../../app/modules/masterData/actions';
 
 let country;
 let indicator;
