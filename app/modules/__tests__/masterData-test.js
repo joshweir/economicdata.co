@@ -2,9 +2,15 @@
 import configureStore from 'redux-mock-store';
 import createSagaMiddleware from 'redux-saga';
 import { polyfill } from 'es6-promise';
-import * as actions from '../../actions/masterData';
+import reducer, {
+  FETCH_COUNTRIES_LIST, FETCH_COUNTRIES_LIST_SUCCESS,
+  FETCH_COUNTRIES_LIST_FAILURE, FETCH_COUNTRY_INDICATORS,
+  FETCH_COUNTRY_INDICATORS_SUCCESS, FETCH_COUNTRY_INDICATORS_FAILURE,
+  FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
+  fetchCountriesList, fetchCountriesListSuccess, fetchCountriesListFailure,
+  fetchCountryIndicators, fetchCountryIndicatorsSuccess,
+  fetchCountryIndicatorsFailure } from '../../modules/masterData';
 import rootSaga from '../../sagas/masterData';
-import * as types from '../../types';
 import createMasterDataService from '../../services/masterData';
 
 jest.mock('../../services/masterData');
@@ -23,6 +29,7 @@ const initialState = {
     countryIndicatorSelected: null
   }
 };
+const reducerInitialState = initialState.masterData;
 
 describe('masterData Actions', () => {
   describe('#extractCountriesList', () => {
@@ -56,11 +63,11 @@ describe('masterData Actions', () => {
         sagaMiddleware.run(rootSaga);
         const expectedActions = [
           {
-            type: types.FETCH_COUNTRIES_LIST,
+            type: FETCH_COUNTRIES_LIST,
             payload: countriesIndicators
           },
           {
-            type: types.FETCH_COUNTRIES_LIST_SUCCESS,
+            type: FETCH_COUNTRIES_LIST_SUCCESS,
             payload: expectedCountriesList
           }
         ];
@@ -83,7 +90,7 @@ describe('masterData Actions', () => {
             done();
           }
         });
-        store.dispatch(actions.fetchCountriesList(countriesIndicators));
+        store.dispatch(fetchCountriesList(countriesIndicators));
       });
     });
 
@@ -93,11 +100,11 @@ describe('masterData Actions', () => {
         sagaMiddleware.run(rootSaga);
         const expectedActions = [
           {
-            type: types.FETCH_COUNTRIES_LIST,
+            type: FETCH_COUNTRIES_LIST,
             payload: countriesIndicators
           },
           {
-            type: types.FETCH_COUNTRIES_LIST_FAILURE,
+            type: FETCH_COUNTRIES_LIST_FAILURE,
             payload: 'Oops! Something went wrong and we couldn\'t ' +
               'initialize the list of countries'
           }
@@ -116,12 +123,12 @@ describe('masterData Actions', () => {
             done();
           }
         });
-        store.dispatch(actions.fetchCountriesList(countriesIndicators));
+        store.dispatch(fetchCountriesList(countriesIndicators));
       });
     });
   });
 
-  describe('#selectCountry', () => {
+  describe('#fetchCountryIndicators', () => {
     const country = 'united-states';
     const payload = country;
     const expectedCountryIndicators = [
@@ -151,16 +158,16 @@ describe('masterData Actions', () => {
     };
 
     describe('on success', () => {
-      test('dispatches SELECT_COUNTRY action', (done) => {
+      test('dispatches FETCH_COUNTRY_INDICATORS action', (done) => {
         const store = mockStore(initialStateWithCountriesIndicators);
         sagaMiddleware.run(rootSaga);
         const expectedActions = [
           {
-            type: types.SELECT_COUNTRY,
+            type: FETCH_COUNTRY_INDICATORS,
             payload: country
           },
           {
-            type: types.FETCH_COUNTRY_INDICATORS_SUCCESS,
+            type: FETCH_COUNTRY_INDICATORS_SUCCESS,
             payload: expectedCountryIndicators
           }
         ];
@@ -183,7 +190,7 @@ describe('masterData Actions', () => {
             done();
           }
         });
-        store.dispatch(actions.selectCountry(payload));
+        store.dispatch(fetchCountryIndicators(payload));
       });
     });
 
@@ -193,11 +200,11 @@ describe('masterData Actions', () => {
         sagaMiddleware.run(rootSaga);
         const expectedActions = [
           {
-            type: types.SELECT_COUNTRY,
+            type: FETCH_COUNTRY_INDICATORS,
             payload: country
           },
           {
-            type: types.FETCH_COUNTRY_INDICATORS_FAILURE,
+            type: FETCH_COUNTRY_INDICATORS_FAILURE,
             payload: 'Oops! Something went wrong and we couldn\'t ' +
               'fetch the list of country indicators'
           }
@@ -216,8 +223,76 @@ describe('masterData Actions', () => {
             done();
           }
         });
-        store.dispatch(actions.selectCountry(payload));
+        store.dispatch(fetchCountryIndicators(payload));
       });
+    });
+  });
+});
+
+describe('masterData reducer', () => {
+  const initialStateWithIndicatorSelected = {
+    ...reducerInitialState,
+    countryIndicatorSelected: 'cpi'
+  };
+  const countrySelected = 'usa';
+  const countrySelectedIndicators = ['gdp', 'cpi'];
+  const countryIndicatorSelected = 'gdp';
+
+  test('returns the initial state', () => {
+    expect(
+      reducer(undefined, {type: 'FOO'})
+    ).toEqual(reducerInitialState);
+  });
+
+  test('handles FETCH_COUNTRIES_LIST_SUCCESS', () => {
+    const countries = ['usa', 'aus'];
+    expect(
+      reducer(undefined, {
+        type: FETCH_COUNTRIES_LIST_SUCCESS,
+        payload: countries
+      })
+    ).toEqual({
+      ...reducerInitialState, countries
+    });
+  });
+
+  test('handles FETCH_COUNTRY_INDICATORS', () => {
+    expect(
+      reducer(initialStateWithIndicatorSelected, {
+        type: FETCH_COUNTRY_INDICATORS,
+        payload: countrySelected
+      })
+    ).toEqual({
+      ...reducerInitialState, countrySelected
+    });
+  });
+
+  test('handles FETCH_COUNTRY_INDICATOR_DATA_SUCCESS', () => {
+    expect(
+      reducer(undefined, {
+        type: FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
+        payload: {
+          countrySelected,
+          countrySelectedIndicators,
+          countryIndicatorSelected
+        }
+      })
+    ).toEqual({
+      ...reducerInitialState,
+      countrySelected,
+      countrySelectedIndicators,
+      countryIndicatorSelected
+    });
+  });
+
+  test('handles FETCH_COUNTRY_INDICATORS_SUCCESS', () => {
+    expect(
+      reducer(undefined, {
+        type: FETCH_COUNTRY_INDICATORS_SUCCESS,
+        payload: countrySelectedIndicators
+      })
+    ).toEqual({
+      ...reducerInitialState, countrySelectedIndicators
     });
   });
 });

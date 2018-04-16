@@ -31,7 +31,7 @@ describe('Root reducer', () => {
 
   test('returns the initial state', () => {
     expect(
-      reducer(undefined, {})
+      reducer(undefined, {type: 'FOO'})
     ).toEqual(initialState);
   });
 });
