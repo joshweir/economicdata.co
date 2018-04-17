@@ -9,15 +9,6 @@ export default () => {
         method: 'GET',
         url: '/master-data'
       });
-    },
-    extractCountriesList: ({ from }) => {
-      return Promise.resolve(from.map((d) => {
-        return {label: d.countryLabel, value: d.country};
-      }));
-    },
-    extractCountryIndicatorsList: ({ from, country }) => {
-      return Promise.resolve(
-        from.filter(d => d.country === country)[0].indicators);
     }
   };
 };

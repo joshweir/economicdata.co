@@ -13,6 +13,8 @@ import {
   fetchCountryIndicatorsFailure } from '../actions';
 import rootSaga from '../sagas';
 import api from '../api';
+import { getCountriesIndicators, getCountries, getCountrySelected,
+  getCountriesForSelect, getCountryIndicatorsForSelect } from '../selectors';
 
 jest.mock('../api');
 polyfill();
@@ -46,6 +48,10 @@ describe('masterData Actions', () => {
         indicators: []
       }
     ];
+    const initialStateWithCountriesIndicators = {
+      ...initialState,
+      masterData: { ...initialState.masterData, countriesIndicators }
+    };
     const expectedCountriesList = [
       {
         label: 'United States',
@@ -57,75 +63,29 @@ describe('masterData Actions', () => {
       }
     ];
 
-    describe('on success', () => {
-      test('dispatches FETCH_COUNTRIES_LIST and ' +
-        'FETCH_COUNTRIES_LIST_SUCCESS actions', (done) => {
-        const store = mockStore(initialState);
-        sagaMiddleware.run(rootSaga);
-        const expectedActions = [
-          {
-            type: FETCH_COUNTRIES_LIST,
-            payload: countriesIndicators
-          },
-          {
-            type: FETCH_COUNTRIES_LIST_SUCCESS,
-            payload: expectedCountriesList
-          }
-        ];
+    test('dispatches FETCH_COUNTRIES_LIST and ' +
+      'FETCH_COUNTRIES_LIST_SUCCESS actions', (done) => {
+      const store = mockStore(initialStateWithCountriesIndicators);
+      sagaMiddleware.run(rootSaga);
+      const expectedActions = [
+        {
+          type: FETCH_COUNTRIES_LIST,
+          payload: countriesIndicators
+        },
+        {
+          type: FETCH_COUNTRIES_LIST_SUCCESS,
+          payload: expectedCountriesList
+        }
+      ];
 
-        const extractCountriesListSpy = jest.fn()
-        .mockImplementation(() => Promise.resolve(expectedCountriesList));
-        api.mockImplementation(() => {
-          return {
-            extractCountriesList: extractCountriesListSpy
-          };
-        });
-
-        store.subscribe(() => {
-          const actualActions = store.getActions();
-          if (actualActions.length >= expectedActions.length) {
-            expect(actualActions).toEqual(expectedActions);
-            expect(extractCountriesListSpy)
-            .toHaveBeenCalledWith({from: countriesIndicators});
-            expect(extractCountriesListSpy).toHaveBeenCalledTimes(1);
-            done();
-          }
-        });
-        store.dispatch(fetchCountriesList(countriesIndicators));
+      store.subscribe(() => {
+        const actualActions = store.getActions();
+        if (actualActions.length >= expectedActions.length) {
+          expect(actualActions).toEqual(expectedActions);
+          done();
+        }
       });
-    });
-
-    describe('on error', () => {
-      test('dispatches FETCH_COUNTRIES_LIST_FAILURE action', (done) => {
-        const store = mockStore(initialState);
-        sagaMiddleware.run(rootSaga);
-        const expectedActions = [
-          {
-            type: FETCH_COUNTRIES_LIST,
-            payload: countriesIndicators
-          },
-          {
-            type: FETCH_COUNTRIES_LIST_FAILURE,
-            payload: 'Oops! Something went wrong and we couldn\'t ' +
-              'initialize the list of countries'
-          }
-        ];
-
-        api.mockImplementation(() => {
-          return {
-            extractCountriesList: () => Promise.reject(new Error('the error'))
-          };
-        });
-
-        store.subscribe(() => {
-          const actualActions = store.getActions();
-          if (actualActions.length >= expectedActions.length) {
-            expect(actualActions).toEqual(expectedActions);
-            done();
-          }
-        });
-        store.dispatch(fetchCountriesList(countriesIndicators));
-      });
+      store.dispatch(fetchCountriesList(countriesIndicators));
     });
   });
 
@@ -158,74 +118,28 @@ describe('masterData Actions', () => {
       }
     };
 
-    describe('on success', () => {
-      test('dispatches FETCH_COUNTRY_INDICATORS action', (done) => {
-        const store = mockStore(initialStateWithCountriesIndicators);
-        sagaMiddleware.run(rootSaga);
-        const expectedActions = [
-          {
-            type: FETCH_COUNTRY_INDICATORS,
-            payload: country
-          },
-          {
-            type: FETCH_COUNTRY_INDICATORS_SUCCESS,
-            payload: expectedCountryIndicators
-          }
-        ];
+    test('dispatches FETCH_COUNTRY_INDICATORS action', (done) => {
+      const store = mockStore(initialStateWithCountriesIndicators);
+      sagaMiddleware.run(rootSaga);
+      const expectedActions = [
+        {
+          type: FETCH_COUNTRY_INDICATORS,
+          payload: country
+        },
+        {
+          type: FETCH_COUNTRY_INDICATORS_SUCCESS,
+          payload: expectedCountryIndicators
+        }
+      ];
 
-        const extractCountryIndicatorsListSpy = jest.fn()
-        .mockImplementation(() => Promise.resolve(expectedCountryIndicators));
-        api.mockImplementation(() => {
-          return {
-            extractCountryIndicatorsList: extractCountryIndicatorsListSpy
-          };
-        });
-
-        store.subscribe(() => {
-          const actualActions = store.getActions();
-          if (actualActions.length >= expectedActions.length) {
-            expect(actualActions).toEqual(expectedActions);
-            expect(extractCountryIndicatorsListSpy)
-            .toHaveBeenCalledWith({from: countriesIndicators, country});
-            expect(extractCountryIndicatorsListSpy).toHaveBeenCalledTimes(1);
-            done();
-          }
-        });
-        store.dispatch(fetchCountryIndicators(payload));
+      store.subscribe(() => {
+        const actualActions = store.getActions();
+        if (actualActions.length >= expectedActions.length) {
+          expect(actualActions).toEqual(expectedActions);
+          done();
+        }
       });
-    });
-
-    describe('on error', () => {
-      test('dispatches FETCH_COUNTRY_INDICATORS_FAILURE action', (done) => {
-        const store = mockStore(initialStateWithCountriesIndicators);
-        sagaMiddleware.run(rootSaga);
-        const expectedActions = [
-          {
-            type: FETCH_COUNTRY_INDICATORS,
-            payload: country
-          },
-          {
-            type: FETCH_COUNTRY_INDICATORS_FAILURE,
-            payload: 'Oops! Something went wrong and we couldn\'t ' +
-              'fetch the list of country indicators'
-          }
-        ];
-
-        api.mockImplementation(() => {
-          return {
-            extractCountryIndicatorsList: () => Promise.reject(new Error('the error'))
-          };
-        });
-
-        store.subscribe(() => {
-          const actualActions = store.getActions();
-          if (actualActions.length >= expectedActions.length) {
-            expect(actualActions).toEqual(expectedActions);
-            done();
-          }
-        });
-        store.dispatch(fetchCountryIndicators(payload));
-      });
+      store.dispatch(fetchCountryIndicators(payload));
     });
   });
 });
@@ -294,6 +208,83 @@ describe('masterData reducer', () => {
       })
     ).toEqual({
       ...reducerInitialState, countrySelectedIndicators
+    });
+  });
+});
+
+describe('masterData selectors', () => {
+  const state = {
+    masterData: {
+      countriesIndicators: [
+        {
+          country: 'united-states',
+          countryLabel: 'United States',
+          indicators: [
+            'ind1', 'ind2'
+          ]
+        },
+        {
+          country: 'australia',
+          countryLabel: 'Australia',
+          indicators: [
+            'ind3', 'ind4'
+          ]
+        }
+      ],
+      countries: ['aus', 'usa'],
+      countrySelected: null
+    }
+  };
+  const stateWithCountrySelected = {
+    ...state,
+    masterData: {
+      ...state.masterData,
+      countrySelected: 'australia'
+    }
+  };
+
+  describe('getCountriesIndicators', () => {
+    test('it retrieves the countriesIndicators', () => {
+      expect(getCountriesIndicators(state))
+      .toEqual(state.masterData.countriesIndicators);
+    });
+  });
+
+  describe('getCountries', () => {
+    test('it retrieves the countries', () => {
+      expect(getCountries(state))
+      .toEqual(state.masterData.countries);
+    });
+  });
+
+  describe('getCountriesForSelect', () => {
+    test('it retrieves the countries in react select compatible format', () => {
+      expect(getCountriesForSelect(state))
+      .toEqual([
+        {
+          label: 'United States',
+          value: 'united-states'
+        },
+        {
+          label: 'Australia',
+          value: 'australia'
+        }
+      ]);
+    });
+  });
+
+  describe('getCountrySelected', () => {
+    test('it retrieves the selected country', () => {
+      expect(getCountrySelected(stateWithCountrySelected))
+      .toEqual(stateWithCountrySelected.masterData.countrySelected);
+    });
+  });
+
+  describe('getCountryIndicatorsForSelect', () => {
+    test('it retrieves the country indicators based on countrySelected ' +
+         'in react select compatible format', () => {
+      expect(getCountryIndicatorsForSelect(stateWithCountrySelected))
+      .toEqual(['ind3', 'ind4']);
     });
   });
 });
