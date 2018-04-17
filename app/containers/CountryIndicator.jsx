@@ -4,13 +4,16 @@ import { connect } from 'react-redux';
 import BackgroundImage from '../images/fx.jpeg';
 import CountryIndicatorInfo from '../components/CountryIndicatorInfo';
 import CountryIndicatorSelection from '../components/CountryIndicatorSelection';
-import { selectCountry } from '../actions/masterData';
-import { fetchCountryIndicatorData } from '../actions/countryIndicators';
-import { preloadDynamic, paramsHaveChanged } from '../utils/preloadDynamic';
+import { fetchCountryIndicators } from '../modules/masterData/actions';
+import { fetchCountryIndicatorData } from '../modules/countryIndicators/actions';
+import { getCountryIndicatorsForSelect, getCountriesForSelect,
+  getCountrySelected } from '../modules/masterData/selectors';
+  import { getIndicatorData,
+    getIndicatorInfo } from '../modules/countryIndicators/selectors';
 
 class CountryIndicator extends Component {
   render() {
-    const { indicatorData, selectCountry, indicatorInfo, countries,
+    const { indicatorData, fetchCountryIndicators, indicatorInfo, countries,
       countrySelectedIndicators, countrySelected,
       fetchCountryIndicatorData } = this.props;
     const { indicator } = indicatorInfo;
@@ -28,7 +31,7 @@ class CountryIndicator extends Component {
                   countries={countries}
                   countryIndicator={indicator}
                   countryIndicators={countrySelectedIndicators}
-                  changeCountry={selectCountry}
+                  changeCountry={fetchCountryIndicators}
                   changeCountryIndicator={fetchCountryIndicatorData}
                 />
                 <CountryIndicatorInfo
@@ -74,20 +77,20 @@ CountryIndicator.propTypes = {
       value: PropTypes.string.isRequired
     })
   ).isRequired,
-  selectCountry: PropTypes.func.isRequired,
+  fetchCountryIndicators: PropTypes.func.isRequired,
   fetchCountryIndicatorData: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    countrySelectedIndicators: state.masterData.countrySelectedIndicators,
-    countrySelected: state.masterData.countrySelected,
-    indicatorInfo: state.countryIndicator.indicatorInfo,
-    indicatorData: state.countryIndicator.indicatorData,
-    countries: state.masterData.countries
+    countrySelectedIndicators: getCountryIndicatorsForSelect(state),
+    countrySelected: getCountrySelected(state),
+    indicatorInfo: getIndicatorInfo(state),
+    indicatorData: getIndicatorData(state),
+    countries: getCountriesForSelect(state)
   };
 }
 
 export default connect(mapStateToProps,
-  { selectCountry,
+  { fetchCountryIndicators,
     fetchCountryIndicatorData })(CountryIndicator);

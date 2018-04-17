@@ -1,9 +1,10 @@
 import { takeLatest } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
-import { countryIndicatorService } from '../../services';
+import api from './api';
 import { FETCH_COUNTRY_INDICATOR_DATA, fetchCountryIndicatorDataSuccess,
   fetchCountryIndicatorDataFailure } from './actions';
+import { getCountrySelected } from '../masterData/selectors';
 
 export function* handleFetchCountryIndicatorData({ payload }) {
   let country;
@@ -11,11 +12,11 @@ export function* handleFetchCountryIndicatorData({ payload }) {
   if (typeof payload === 'object') {
     ({ country, indicator } = payload);
   } else {
-    country = yield select(state => state.masterData.countrySelected);
+    country = yield select(state => getCountrySelected(state));
     indicator = payload;
   }
   try {
-    const { data } = yield call(countryIndicatorService().getCountryIndicator,
+    const { data } = yield call(api().getCountryIndicator,
                             { country, indicator });
     yield put(push(`/data/${country}/${indicator}`));
     yield put(fetchCountryIndicatorDataSuccess(data));

@@ -10,6 +10,7 @@ import {
   fetchCountryIndicatorDataFailure } from '../actions';
 import rootSaga from '../sagas';
 import api from '../api';
+import { getIndicatorInfo, getIndicatorData } from '../selectors';
 
 jest.mock('../api');
 polyfill();
@@ -213,6 +214,29 @@ describe('countryIndicator reducer', () => {
       })
     ).toEqual({
       ...reducerInitialState, indicatorInfo, indicatorData
+    });
+  });
+});
+
+describe('countryIndicators selectors', () => {
+  const state = {
+    countryIndicator: {
+      indicatorInfo: 'indicator info',
+      indicatorData: 'indicator data'
+    }
+  };
+
+  describe('getIndicatorInfo', () => {
+    test('it retrieves the indicator info', () => {
+      expect(getIndicatorInfo(state))
+      .toEqual(state.countryIndicator.indicatorInfo);
+    });
+  });
+
+  describe('getIndicatorData', () => {
+    test('it retrieves the indicator data', () => {
+      expect(getIndicatorInfo(state))
+      .toEqual(state.countryIndicator.indicatorInfo);
     });
   });
 });
