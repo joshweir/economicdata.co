@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
-import { dismissMessage } from '../actions/messages';
-import styles from '../css/components/message';
+import { dismissMessage } from '../modules/messages/actions';
+import { getMessage, getMessageType } from '../modules/messages/selectors';
+import styles from '../css/components/message.css';
 
 const cx = classNames.bind(styles);
 
@@ -23,7 +24,10 @@ Message.propTypes = {
 };
 
 function mapStateToProps(state) {
-  return {...state.message};
+  return {
+    message: getMessage(state),
+    type: getMessageType(state)
+  };
 }
 
 export default connect(mapStateToProps, { dismissMessage })(Message);

@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import classNames from 'classnames/bind';
-import { logOut } from '../actions/users';
-import styles from '../css/components/navigation';
+import { logOut } from '../modules/users/actions';
+import { getUser } from '../modules/users/selectors';
+import styles from '../css/components/navigation.css';
 import logo from '../images/logo-light.png';
 import NavItem from '../components/NavItem';
 
@@ -76,7 +77,7 @@ Navigation.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    user: state.user
+    user: getUser(state)
   };
 }
 

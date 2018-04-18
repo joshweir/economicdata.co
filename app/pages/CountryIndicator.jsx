@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Page from '../pages/Page';
 import CountryIndicatorContainer from '../containers/CountryIndicator';
-import { handleFetchCountryIndicatorData } from '../sagas/countryIndicators';
-import { fetchCountryIndicatorData } from '../actions/countryIndicators';
+import { handleFetchCountryIndicatorData } from '../modules/countryIndicators/sagas';
+import { fetchCountryIndicatorData } from '../modules/countryIndicators/actions';
 import { preloadDynamic, paramsHaveChanged } from '../utils/preloadDynamic';
+import { getIndicatorInfo } from '../modules/countryIndicators/selectors';
 
-class CountryIndicator extends Component {
+export class CountryIndicator extends Component {
   componentWillMount() {
     preloadDynamic([
       {
@@ -56,23 +57,21 @@ class CountryIndicator extends Component {
     const indicatorInfo = this.props.indicatorInfo;
     this.country = indicatorInfo.country;
     this.indicator = indicatorInfo.indicator;
+    let theContainer = (<div />);
     if (this.country && this.indicator) {
-      return (
+      theContainer = (
         <Page {...this.getMetaData()}>
           <CountryIndicatorContainer {...this.props} />
         </Page>
       );
-    } else {
-      return (<div />);
     }
+    return theContainer;
   }
 }
 
 function mapStateToProps(state) {
   return {
-    masterData: state.masterData,
-    indicatorInfo: state.countryIndicator.indicatorInfo,
-    indicatorData: state.countryIndicator.indicatorData
+    indicatorInfo: getIndicatorInfo(state)
   };
 }
 

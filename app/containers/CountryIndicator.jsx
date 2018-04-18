@@ -7,45 +7,40 @@ import CountryIndicatorSelection from '../components/CountryIndicatorSelection';
 import { fetchCountryIndicators } from '../modules/masterData/actions';
 import { fetchCountryIndicatorData } from '../modules/countryIndicators/actions';
 import { getCountryIndicatorsForSelect, getCountriesForSelect,
-  getCountrySelected } from '../modules/masterData/selectors';
-  import { getIndicatorData,
-    getIndicatorInfo } from '../modules/countryIndicators/selectors';
+  getCountrySelected, getCountryIndicatorSelected } from '../modules/masterData/selectors';
+import { getIndicatorData,
+  getIndicatorInfo } from '../modules/countryIndicators/selectors';
 
-class CountryIndicator extends Component {
-  render() {
-    const { indicatorData, fetchCountryIndicators, indicatorInfo, countries,
-      countrySelectedIndicators, countrySelected,
-      fetchCountryIndicatorData } = this.props;
-    const { indicator } = indicatorInfo;
-
-    return (
-      <section id="home">
-        <div
-          className="g-flex-centered g-min-height-500--md g-bg-cover g-bg-pos-center g-bg-img-hero g-bg-black-opacity-0_5--after g-pt-110"
-          style={{backgroundImage: `url(${BackgroundImage})`}}>
-          <div className="container text-center g-z-index-1">
-            <div className="row">
-              <div className="col-lg-8 col-md-10 mx-auto">
-                <CountryIndicatorSelection
-                  country={countrySelected}
-                  countries={countries}
-                  countryIndicator={indicator}
-                  countryIndicators={countrySelectedIndicators}
-                  changeCountry={fetchCountryIndicators}
-                  changeCountryIndicator={fetchCountryIndicatorData}
-                />
-                <CountryIndicatorInfo
-                  indicatorInfo={indicatorInfo}
-                  indicatorData={indicatorData}
-                />
-              </div>
+const CountryIndicator = ({ indicatorData, fetchCountryIndicators,
+  indicatorInfo, countries, countrySelectedIndicators, countrySelected,
+  fetchCountryIndicatorData, countryIndicatorSelected }) => {
+  return (
+    <section id="home">
+      <div
+        className="g-flex-centered g-min-height-500--md g-bg-cover g-bg-pos-center g-bg-img-hero g-bg-black-opacity-0_5--after g-pt-110"
+        style={{backgroundImage: `url(${BackgroundImage})`}}>
+        <div className="container text-center g-z-index-1">
+          <div className="row">
+            <div className="col-lg-8 col-md-10 mx-auto">
+              <CountryIndicatorSelection
+                country={countrySelected}
+                countries={countries}
+                countryIndicator={countryIndicatorSelected}
+                countryIndicators={countrySelectedIndicators}
+                changeCountry={fetchCountryIndicators}
+                changeCountryIndicator={fetchCountryIndicatorData}
+              />
+              <CountryIndicatorInfo
+                indicatorInfo={indicatorInfo}
+                indicatorData={indicatorData}
+              />
             </div>
           </div>
         </div>
-      </section>
-    );
-  }
-}
+      </div>
+    </section>
+  );
+};
 
 CountryIndicator.propTypes = {
   indicatorData: PropTypes.arrayOf(
@@ -77,6 +72,8 @@ CountryIndicator.propTypes = {
       value: PropTypes.string.isRequired
     })
   ).isRequired,
+  countrySelected: PropTypes.string.isRequired,
+  countryIndicatorSelected: PropTypes.string.isRequired,
   fetchCountryIndicators: PropTypes.func.isRequired,
   fetchCountryIndicatorData: PropTypes.func.isRequired
 };
@@ -85,6 +82,7 @@ function mapStateToProps(state) {
   return {
     countrySelectedIndicators: getCountryIndicatorsForSelect(state),
     countrySelected: getCountrySelected(state),
+    countryIndicatorSelected: getCountryIndicatorSelected(state),
     indicatorInfo: getIndicatorInfo(state),
     indicatorData: getIndicatorData(state),
     countries: getCountriesForSelect(state)

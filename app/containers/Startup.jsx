@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchCountriesList } from '../actions/masterData';
+import { fetchCountriesList } from '../modules/masterData/actions';
+import { getCountriesIndicators } from '../modules/masterData/selectors';
 
 class Startup extends Component {
   componentDidMount() {
@@ -32,7 +33,7 @@ Startup.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    countriesIndicators: state.masterData.countriesIndicators
+    countriesIndicators: getCountriesIndicators(state)
   };
 }
 

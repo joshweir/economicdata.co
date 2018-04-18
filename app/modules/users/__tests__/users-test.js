@@ -9,6 +9,7 @@ import {
   LOGOUT_ERROR_USER, TOGGLE_LOGIN_MODE,
   manualLogin, beginLogin, signUp, logOut, toggleLoginMode } from '../actions';
 import api from '../api';
+import { getUser } from '../selectors';
 
 jest.mock('../api');
 polyfill();
@@ -365,6 +366,24 @@ describe('Users reducer', () => {
     ).toEqual({
       ...initialState,
       isLogin: false
+    });
+  });
+});
+
+describe('Users selectors', () => {
+  const state = {
+    user: {
+      isLogin: true,
+      message: '',
+      isWaiting: false,
+      authenticated: false
+    }
+  };
+
+  describe('getUser', () => {
+    test('it retrieves the user', () => {
+      expect(getUser(state))
+      .toEqual(state.user);
     });
   });
 });

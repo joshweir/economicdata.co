@@ -9,7 +9,6 @@ import styles from '../css/main.css';
 
 const cx = classNames.bind(styles);
 
-
 /*
  * React-router's <Router> component renders <Route>'s
  * and replaces `this.props.children` with the proper React Component.

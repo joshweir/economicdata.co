@@ -5,6 +5,7 @@ import { polyfill } from 'es6-promise';
 import reducer from '../reducers';
 import { DISMISS_MESSAGE, dismissMessage } from '../actions';
 import { LOGIN_SUCCESS_USER, SIGNUP_SUCCESS_USER } from '../../users/actions';
+import { getMessage, getMessageType } from '../selectors';
 
 polyfill();
 
@@ -70,5 +71,28 @@ describe('Message reducer', () => {
     expect(
       reducer(stateWithMessage, {type: DISMISS_MESSAGE})
     ).toEqual(initialState);
+  });
+});
+
+describe('Messages selectors', () => {
+  const state = {
+    message: {
+      message: '',
+      type: 'SUCCESS'
+    }
+  };
+
+  describe('getMessage', () => {
+    test('it retrieves the message', () => {
+      expect(getMessage(state))
+      .toEqual(state.message.message);
+    });
+  });
+
+  describe('getMessageType', () => {
+    test('it retrieves the message type', () => {
+      expect(getMessageType(state))
+      .toEqual(state.message.type);
+    });
   });
 });

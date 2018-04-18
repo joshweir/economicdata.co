@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import Select from 'react-select';
 import CountryIndicatorSelection
   from '../../components/CountryIndicatorSelection';
@@ -10,7 +10,7 @@ describe('<CountryIndicatorSelection />', () => {
 
   const component = () => {
     if (!mountedComponent) {
-      mountedComponent = mount(
+      mountedComponent = shallow(
         <CountryIndicatorSelection {...props} />
       );
     }

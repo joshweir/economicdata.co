@@ -40,9 +40,7 @@ function onUpdate() {
 // Read more https://github.com/rackt/react-router/blob/latest/docs/Glossary.md#routeconfig
 render(
   <Provider store={store}>
-    <Startup>
-      <Router history={history} onUpdate={onUpdate}>
-        {routes}
-      </Router>
-    </Startup>
+    <Router history={history} onUpdate={onUpdate}>
+      {routes}
+    </Router>
   </Provider>, document.getElementById('app'));

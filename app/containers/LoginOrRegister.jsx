@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames/bind';
 import { connect } from 'react-redux';
-import { manualLogin, signUp, toggleLoginMode } from '../actions/users';
-import styles from '../css/components/login';
+import { manualLogin, signUp, toggleLoginMode } from '../modules/users/actions';
+import { getUser } from '../modules/users/selectors';
+import styles from '../css/components/login.css';
 import hourGlassSvg from '../images/hourglass.svg';
 
 const cx = classNames.bind(styles);
@@ -83,7 +84,7 @@ class LoginOrRegister extends Component {
               <input
                 className={cx('input')}
                 type="password"
-               ref="password"
+                ref="password"
                 placeholder="password"
               />
               <div className={cx('hint')}>
@@ -121,9 +122,9 @@ LoginOrRegister.propTypes = {
 
 // Function passed in to `connect` to subscribe to Redux store updates.
 // Any time it updates, mapStateToProps is called.
-function mapStateToProps({user}) {
+function mapStateToProps(state) {
   return {
-    user
+    user: getUser(state)
   };
 }
 
@@ -131,4 +132,3 @@ function mapStateToProps({user}) {
 // It does not modify the component class passed to it
 // Instead, it returns a new, connected component class, for you to use.
 export default connect(mapStateToProps, { manualLogin, signUp, toggleLoginMode })(LoginOrRegister);
-
