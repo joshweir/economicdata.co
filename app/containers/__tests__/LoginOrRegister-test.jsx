@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import LoginOrRegister from '../../containers/LoginOrRegister';
 import initialState from '../../tests/helpers/initialState';
@@ -7,7 +8,9 @@ import { getUser } from '../../modules/users/selectors';
 import { manualLogin, signUp, toggleLoginMode
   } from '../../modules/users/actions';
 
-const mockStore = configureMockStore();
+jest.mock('../../modules/users/actions');
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 describe('<LoginOrRegister />', () => {
   let wrapper;
@@ -27,34 +30,27 @@ describe('<LoginOrRegister />', () => {
     });
 
     test('receives manualLogin from dispatch', () => {
-      /*const spy = jest.fn();
-      actions.mockImplementation(() => {
-        return {
-          manualLogin: spy
-        };
-      });*/
-      // wrapper.props().manualLogin();
-      // expect(spy).toHaveBeenCalledTimes(1);
-      /*
-TODO:
-As manualLogin is a thunk, determine how to
-mock the named imports using jest, then can
-mock that manualLogin was called with expected
-data, calling this should trigger the mocked
-function, then can check with toHaveBeenCalledWith:
-wrapper.props().manualLogin();
-       */
-      expect(1).toEqual(1);
+      manualLogin.mockImplementation(() => {
+        return jest.fn();
+      });
+      wrapper.props().manualLogin();
+      expect(manualLogin).toHaveBeenCalledTimes(1);
     });
 
     test('receives signUp from dispatch', () => {
-      //TODO: same as above..
-      expect(1).toEqual(1);
+      signUp.mockImplementation(() => {
+        return jest.fn();
+      });
+      wrapper.props().signUp();
+      expect(signUp).toHaveBeenCalledTimes(1);
     });
 
     test('receives toggleLoginMode from dispatch', () => {
-      //TODO: see above
-      expect(1).toEqual(1);
+      toggleLoginMode.mockImplementation(() => {
+        return jest.fn();
+      });
+      wrapper.props().toggleLoginMode();
+      expect(toggleLoginMode).toHaveBeenCalledTimes(1);
     });
   });
 
