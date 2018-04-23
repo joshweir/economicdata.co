@@ -73,9 +73,13 @@ CountryIndicator.propTypes = {
     })
   ).isRequired,
   countrySelected: PropTypes.string.isRequired,
-  countryIndicatorSelected: PropTypes.string.isRequired,
+  countryIndicatorSelected: PropTypes.string,
   fetchCountryIndicators: PropTypes.func.isRequired,
   fetchCountryIndicatorData: PropTypes.func.isRequired
+};
+
+CountryIndicator.defaultProps = {
+  countryIndicatorSelected: null
 };
 
 function mapStateToProps(state) {
