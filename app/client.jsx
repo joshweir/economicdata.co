@@ -6,7 +6,6 @@ import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import createRoutes from './routes';
 import configureStore from './store/configureStore';
-import Startup from './containers/Startup';
 import rootSaga from './sagas/index';
 
 // Grab the state from a global injected into
@@ -30,7 +29,6 @@ function onUpdate() {
   // Read more: https://github.com/choonkending/react-webpack-node/pull/203#discussion_r60839356
   if (window.__INITIAL_STATE__ !== null) {
     window.__INITIAL_STATE__ = null;
-    return;
   }
 
   // fetchDataForRoute(this.state, store);
@@ -40,9 +38,7 @@ function onUpdate() {
 // Read more https://github.com/rackt/react-router/blob/latest/docs/Glossary.md#routeconfig
 render(
   <Provider store={store}>
-    
-      <Router history={history} onUpdate={onUpdate}>
-        {routes}
-      </Router>
-
+    <Router history={history} onUpdate={onUpdate}>
+      {routes}
+    </Router>
   </Provider>, document.getElementById('app'));

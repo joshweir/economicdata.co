@@ -49,7 +49,7 @@ CountryIndicatorSelection.propTypes = {
       value: PropTypes.string
     }).isRequired
   ).isRequired,
-  countryIndicator: PropTypes.string.isRequired,
+  countryIndicator: PropTypes.string,
   countryIndicators: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -58,6 +58,10 @@ CountryIndicatorSelection.propTypes = {
   ).isRequired,
   changeCountry: PropTypes.func.isRequired,
   changeCountryIndicator: PropTypes.func.isRequired
+};
+
+CountryIndicatorSelection.defaultProps = {
+  countryIndicator: null
 };
 
 export default CountryIndicatorSelection;

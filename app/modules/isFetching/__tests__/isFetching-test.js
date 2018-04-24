@@ -5,8 +5,6 @@ import { polyfill } from 'es6-promise';
 import reducer from '../reducers';
 import { FETCH_COUNTRY_INDICATOR_DATA, FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
   FETCH_COUNTRY_INDICATOR_DATA_FAILURE } from '../../countryIndicators/actions';
-import { FETCH_COUNTRIES_LIST, FETCH_COUNTRIES_LIST_SUCCESS,
-  FETCH_COUNTRIES_LIST_FAILURE } from '../../masterData/actions';
 
 polyfill();
 
@@ -32,22 +30,17 @@ describe('isFetching reducer', () => {
      '(isFetching is true)', () => {
     const expectedValue = true;
     [
-      FETCH_COUNTRY_INDICATOR_DATA,
-      FETCH_COUNTRIES_LIST
+      FETCH_COUNTRY_INDICATOR_DATA
     ].forEach(type => expectIsFetching({expectedValue, type}));
   });
 
   test('handles FETCH_COUNTRY_INDICATOR_DATA_SUCCESS, ' +
      'FETCH_COUNTRY_INDICATOR_DATA_FAILURE, ' +
-     'FETCH_COUNTRIES_LIST_SUCCESS, ' +
-     'FETCH_COUNTRIES_LIST_FAILURE ' +
      '(isFetching is false)', () => {
     const expectedValue = false;
     [
       FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
-      FETCH_COUNTRY_INDICATOR_DATA_FAILURE,
-      FETCH_COUNTRIES_LIST_SUCCESS,
-      FETCH_COUNTRIES_LIST_FAILURE
+      FETCH_COUNTRY_INDICATOR_DATA_FAILURE
     ].forEach(type => expectIsFetching({expectedValue, type}));
   });
 });

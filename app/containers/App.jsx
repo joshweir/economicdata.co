@@ -30,7 +30,14 @@ const App = ({ children }) => {
 };
 
 App.propTypes = {
-  children: PropTypes.object
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]).isRequired
+};
+
+App.defaultProps = {
+  children: null
 };
 
 export default App;

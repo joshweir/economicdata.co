@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 import { handleActions } from 'redux-actions';
 
 const initialState = {
-  countries: [],
   countrySelected: null,
   countrySelectedIndicators: [],
   countryIndicatorSelected: null,
@@ -10,10 +9,6 @@ const initialState = {
 };
 
 const countriesIndicators = (state = []) => state;
-
-const countries = handleActions({
-  FETCH_COUNTRIES_LIST_SUCCESS: (state, action) => action.payload
-}, initialState.countries);
 
 const countrySelected = handleActions({
   FETCH_COUNTRY_INDICATORS: (state, action) => action.payload,
@@ -32,7 +27,6 @@ const countryIndicatorSelected = handleActions({
 
 export default combineReducers({
   countriesIndicators,
-  countries,
   countrySelected,
   countrySelectedIndicators,
   countryIndicatorSelected

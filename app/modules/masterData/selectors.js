@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 
 export const getCountriesIndicators = state => state.masterData.countriesIndicators;
-export const getCountries = state => state.masterData.countries;
 export const getCountrySelected = state => state.masterData.countrySelected;
 export const getCountryIndicatorSelected = state => state.masterData.countryIndicatorSelected;
 export const getCountriesForSelect = createSelector(

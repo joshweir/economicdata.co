@@ -28,23 +28,23 @@ export class CountryIndicator extends Component {
     }
   }
 
-  getMetaData() {
+  getMetaData(data) {
     return {
-      title: this.pageTitle(),
-      meta: this.pageMeta(),
+      title: this.pageTitle(data),
+      meta: this.pageMeta(data),
       link: this.pageLink()
     };
   }
 
-  pageTitle = () => {
-    return `${this.country} - ${this.indicator} | EconomicData.co`;
+  pageTitle = ({ country, indicator }) => {
+    return `${country} - ${indicator} | EconomicData.co`;
   };
 
-  pageMeta = () => {
+  pageMeta = ({ country, indicator }) => {
     return [
       {
         name: 'description',
-        content: `${this.country} - ${this.indicator} data history. No registration, free download to csv.`
+        content: `${country} - ${indicator} data history. No registration, free download to csv.`
       }
     ];
   };
@@ -53,19 +53,23 @@ export class CountryIndicator extends Component {
     return [];
   };
 
-  render() {
-    const indicatorInfo = this.props.indicatorInfo;
-    this.country = indicatorInfo.country;
-    this.indicator = indicatorInfo.indicator;
+  renderPageIfCountryAndIndicatorAvailable = () => {
     let theContainer = (<div />);
-    if (this.country && this.indicator) {
-      theContainer = (
-        <Page {...this.getMetaData()}>
-          <CountryIndicatorContainer {...this.props} />
-        </Page>
-      );
+    if (this.props.indicatorInfo) {
+      const { country, indicator } = this.props.indicatorInfo;
+      if (country && indicator) {
+        theContainer = (
+          <Page {...this.getMetaData({country, indicator})}>
+            <CountryIndicatorContainer {...this.props} />
+          </Page>
+        );
+      }
     }
     return theContainer;
+  };
+
+  render() {
+    return this.renderPageIfCountryAndIndicatorAvailable();
   }
 }
 

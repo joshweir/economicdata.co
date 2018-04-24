@@ -8,7 +8,6 @@ describe('Root reducer', () => {
     },
     isFetching: false,
     masterData: {
-      countries: [],
       countriesIndicators: [],
       countryIndicatorSelected: null,
       countrySelected: null,

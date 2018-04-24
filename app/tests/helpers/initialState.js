@@ -55,16 +55,6 @@ export default {
         ]
       }
     ],
-    countries: [
-      {
-        country: 'united-states',
-        label: 'United States'
-      },
-      {
-        country: 'australia',
-        label: 'Australia'
-      }
-    ],
     countrySelected: 'united-states',
     countrySelectedIndicators: [
       {
