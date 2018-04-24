@@ -44,31 +44,46 @@ describe('<Navigation />', () => {
       const [indexComponent, aboutComponent] =
       wrapper.dive().find('.navbar-nav')
       .find(NavItem);
-
-      const subComponentProps = asdf.props();
-      expect(subComponentProps.country)
-      .toEqual(getCountrySelected(initialState));
-      expect(subComponentProps.countries)
-      .toEqual(getCountriesForSelect(initialState));
-      expect(subComponentProps.countryIndicator)
-      .toEqual(getCountryIndicatorSelected(initialState));
-      expect(subComponentProps.countryIndicators)
-      .toEqual(getCountryIndicatorsForSelect(initialState));
-      expect(wrapper.dive().find(CountryIndicatorSelection).props().changeCountry())
-      .toEqual(fetchCountryIndicators());
-      expect(
-        wrapper.dive().find(CountryIndicatorSelection)
-        .props().changeCountryIndicator()
-      ).toEqual(fetchCountryIndicatorData());
+      expect(indexComponent.props.to).toEqual('/');
+      expect(aboutComponent.props.to).toEqual('/about');
     });
   });
 
-  test('renders <CountryIndicatorInfo> with props', () => {
-    const subComponentProps =
-    wrapper.dive().find(CountryIndicatorInfo).props();
-    expect(subComponentProps.indicatorInfo)
-    .toEqual(getIndicatorInfo(initialState));
-    expect(subComponentProps.indicatorData)
-    .toEqual(getIndicatorData(initialState));
+  describe('when user is authenticated', () => {
+    test('the sign out <NavItem> is rendered with logOut action', () => {
+      const initialStateUserAuthenticated = {
+        ...initialState,
+        user: {
+          ...initialState.user,
+          authenticated: true
+        }
+      };
+      store = mockStore(initialStateUserAuthenticated);
+      wrapper = shallow(
+        <Navigation store={store} />
+      );
+      const [,, signOutComponent] =
+      wrapper.dive().find('.navbar-nav')
+      .find(NavItem);
+      expect(signOutComponent.props.to).toEqual('/');
+
+      logOut.mockClear();
+      logOut.mockImplementation(() => {
+        return jest.fn();
+      });
+      //<withRouter(NavItem) onClick={[Function anonymous]} to="/">Sign Out</withRouter(NavItem)>
+      //signOutComponent.dive().simulate('click');
+      signOutComponent.props.onClick();
+      expect(logOut).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('when user is not authenticated', () => {
+    test('the sign in <NavItem> is rendered', () => {
+      const [,, signInComponent] =
+      wrapper.dive().find('.navbar-nav')
+      .find(NavItem);
+      expect(signInComponent.props.to).toEqual('/login');
+    });
   });
 });
