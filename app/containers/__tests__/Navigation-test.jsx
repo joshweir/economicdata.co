@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import configureMockStore from 'redux-mock-store';
-import { Link } from 'react-router';
 import thunk from 'redux-thunk';
 import Navigation from '../../containers/Navigation';
 import initialState from '../../tests/helpers/initialState';
@@ -71,9 +70,7 @@ describe('<Navigation />', () => {
       logOut.mockImplementation(() => {
         return jest.fn();
       });
-      //<withRouter(NavItem) onClick={[Function anonymous]} to="/">Sign Out</withRouter(NavItem)>
-      //signOutComponent.dive().simulate('click');
-      signOutComponent.props.onClick();
+      shallow(signOutComponent).simulate('click');
       expect(logOut).toHaveBeenCalledTimes(1);
     });
   });
