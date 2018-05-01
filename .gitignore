@@ -9,3 +9,4 @@ compiled
 .nyc_output/
 coverage/
 yarn-error.log
+__snapshots__/

@@ -145,7 +145,8 @@
     "collectCoverageFrom": [
       "app/**/*.js*",
       "!app/tests/**",
-      "!app/store/**"
+      "!app/store/**",
+      "!app/**/__snapshots__/**"
     ]
   },
   "babel": {

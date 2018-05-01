@@ -34,11 +34,10 @@ function onUpdate() {
   // fetchDataForRoute(this.state, store);
 }
 
-// Router converts <Route> element hierarchy to a route config:
-// Read more https://github.com/rackt/react-router/blob/latest/docs/Glossary.md#routeconfig
-render(
+export default render(
   <Provider store={store}>
     <Router history={history} onUpdate={onUpdate}>
       {routes}
     </Router>
-  </Provider>, document.getElementById('app'));
+  </Provider>, document.getElementById('app') || document.createElement('div')
+);

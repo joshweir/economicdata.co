@@ -13,9 +13,17 @@ const Page = ({ title, link, meta, children }) => {
 
 Page.propTypes = {
   title: PropTypes.string,
-  link: PropTypes.array,
-  meta: PropTypes.array
+  link: PropTypes.arrayOf(PropTypes.shape({})),
+  meta: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    content: PropTypes.string
+  }))
+};
+
+Page.defaultProps = {
+  title: null,
+  link: null,
+  meta: null
 };
 
 export default Page;
-
