@@ -10,7 +10,8 @@ import {
   fetchCountryIndicatorDataFailure } from '../actions';
 import rootSaga from '../sagas';
 import api from '../api';
-import { getIndicatorInfo, getIndicatorData } from '../selectors';
+import { getIndicatorInfo, getIndicatorData, getCountryDisplay,
+  getCountryIndicatorDisplay } from '../selectors';
 
 jest.mock('../api');
 polyfill();
@@ -237,6 +238,20 @@ describe('countryIndicators selectors', () => {
     test('it retrieves the indicator data', () => {
       expect(getIndicatorInfo(state))
       .toEqual(state.countryIndicator.indicatorInfo);
+    });
+  });
+
+  describe('getCountryDisplay', () => {
+    test('it retrieves the selected country in display format', () => {
+      expect(getCountryDisplay(state))
+      .toEqual(state.countryIndicator.indicatorInfo.countryDisplay);
+    });
+  });
+
+  describe('getCountryIndicatorDisplay', () => {
+    test('it retrieves the selected country indicator in display format', () => {
+      expect(getCountryIndicatorDisplay(state))
+      .toEqual(state.countryIndicator.indicatorInfo.indicatorDisplay);
     });
   });
 });

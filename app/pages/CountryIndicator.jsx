@@ -5,7 +5,8 @@ import CountryIndicatorContainer from '../containers/CountryIndicator';
 import { handleFetchCountryIndicatorData } from '../modules/countryIndicators/sagas';
 import { fetchCountryIndicatorData } from '../modules/countryIndicators/actions';
 import { preloadDynamic, paramsHaveChanged } from '../utils/preloadDynamic';
-import { getIndicatorInfo } from '../modules/countryIndicators/selectors';
+import { getCountryDisplay,
+  getCountryIndicatorDisplay } from '../modules/countryIndicators/selectors';
 
 export class CountryIndicator extends Component {
   componentWillMount() {
@@ -36,15 +37,15 @@ export class CountryIndicator extends Component {
     };
   }
 
-  pageTitle = ({ country, indicator }) => {
-    return `${country} - ${indicator} | EconomicData.co`;
+  pageTitle = ({ countryDisplay, indicatorDisplay }) => {
+    return `${countryDisplay} - ${indicatorDisplay} | EconomicData.co`;
   };
 
-  pageMeta = ({ country, indicator }) => {
+  pageMeta = ({ countryDisplay, indicatorDisplay }) => {
     return [
       {
         name: 'description',
-        content: `${country} - ${indicator} data history. No registration, free download to csv.`
+        content: `${countryDisplay} - ${indicatorDisplay} data history. No registration, free download to csv.`
       }
     ];
   };
@@ -55,15 +56,13 @@ export class CountryIndicator extends Component {
 
   renderPageIfCountryAndIndicatorAvailable = () => {
     let theContainer = (<div />);
-    if (this.props.indicatorInfo) {
-      const { country, indicator } = this.props.indicatorInfo;
-      if (country && indicator) {
-        theContainer = (
-          <Page {...this.getMetaData({country, indicator})}>
-            <CountryIndicatorContainer {...this.props} />
-          </Page>
-        );
-      }
+    const { countryDisplay, indicatorDisplay } = this.props;
+    if (countryDisplay && indicatorDisplay) {
+      theContainer = (
+        <Page {...this.getMetaData({countryDisplay, indicatorDisplay})}>
+          <CountryIndicatorContainer {...this.props} />
+        </Page>
+      );
     }
     return theContainer;
   };
@@ -75,7 +74,8 @@ export class CountryIndicator extends Component {
 
 function mapStateToProps(state) {
   return {
-    indicatorInfo: getIndicatorInfo(state)
+    countryDisplay: getCountryDisplay(state),
+    indicatorDisplay: getCountryIndicatorDisplay(state)
   };
 }
 

@@ -66,7 +66,7 @@ export default {
         value: 'new-home-sales-mom'
       }
     ],
-    countryIndicatorSelected: 'gdp'
+    countryIndicatorSelected: 'new-home-sales-mom'
   },
   isFetching: false,
   message: {
