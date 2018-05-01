@@ -15,7 +15,7 @@
     "build": "npm run clean && cross-env NODE_ENV=production npm run webpack -- --env.browser && cross-env NODE_ENV=production npm run webpack -- --env.server",
     "webpack": "webpack --colors --display-error-details --config ./webpack/webpack.config.js",
     "test": "jest",
-    "test:coverage": "yarn run test -- --coverage ",
+    "test:coverage": "yarn run test -- --coverage --updateSnapshot ",
     "test:travis": "yarn run test:coverage && cat ./coverage/lcov.info | coveralls",
     "test:watch": "jest --watch"
   },
