@@ -1,11 +1,12 @@
 import { Route, Router, IndexRoute, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
-import Index from '../client';
 import initialState from '../tests/helpers/initialState';
 import configureStore from '../store/configureStore';
 import createRoutes from '../routes';
 import { About, App, Contact, Country, CountryIndicator,
          LoginOrRegister } from '../pages';
+
+let Index;
 
 describe('client.jsx', () => {
   let renderedClient;
@@ -16,9 +17,10 @@ describe('client.jsx', () => {
   const rendered = (state = initialState) => {
     if (!renderedClient) {
       global.window.__INITIAL_STATE__ = state;
-      store = configureStore(initialState, browserHistory);
+      store = configureStore(state, browserHistory);
       history = syncHistoryWithStore(browserHistory, store);
       routes = createRoutes(store);
+      Index = require('../client').default;
       renderedClient = Object.assign(
         {}, Index, { _reactInternalInstance: 'censored' });
     }
@@ -107,6 +109,49 @@ describe('client.jsx', () => {
       expect(countryRoute.props.component).toEqual(Country);
       expect(countryRoute.props.path)
       .toEqual('data/:country');
+    });
+
+    describe('login route onEnter, when user is not authenticated', () => {
+      test('does not call replace, calls callback', () => {
+        const nextState = jest.fn();
+        const replace = jest.fn();
+        const callback = jest.fn();
+        loginRoute.props.onEnter(nextState, replace, callback);
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(replace).toHaveBeenCalledTimes(0);
+      });
+    });
+
+    describe('login route onEnter, when user is authenticated', () => {
+      beforeEach(() => {
+        jest.resetModules();
+      });
+
+      test('calls replace, calls callback', () => {
+        renderedClient = null;
+        const initialStateUserAuthenticated = {
+          ...initialState,
+          user: {
+            ...initialState.user,
+            authenticated: true
+          }
+        };
+        const [
+          ,
+          route
+        ] =
+        rendered(initialStateUserAuthenticated)
+        .props.children.props.children.props.children;
+        const nextState = jest.fn();
+        const replace = jest.fn();
+        const callback = jest.fn();
+        route.props.onEnter(nextState, replace, callback);
+        expect(callback).toHaveBeenCalledTimes(1);
+        expect(replace).toHaveBeenCalledTimes(1);
+        expect(replace).toHaveBeenCalledWith({
+          pathname: '/'
+        });
+      });
     });
   });
 });
