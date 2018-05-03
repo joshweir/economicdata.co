@@ -9,6 +9,7 @@ import { About, App, Contact, Country, CountryIndicator,
  * state from the store after it has been authenticated.
  */
 export default (store) => {
+  /*
   const requireAuth = (nextState, replace, callback) => {
     const { user: { authenticated }} = store.getState();
     if (!authenticated) {
@@ -19,6 +20,7 @@ export default (store) => {
     }
     callback();
   };
+  */
 
   const redirectAuth = (nextState, replace, callback) => {
     const { user: { authenticated }} = store.getState();
