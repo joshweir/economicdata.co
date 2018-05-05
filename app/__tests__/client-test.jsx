@@ -136,10 +136,7 @@ describe('client.jsx', () => {
             authenticated: true
           }
         };
-        const [
-          ,
-          route
-        ] =
+        const [, route] =
         rendered(initialStateUserAuthenticated)
         .props.children.props.children.props.children;
         const nextState = jest.fn();

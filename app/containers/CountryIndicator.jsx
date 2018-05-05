@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import BackgroundImage from '../images/fx.jpeg';
+import CountryIndicatorData from '../components/CountryIndicatorData';
 import CountryIndicatorInfo from '../components/CountryIndicatorInfo';
 import CountryIndicatorSelection from '../components/CountryIndicatorSelection';
 import { fetchCountryIndicators } from '../modules/masterData/actions';
@@ -32,6 +33,9 @@ const CountryIndicator = ({ indicatorData, fetchCountryIndicators,
               />
               <CountryIndicatorInfo
                 indicatorInfo={indicatorInfo}
+                indicatorData={indicatorData}
+              />
+              <CountryIndicatorData
                 indicatorData={indicatorData}
               />
             </div>
