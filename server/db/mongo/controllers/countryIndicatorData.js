@@ -72,13 +72,14 @@ const transformIndicatorsForSelect = (indicators) => {
   });
 };
 
-const buildOutput = ({indicatorInfo, indicatorData, indicators}) => {
+const buildOutput = ({indicatorInfo, indicatorData, indicators, perPage}) => {
   return {
     indicatorInfo,
     indicatorData: transformIndicatorData(indicatorData),
     countrySelected: country,
     countryIndicatorSelected: indicator,
-    countrySelectedIndicators: transformIndicatorsForSelect(indicators)
+    countrySelectedIndicators: transformIndicatorsForSelect(indicators),
+    moreToLoad: indicatorData.length >= perPage
   };
 };
 
@@ -95,7 +96,8 @@ export function listCountryIndicatorData(req, res) {
       countryIndicatorDataQuery(),
       countryIndicatorsQuery()
     ]).then(([indicatorInfo, indicatorData, indicators]) => {
-      return res.json(buildOutput({indicatorInfo, indicatorData, indicators}));
+      return res.json(buildOutput({
+        indicatorInfo, indicatorData, indicators, perPage}));
     }).catch((err) => {
       console.log('Error retrieving country indicator data', err, country,
         indicator);

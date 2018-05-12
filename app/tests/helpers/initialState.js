@@ -22,7 +22,8 @@ export default {
         previous: '11,250,001',
         releaseDate: 'Jan 23, 2005'
       }
-    ]
+    ],
+    moreToLoad: true
   },
   masterData: {
     countriesIndicators: [

@@ -6,12 +6,14 @@ import reducer from '../reducers';
 import {
   FETCH_COUNTRY_INDICATOR_DATA, FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
   FETCH_COUNTRY_INDICATOR_DATA_FAILURE,
+  FETCH_MORE_COUNTRY_INDICATOR_DATA_SUCCESS,
   fetchCountryIndicatorData, fetchCountryIndicatorDataSuccess,
-  fetchCountryIndicatorDataFailure } from '../actions';
+  fetchCountryIndicatorDataFailure,
+  fetchMoreCountryIndicatorDataSuccess } from '../actions';
 import rootSaga from '../sagas';
 import api from '../api';
 import { getIndicatorInfo, getIndicatorData, getCountryDisplay,
-  getCountryIndicatorDisplay } from '../selectors';
+  getCountryIndicatorDisplay, getMoreToLoad } from '../selectors';
 
 jest.mock('../api');
 polyfill();
@@ -31,13 +33,51 @@ const initialState = {
 };
 const reducerInitialState = {
   indicatorInfo: {},
-  indicatorData: []
+  indicatorData: [],
+  moreToLoad: true
 };
 
 describe('countryIndicators Actions', () => {
   describe('#fetchCountryIndicatorData', () => {
     const country = 'united-states';
     const indicator = 'gdp';
+    const releaseDateBefore = '2011-01-01';
+    const indicatorData = [
+      {
+        releaseDate: '2011-02-01',
+        time: '05:00',
+        actual: '0.8%',
+        forecast: '0.9%',
+        previous: '0.7%'
+      },
+      {
+        releaseDate: '2011-01-01',
+        time: '05:00',
+        actual: '0.8%',
+        forecast: '0.9%',
+        previous: '0.7%'
+      }
+    ];
+    const indicatorDataMore = [
+      {
+        releaseDate: '2010-12-01',
+        time: '05:00',
+        actual: '0.8%',
+        forecast: '0.9%',
+        previous: '0.7%'
+      }
+    ];
+    const apiResponseSuccess = {
+      countryIndicatorSelected: indicator,
+      countrySelected: country,
+      indicatorData,
+      moreToLoad: true
+    };
+    const apiResponseSuccessMore = {
+      ...apiResponseSuccess,
+      indicatorData: indicatorDataMore,
+      moreToLoad: false
+    };
     const initialStateWithCountrySelected = {
       masterData: {
         countriesIndicators: [],
@@ -63,10 +103,20 @@ describe('countryIndicators Actions', () => {
         },
         {
           type: FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
-          payload: {
-            countryIndicatorSelected: indicator,
-            countrySelected: country
-          }
+          payload: apiResponseSuccess
+        }
+      ];
+    };
+
+    const expectedActionsSuccessMore = ({payload}) => {
+      return [
+        {
+          type: FETCH_COUNTRY_INDICATOR_DATA,
+          payload
+        },
+        {
+          type: FETCH_MORE_COUNTRY_INDICATOR_DATA_SUCCESS,
+          payload: apiResponseSuccessMore
         }
       ];
     };
@@ -87,10 +137,19 @@ describe('countryIndicators Actions', () => {
 
     const mockApiForSuccess = () => {
       const spy = jest.fn().mockImplementation(() => Promise.resolve({
-        data: {
-          countrySelected: country,
-          countryIndicatorSelected: indicator
-        }
+        data: apiResponseSuccess
+      }));
+      api.mockImplementation(() => {
+        return {
+          getCountryIndicator: spy
+        };
+      });
+      return spy;
+    };
+
+    const mockApiForSuccessMore = () => {
+      const spy = jest.fn().mockImplementation(() => Promise.resolve({
+        data: apiResponseSuccessMore
       }));
       api.mockImplementation(() => {
         return {
@@ -152,7 +211,8 @@ describe('countryIndicators Actions', () => {
       });
     });
 
-    describe('when called with object payload (SSR)', () => {
+    describe('when called with object payload without releaseDateBefore',
+    () => {
       const payload = {indicator, country};
       describe('on success', () => {
         test('dispatches FETCH_COUNTRY_INDICATOR_DATA and ' +
@@ -195,6 +255,51 @@ describe('countryIndicators Actions', () => {
         });
       });
     });
+
+    describe('when called with object payload with releaseDateBefore',
+    () => {
+      const payload = {indicator, country, releaseDateBefore};
+      describe('on success', () => {
+        test('dispatches FETCH_COUNTRY_INDICATOR_DATA and ' +
+          'FETCH_MORE_COUNTRY_INDICATOR_DATA_SUCCESS actions', (done) => {
+          const getCountryIndicatorSpy = mockApiForSuccessMore();
+          const store = mockStore(initialState);
+          sagaMiddleware.run(rootSaga);
+          const expectedActions = expectedActionsSuccessMore({payload});
+
+          store.subscribe(() => {
+            const actualActions = store.getActions();
+            if (actualActions.length >= expectedActions.length) {
+              expect(actualActions).toEqual(expectedActions);
+              expect(getCountryIndicatorSpy)
+              .toHaveBeenCalledWith({indicator, country, releaseDateBefore});
+              expect(getCountryIndicatorSpy).toHaveBeenCalledTimes(1);
+              done();
+            }
+          });
+          store.dispatch(fetchCountryIndicatorData(payload));
+        });
+      });
+
+      describe('on error', () => {
+        test('dispatches FETCH_COUNTRY_INDICATOR_FAILURE action', (done) => {
+          const store = mockStore(initialStateWithCountrySelected);
+          sagaMiddleware.run(rootSaga);
+          const expectedActions = expectedActionsError({payload});
+
+          mockApiForError();
+
+          store.subscribe(() => {
+            const actualActions = store.getActions();
+            if (actualActions.length >= expectedActions.length) {
+              expect(actualActions).toEqual(expectedActions);
+              done();
+            }
+          });
+          store.dispatch(fetchCountryIndicatorData(payload));
+        });
+      });
+    });
   });
 });
 
@@ -208,13 +313,36 @@ describe('countryIndicator reducer', () => {
   test('handles FETCH_COUNTRY_INDICATOR_DATA_SUCCESS', () => {
     const indicatorInfo = {foo: 'bar'};
     const indicatorData = ['the', 'data'];
+    const moreToLoad = true;
     expect(
       reducer(undefined, {
         type: FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
-        payload: {indicatorInfo, indicatorData}
+        payload: {indicatorInfo, indicatorData, moreToLoad}
       })
     ).toEqual({
-      ...reducerInitialState, indicatorInfo, indicatorData
+      ...reducerInitialState, indicatorInfo, indicatorData, moreToLoad
+    });
+  });
+
+  test('handles FETCH_MORE_COUNTRY_INDICATOR_DATA_SUCCESS', () => {
+    const indicatorInfo = {foo: 'bar'};
+    const indicatorData = ['the', 'data'];
+    const moreToLoad = false;
+    const initialStateIndicatorLoaded = {
+      indicatorData: ['initial'],
+      indicatorInfo,
+      moreToLoad: true
+    };
+    expect(
+      reducer(initialStateIndicatorLoaded, {
+        type: FETCH_MORE_COUNTRY_INDICATOR_DATA_SUCCESS,
+        payload: {indicatorInfo, indicatorData, moreToLoad}
+      })
+    ).toEqual({
+      ...reducerInitialState,
+      indicatorInfo,
+      indicatorData: [...initialStateIndicatorLoaded.indicatorData, ...indicatorData],
+      moreToLoad
     });
   });
 });
@@ -223,7 +351,8 @@ describe('countryIndicators selectors', () => {
   const state = {
     countryIndicator: {
       indicatorInfo: 'indicator info',
-      indicatorData: 'indicator data'
+      indicatorData: 'indicator data',
+      moreToLoad: true
     }
   };
 
@@ -252,6 +381,14 @@ describe('countryIndicators selectors', () => {
     test('it retrieves the selected country indicator in display format', () => {
       expect(getCountryIndicatorDisplay(state))
       .toEqual(state.countryIndicator.indicatorInfo.indicatorDisplay);
+    });
+  });
+
+  describe('getMoreToLoad', () => {
+    test('it retrieves a boolean whether there is more data to load from ' +
+      'server for current country indicator', () => {
+      expect(getMoreToLoad(state))
+      .toEqual(state.countryIndicator.moreToLoad);
     });
   });
 });

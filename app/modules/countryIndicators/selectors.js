@@ -8,3 +8,4 @@ export const getCountryIndicatorDisplay = (state) => {
   const indicatorInfo = state.countryIndicator.indicatorInfo;
   return indicatorInfo && indicatorInfo.indicatorDisplay;
 };
+export const getMoreToLoad = state => state.countryIndicator.moreToLoad;

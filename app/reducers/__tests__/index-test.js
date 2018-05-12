@@ -4,7 +4,8 @@ describe('Root reducer', () => {
   const initialState = {
     countryIndicator: {
       indicatorData: [],
-      indicatorInfo: {}
+      indicatorInfo: {},
+      moreToLoad: true
     },
     isFetching: false,
     masterData: {
