@@ -14,13 +14,14 @@ export default {
         actual: '12,250,000',
         forecast: '13,250,000',
         previous: '11,250,000',
-        releaseDate: 'Jan 22, 2005'
+        releaseDate: 'Jan 23, 2005',
+        time: '10:00'
       },
       {
         actual: '12,250,001',
         forecast: '13,250,001',
         previous: '11,250,001',
-        releaseDate: 'Jan 23, 2005'
+        releaseDate: 'Jan 22, 2005'
       }
     ],
     moreToLoad: true
@@ -68,6 +69,32 @@ export default {
       }
     ],
     countryIndicatorSelected: 'new-home-sales-mom'
+  },
+  isFetching: false,
+  message: {
+    message: '',
+    type: 'SUCCESS'
+  },
+  user: {
+    authenticated: false,
+    isWaiting: false,
+    message: '',
+    isLogin: true
+  }
+};
+
+export const emptyState = {
+  countryIndicator: {
+    indicatorInfo: {},
+    indicatorData: [],
+    moreToLoad: true
+  },
+  masterData: {
+    countriesIndicators: [],
+    countries: [],
+    countrySelected: null,
+    countrySelectedIndicators: [],
+    countryIndicatorSelected: null
   },
   isFetching: false,
   message: {

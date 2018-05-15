@@ -4,13 +4,15 @@ import configureMockStore from 'redux-mock-store';
 import CountryIndicator from '../../containers/CountryIndicator';
 import CountryIndicatorSelection from '../../components/CountryIndicatorSelection';
 import CountryIndicatorInfo from '../../components/CountryIndicatorInfo';
+import CountryIndicatorData from '../../components/CountryIndicatorData';
 import initialState from '../../tests/helpers/initialState';
 import { getCountryIndicatorsForSelect, getCountriesForSelect,
   getCountrySelected, getCountryIndicatorSelected } from '../../modules/masterData/selectors';
-import { getIndicatorData,
-  getIndicatorInfo } from '../../modules/countryIndicators/selectors';
+import { getIndicatorData, getIndicatorInfo,
+  getMoreToLoad } from '../../modules/countryIndicators/selectors';
 import { fetchCountryIndicators } from '../../modules/masterData/actions';
-import { fetchCountryIndicatorData } from '../../modules/countryIndicators/actions';
+import { fetchCountryIndicatorData, downloadCsvIndicatorData,
+  loadMoreIndicatorData } from '../../modules/countryIndicators/actions';
 
 const mockStore = configureMockStore();
 
@@ -56,6 +58,11 @@ describe('<CountryIndicator />', () => {
       .toEqual(getCountriesForSelect(initialState));
     });
 
+    test('receives moreToLoad from state', () => {
+      expect(wrapper.props().moreToLoad)
+      .toEqual(getMoreToLoad(initialState));
+    });
+
     test('receives fetchCountryIndicators from dispatch', () => {
       expect(wrapper.props().fetchCountryIndicators())
       .toEqual(fetchCountryIndicators());
@@ -64,6 +71,16 @@ describe('<CountryIndicator />', () => {
     test('receives fetchCountryIndicatorData from dispatch', () => {
       expect(wrapper.props().fetchCountryIndicatorData())
       .toEqual(fetchCountryIndicatorData());
+    });
+
+    test('receives downloadCSVIndicatorData from dispatch', () => {
+      expect(wrapper.props().downloadCsvIndicatorData())
+      .toEqual(downloadCsvIndicatorData());
+    });
+
+    test('receives loadMoreIndicatorData from dispatch', () => {
+      expect(wrapper.props().loadMoreIndicatorData())
+      .toEqual(loadMoreIndicatorData());
     });
   });
 
@@ -93,5 +110,18 @@ describe('<CountryIndicator />', () => {
     .toEqual(getIndicatorInfo(initialState));
     expect(subComponentProps.indicatorData)
     .toEqual(getIndicatorData(initialState));
+  });
+
+  test('renders <CountryIndicatorData> with props', () => {
+    const subComponentProps =
+    wrapper.dive().find(CountryIndicatorData).props();
+    expect(subComponentProps.indicatorData)
+    .toEqual(getIndicatorData(initialState));
+    expect(subComponentProps.moreToLoad)
+    .toEqual(getMoreToLoad(initialState));
+    expect(subComponentProps.onDownloadCSV())
+    .toEqual(downloadCsvIndicatorData());
+    expect(subComponentProps.onLoadMore())
+    .toEqual(loadMoreIndicatorData());
   });
 });

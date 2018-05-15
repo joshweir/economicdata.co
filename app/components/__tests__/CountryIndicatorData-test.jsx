@@ -4,9 +4,27 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import CountryIndicatorData from '../../components/CountryIndicatorData';
 
 describe('<CountryIndicatorData />', () => {
-  let props;
+  let props = {
+    indicatorData: [
+      {
+        releaseDate: 'Mar 30, 2018',
+        time: '05:00',
+        actual: '0.8%',
+        forecast: '0.9%',
+        previous: '0.7%'
+      },
+      {
+        releaseDate: 'Feb 28, 2018',
+        actual: '0.1%',
+        forecast: '0.2%',
+        previous: '0.3%'
+      },
+    ],
+    onDownloadCSV: jest.fn(),
+    onLoadMore: jest.fn(),
+    moreToLoad: true
+  };
   let mountedComponent;
-  let bootstrapTableComponent;
 
   const component = () => {
     if (!mountedComponent) {
@@ -16,28 +34,6 @@ describe('<CountryIndicatorData />', () => {
     }
     return mountedComponent;
   };
-
-  beforeEach(() => {
-    props = {
-      indicatorData: [
-        {
-          releaseDate: 'Mar 30, 2018',
-          time: '05:00',
-          actual: '0.8%',
-          forecast: '0.9%',
-          previous: '0.7%'
-        },
-        {
-          releaseDate: 'Feb 28, 2018',
-          actual: '0.1%',
-          forecast: '0.2%',
-          previous: '0.3%'
-        },
-      ],
-      onDownloadCSV: jest.fn(),
-      onLoadMore: jest.fn()
-    };
-  });
 
   test('renders a <BootstrapTable> with props', () => {
     expect(component().find(BootstrapTable).first().props().data)
@@ -62,22 +58,30 @@ describe('<CountryIndicatorData />', () => {
 
   describe('when moreToLoad prop is true', () => {
     test('renders the load more button', () => {
-
+      expect(component().find('.load-more').length).toEqual(1);
     });
 
     test('triggers onLoadMore function when clicked', () => {
-
+      props.onLoadMore.mockReset();
+      component().find('.load-more').prop('onClick')();
+      expect(props.onLoadMore).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('when moreToLoad prop is false', () => {
     test('does not render the load more button', () => {
-
+      mountedComponent = null;
+      props = {
+        ...props, moreToLoad: false
+      };
+      expect(component().find('.load-more').length).toEqual(0);
     });
   });
 
   test('triggers onDownloadCSV function when download to csv button clicked',
   () => {
-
+    props.onDownloadCSV.mockReset();
+    component().find('.dl-csv').prop('onClick')();
+    expect(props.onDownloadCSV).toHaveBeenCalledTimes(1);
   });
 });

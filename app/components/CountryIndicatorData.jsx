@@ -47,12 +47,14 @@ const CountryIndicatorData =
           className="val-col l"
         >Previous</TableHeaderColumn>
       </BootstrapTable>
+      {moreToLoad &&
+        <button
+          className="btn btn-sm u-btn-outline-lightgray text-uppercase g-mb-15 g-color-grey load-more"
+          onClick={onLoadMore}
+        >Load more..</button>
+      }
       <button
-        className="btn btn-sm u-btn-outline-lightgray text-uppercase g-mb-15 g-color-grey"
-        onClick={onLoadMore}
-      >Load more..</button>
-      <button
-        className="btn btn-sm u-btn-outline-lightgray text-uppercase g-mb-15 g-color-grey"
+        className="btn btn-sm u-btn-outline-lightgray text-uppercase g-mb-15 g-color-grey dl-csv"
         title="Download to csv"
         onClick={onDownloadCSV}
       >

@@ -2,10 +2,13 @@ import { takeLatest } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import api from './api';
-import { FETCH_COUNTRY_INDICATOR_DATA, fetchCountryIndicatorDataSuccess,
+import { FETCH_COUNTRY_INDICATOR_DATA, LOAD_MORE_INDICATOR_DATA,
+  fetchCountryIndicatorData, fetchCountryIndicatorDataSuccess,
   fetchMoreCountryIndicatorDataSuccess,
   fetchCountryIndicatorDataFailure } from './actions';
-import { getCountrySelected } from '../masterData/selectors';
+import { getCountrySelected,
+  getCountryIndicatorSelected } from '../masterData/selectors';
+import { getReleaseDateBeforeXmlFormat } from '../countryIndicators/selectors';
 
 export function* handleFetchCountryIndicatorData({ payload }) {
   let country;
@@ -31,7 +34,18 @@ export function* handleFetchCountryIndicatorData({ payload }) {
   }
 }
 
+export function* handleLoadMoreIndicatorData() {
+  const country = yield select(state => getCountrySelected(state));
+  const indicator = yield select(state => getCountryIndicatorSelected(state));
+  const releaseDateBefore = yield select((state) => (
+    getReleaseDateBeforeXmlFormat(state)
+  ));
+  yield put(fetchCountryIndicatorData({ country, indicator, releaseDateBefore }));
+}
+
 export default function* rootSaga() {
   yield takeLatest(FETCH_COUNTRY_INDICATOR_DATA,
     handleFetchCountryIndicatorData);
+  yield takeLatest(LOAD_MORE_INDICATOR_DATA,
+    handleLoadMoreIndicatorData);
 }
