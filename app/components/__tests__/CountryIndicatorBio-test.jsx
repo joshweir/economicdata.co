@@ -40,7 +40,7 @@ describe('<CountryIndicatorBio />', () => {
 
   test('renders the country link', () => {
     const countryLink = component().find('.info').find(Link).first();
-    expect(countryLink.prop('to')).toBe('/united-states');
+    expect(countryLink.prop('to')).toBe('/data/united-states');
     expect(countryLink.text()).toBe('United States');
   });
 

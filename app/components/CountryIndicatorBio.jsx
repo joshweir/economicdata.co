@@ -25,7 +25,7 @@ const CountryIndicatorBio = ({ data }) => {
       <div>
         <span className="l">Country:</span>
         <span>
-          <Link to={`/${country}`}>{countryDisplay}</Link>
+          <Link to={`/data/${country}`}>{countryDisplay}</Link>
         </span>
       </div>
       <div>
