@@ -6,17 +6,17 @@ import CountryIndicatorData from '../components/CountryIndicatorData';
 import CountryIndicatorInfo from '../components/CountryIndicatorInfo';
 import CountryIndicatorSelection from '../components/CountryIndicatorSelection';
 import { fetchCountryIndicators } from '../modules/masterData/actions';
-import { fetchCountryIndicatorData, downloadCsvIndicatorData,
+import { fetchCountryIndicatorData,
   loadMoreIndicatorData } from '../modules/countryIndicators/actions';
 import { getCountryIndicatorsForSelect, getCountriesForSelect,
   getCountrySelected, getCountryIndicatorSelected } from '../modules/masterData/selectors';
-import { getIndicatorData,
+import { getIndicatorData, getCountry, getCountryIndicator,
   getIndicatorInfo, getMoreToLoad } from '../modules/countryIndicators/selectors';
 
 const CountryIndicator = ({ indicatorData, fetchCountryIndicators,
   indicatorInfo, countries, countrySelectedIndicators, countrySelected,
-  fetchCountryIndicatorData, countryIndicatorSelected, downloadCsvIndicatorData,
-  loadMoreIndicatorData, moreToLoad }) => {
+  fetchCountryIndicatorData, countryIndicatorSelected, loadMoreIndicatorData,
+  moreToLoad, country, countryIndicator }) => {
   return (
     <section id="home">
       <div
@@ -39,7 +39,8 @@ const CountryIndicator = ({ indicatorData, fetchCountryIndicators,
               />
               <CountryIndicatorData
                 indicatorData={indicatorData}
-                onDownloadCSV={downloadCsvIndicatorData}
+                country={country}
+                countryIndicator={countryIndicator}
                 onLoadMore={loadMoreIndicatorData}
                 moreToLoad={moreToLoad}
               />
@@ -84,9 +85,10 @@ CountryIndicator.propTypes = {
   moreToLoad: PropTypes.bool.isRequired,
   countrySelected: PropTypes.string.isRequired,
   countryIndicatorSelected: PropTypes.string,
+  country: PropTypes.string.isRequired,
+  countryIndicator: PropTypes.string.isRequired,
   fetchCountryIndicators: PropTypes.func.isRequired,
   fetchCountryIndicatorData: PropTypes.func.isRequired,
-  downloadCsvIndicatorData: PropTypes.func.isRequired,
   loadMoreIndicatorData: PropTypes.func.isRequired
 };
 
@@ -99,6 +101,8 @@ function mapStateToProps(state) {
     countrySelectedIndicators: getCountryIndicatorsForSelect(state),
     countrySelected: getCountrySelected(state),
     countryIndicatorSelected: getCountryIndicatorSelected(state),
+    country: getCountry(state),
+    countryIndicator: getCountryIndicator(state),
     indicatorInfo: getIndicatorInfo(state),
     indicatorData: getIndicatorData(state),
     countries: getCountriesForSelect(state),
@@ -109,5 +113,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps,
   { fetchCountryIndicators,
     fetchCountryIndicatorData,
-    downloadCsvIndicatorData,
     loadMoreIndicatorData })(CountryIndicator);

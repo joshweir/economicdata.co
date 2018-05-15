@@ -4,7 +4,7 @@ import createRestApiClient from '../../utils/createRestApiClient';
 export default () => {
   const client = createRestApiClient().withConfig({ baseURL: apiEndpoint });
   return {
-    getCountryIndicator: ({ country, indicator, releaseDateBefore, perPage = 10 }) => {
+    getCountryIndicator: ({ country, indicator, releaseDateBefore, perPage = 50 }) => {
       return client.request({
         method: 'GET',
         url: '/country-indicator-data',

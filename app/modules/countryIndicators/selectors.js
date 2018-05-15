@@ -1,6 +1,8 @@
 import { MONTH_NAMES } from '../masterData/actions';
 
 export const getIndicatorInfo = state => state.countryIndicator.indicatorInfo;
+export const getCountry = state => state.countryIndicator.indicatorInfo.country;
+export const getCountryIndicator = state => state.countryIndicator.indicatorInfo.indicator;
 export const getIndicatorData = state => state.countryIndicator.indicatorData;
 export const getCountryDisplay =
 ({ countryIndicator: {
@@ -33,7 +35,7 @@ const convertToXmlFormat = (dateString) => {
   const [monthAbbrev, day] = monthAndDay.split(' ');
   const month = MONTH_NAMES.indexOf(monthAbbrev) + 1;
   return `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
-}
+};
 export const getReleaseDateBeforeXmlFormat = (state) => {
   let releaseDateBeforeXmlFormat = null;
   const releaseDateBefore = getReleaseDateBefore(state);

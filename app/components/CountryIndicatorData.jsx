@@ -4,7 +4,7 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import '../../node_modules/react-bootstrap-table/dist/react-bootstrap-table.min.css';
 
 const CountryIndicatorData =
-({ indicatorData, onDownloadCSV, onLoadMore, moreToLoad }) => {
+({ indicatorData, onLoadMore, moreToLoad, country, countryIndicator }) => {
   return (
     <div className="table-responsive g-mb-20">
       <BootstrapTable
@@ -53,13 +53,13 @@ const CountryIndicatorData =
           onClick={onLoadMore}
         >Load more..</button>
       }
-      <button
+      <a
         className="btn btn-sm u-btn-outline-lightgray text-uppercase g-mb-15 g-color-grey dl-csv"
         title="Download to csv"
-        onClick={onDownloadCSV}
+        href={`/download?country=${country}&indicator=${countryIndicator}`}
       >
         <i className="fa fa-download" />
-      </button>
+      </a>
     </div>
   );
 };
@@ -74,8 +74,9 @@ CountryIndicatorData.propTypes = {
     })
   ).isRequired,
   onLoadMore: PropTypes.func.isRequired,
-  onDownloadCSV: PropTypes.func.isRequired,
-  moreToLoad: PropTypes.bool.isRequired
+  moreToLoad: PropTypes.bool.isRequired,
+  country: PropTypes.string.isRequired,
+  countryIndicator: PropTypes.string.isRequired
 };
 
 export default CountryIndicatorData;

@@ -37,7 +37,7 @@ export function* handleFetchCountryIndicatorData({ payload }) {
 export function* handleLoadMoreIndicatorData() {
   const country = yield select(state => getCountrySelected(state));
   const indicator = yield select(state => getCountryIndicatorSelected(state));
-  const releaseDateBefore = yield select((state) => (
+  const releaseDateBefore = yield select(state => (
     getReleaseDateBeforeXmlFormat(state)
   ));
   yield put(fetchCountryIndicatorData({ country, indicator, releaseDateBefore }));

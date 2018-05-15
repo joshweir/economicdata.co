@@ -14,7 +14,8 @@ import rootSaga from '../sagas';
 import api from '../api';
 import { getIndicatorInfo, getIndicatorData, getCountryDisplay,
   getCountryIndicatorDisplay, getMoreToLoad, getReleaseDateBefore,
-  getReleaseDateBeforeXmlFormat } from '../selectors';
+  getReleaseDateBeforeXmlFormat, getCountry,
+  getCountryIndicator } from '../selectors';
 import { getCountrySelected,
   getCountryIndicatorSelected } from '../../masterData/selectors';
 import initialState, {
@@ -414,6 +415,20 @@ describe('countryIndicators selectors', () => {
     test('retrieves the indicator info', () => {
       expect(getIndicatorInfo(state))
       .toEqual(state.countryIndicator.indicatorInfo);
+    });
+  });
+
+  describe('getCountry', () => {
+    test('retrieves the current country from indicatorInfo', () => {
+      expect(getCountry(state))
+      .toEqual(state.countryIndicator.indicatorInfo.country);
+    });
+  });
+
+  describe('getCountryIndicator', () => {
+    test('retrieves the current indicator from indicatorInfo', () => {
+      expect(getCountryIndicator(state))
+      .toEqual(state.countryIndicator.indicatorInfo.indicator);
     });
   });
 

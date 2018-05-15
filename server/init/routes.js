@@ -54,6 +54,7 @@ export default (app) => {
   if (countryIndicatorDataController) {
     app.get('/country-indicator-data',
       countryIndicatorDataController.listCountryIndicatorData);
+    app.get('/download', countryIndicatorDataController.download);
   } else {
     console.warn(unsupportedMessage('countryIndicatorData routes'));
   }

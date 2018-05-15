@@ -1,3 +1,4 @@
+import { Parser as Json2csvParser} from 'json2csv';
 import CountryIndicatorInfo from '../models/countryIndicatorInfo';
 import CountryIndicatorData from '../models/countryIndicatorData';
 import { MONTH_NAMES } from '../../../../app/modules/masterData/actions';
@@ -54,15 +55,26 @@ const formatReleaseDate = (releaseDate) => {
     `${dt.getUTCDate()}, ${dt.getUTCFullYear()}`;
 };
 
+const formatReleaseTime = (releaseDate) => {
+  const dt = new Date(releaseDate);
+  const h = dt.getUTCHours();
+  const m = dt.getUTCMinutes();
+  return h <= 0 && m <= 0 ?
+    null : `${h < 10 ? '0' : ''}${h}:${m < 10 ? '0' : ''}${m}`;
+};
+
 const transformIndicatorData = (indicatorData) => {
   return indicatorData.map((d) => {
     const { actual, forecast, previous, releaseDate } = d;
-    return {
+    const obj = {
       actual,
       forecast,
       previous,
       releaseDate: formatReleaseDate(releaseDate)
     };
+    const time = formatReleaseTime(releaseDate);
+    if (time) obj.time = time;
+    return obj;
   });
 };
 
@@ -107,6 +119,43 @@ export function listCountryIndicatorData(req, res) {
   }
 }
 
+export function download(req, res) {
+  ({ country, indicator, releaseDateBefore, perPage = 99999 } = req.query);
+  _id = `${country}|${indicator}`;
+  countryIndicatorDataQuery()
+  .then((data) => {
+    const fields = [
+      {
+        label: 'Release Date',
+        value: 'releaseDate'
+      },
+      {
+        label: 'Time',
+        value: 'time'
+      },
+      {
+        label: 'Actual',
+        value: 'actual'
+      },
+      {
+        label: 'Forecast',
+        value: 'forecast'
+      },
+      {
+        label: 'Previous',
+        value: 'previous'
+      }
+    ];
+    const parser = new Json2csvParser({ fields });
+    const csv = parser.parse(transformIndicatorData(data), { fields });
+    res.setHeader('Content-disposition',
+      `attachment; filename=${country}.${indicator}.csv`);
+    res.set('Content-Type', 'text/csv');
+    res.status(200).send(csv);
+  });
+}
+
 export default {
-  listCountryIndicatorData
+  listCountryIndicatorData,
+  download
 };

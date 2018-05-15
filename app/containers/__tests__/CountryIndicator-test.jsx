@@ -9,9 +9,10 @@ import initialState from '../../tests/helpers/initialState';
 import { getCountryIndicatorsForSelect, getCountriesForSelect,
   getCountrySelected, getCountryIndicatorSelected } from '../../modules/masterData/selectors';
 import { getIndicatorData, getIndicatorInfo,
-  getMoreToLoad } from '../../modules/countryIndicators/selectors';
+  getMoreToLoad, getCountry,
+  getCountryIndicator } from '../../modules/countryIndicators/selectors';
 import { fetchCountryIndicators } from '../../modules/masterData/actions';
-import { fetchCountryIndicatorData, downloadCsvIndicatorData,
+import { fetchCountryIndicatorData,
   loadMoreIndicatorData } from '../../modules/countryIndicators/actions';
 
 const mockStore = configureMockStore();
@@ -43,6 +44,16 @@ describe('<CountryIndicator />', () => {
       .toEqual(getCountryIndicatorSelected(initialState));
     });
 
+    test('receives country from state', () => {
+      expect(wrapper.props().country)
+      .toEqual(getCountry(initialState));
+    });
+
+    test('receives countryIndicator from state', () => {
+      expect(wrapper.props().countryIndicator)
+      .toEqual(getCountryIndicator(initialState));
+    });
+
     test('receives indicatorInfo from state', () => {
       expect(wrapper.props().indicatorInfo)
       .toEqual(getIndicatorInfo(initialState));
@@ -71,11 +82,6 @@ describe('<CountryIndicator />', () => {
     test('receives fetchCountryIndicatorData from dispatch', () => {
       expect(wrapper.props().fetchCountryIndicatorData())
       .toEqual(fetchCountryIndicatorData());
-    });
-
-    test('receives downloadCSVIndicatorData from dispatch', () => {
-      expect(wrapper.props().downloadCsvIndicatorData())
-      .toEqual(downloadCsvIndicatorData());
     });
 
     test('receives loadMoreIndicatorData from dispatch', () => {
@@ -117,10 +123,12 @@ describe('<CountryIndicator />', () => {
     wrapper.dive().find(CountryIndicatorData).props();
     expect(subComponentProps.indicatorData)
     .toEqual(getIndicatorData(initialState));
+    expect(subComponentProps.country)
+    .toEqual(getCountry(initialState));
+    expect(subComponentProps.countryIndicator)
+    .toEqual(getCountryIndicator(initialState));
     expect(subComponentProps.moreToLoad)
     .toEqual(getMoreToLoad(initialState));
-    expect(subComponentProps.onDownloadCSV())
-    .toEqual(downloadCsvIndicatorData());
     expect(subComponentProps.onLoadMore())
     .toEqual(loadMoreIndicatorData());
   });

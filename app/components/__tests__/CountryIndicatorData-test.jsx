@@ -20,7 +20,8 @@ describe('<CountryIndicatorData />', () => {
         previous: '0.3%'
       },
     ],
-    onDownloadCSV: jest.fn(),
+    country: 'united-states',
+    countryIndicator: 'gdp',
     onLoadMore: jest.fn(),
     moreToLoad: true
   };
@@ -46,14 +47,19 @@ describe('<CountryIndicatorData />', () => {
     ] = component().find(BootstrapTable).first().props().children;
     expect(releaseDateCol.props.dataField).toEqual('releaseDate');
     expect(releaseDateCol.props.columnClassName).toEqual('f r');
+    expect(releaseDateCol.type).toEqual(TableHeaderColumn);
     expect(timeCol.props.dataField).toEqual('time');
     expect(timeCol.props.columnClassName).toEqual('d-none d-md-block');
+    expect(timeCol.type).toEqual(TableHeaderColumn);
     expect(actualCol.props.dataField).toEqual('actual');
     expect(actualCol.props.columnClassName).toEqual('val-col');
+    expect(actualCol.type).toEqual(TableHeaderColumn);
     expect(forecastCol.props.dataField).toEqual('forecast');
     expect(forecastCol.props.columnClassName).toEqual('val-col');
+    expect(forecastCol.type).toEqual(TableHeaderColumn);
     expect(prevCol.props.dataField).toEqual('previous');
     expect(prevCol.props.columnClassName).toEqual('val-col l');
+    expect(prevCol.type).toEqual(TableHeaderColumn);
   });
 
   describe('when moreToLoad prop is true', () => {
@@ -78,10 +84,12 @@ describe('<CountryIndicatorData />', () => {
     });
   });
 
-  test('triggers onDownloadCSV function when download to csv button clicked',
+  test('renders the download to csv anchor with href referencing the current ' +
+    'country / indicator',
   () => {
-    props.onDownloadCSV.mockReset();
-    component().find('.dl-csv').prop('onClick')();
-    expect(props.onDownloadCSV).toHaveBeenCalledTimes(1);
+    const theButton = component().find('.dl-csv').first();
+    expect(theButton.props().href)
+    .toEqual(`/download?country=${props.country}&` +
+      `indicator=${props.countryIndicator}`);
   });
 });
