@@ -1,25 +1,46 @@
 import React, { Component } from 'react';
 import Page from '../pages/Page';
 import CountryContainer from '../containers/Country';
+import { preloadDynamic, paramsHaveChanged } from '../utils/preloadDynamic';
 
 class Country extends Component {
-  getMetaData() {
+  componentWillMount() {
+    preloadDynamic([
+      {
+        action: this.props.fetchCountryIndicatorData,
+        args: this.props.params
+      }
+    ]);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (paramsHaveChanged(this.props.params, nextProps.params)) {
+      preloadDynamic([
+        {
+          action: this.props.fetchCountryIndicatorData,
+          args: nextProps.params
+        }
+      ]);
+    }
+  }
+
+  getMetaData(data) {
     return {
-      title: this.pageTitle(),
-      meta: this.pageMeta(),
+      title: this.pageTitle(data),
+      meta: this.pageMeta(data),
       link: this.pageLink()
     };
   }
 
-  pageTitle = () => {
-    return 'EconomicData.co | Download Free Economic Data for Forex';
+  pageTitle = ({ countryDisplay, indicatorDisplay }) => {
+    return `${countryDisplay} - ${indicatorDisplay} | EconomicData.co`;
   };
 
-  pageMeta = () => {
+  pageMeta = ({ countryDisplay, indicatorDisplay }) => {
     return [
       {
         name: 'description',
-        content: 'No registration, free download to csv, a full history of economic data for a number of indicators accross a range of countries.'
+        content: `${countryDisplay} - ${indicatorDisplay} data history. No registration, free download to csv.`
       }
     ];
   };

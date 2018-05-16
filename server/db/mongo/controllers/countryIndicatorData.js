@@ -1,7 +1,8 @@
 import { Parser as Json2csvParser} from 'json2csv';
 import CountryIndicatorInfo from '../models/countryIndicatorInfo';
 import CountryIndicatorData from '../models/countryIndicatorData';
-import { MONTH_NAMES } from '../../../../app/modules/masterData/actions';
+import { formatReleaseDate,
+  formatReleaseTime } from '../../../../app/utils/dateFormatting';
 
 let country;
 let indicator;
@@ -49,20 +50,6 @@ const countryIndicatorsQuery = () => {
   .select('indicator indicatorDisplay');
 };
 
-const formatReleaseDate = (releaseDate) => {
-  const dt = new Date(releaseDate);
-  return `${MONTH_NAMES[dt.getUTCMonth()]} ` +
-    `${dt.getUTCDate()}, ${dt.getUTCFullYear()}`;
-};
-
-const formatReleaseTime = (releaseDate) => {
-  const dt = new Date(releaseDate);
-  const h = dt.getUTCHours();
-  const m = dt.getUTCMinutes();
-  return h <= 0 && m <= 0 ?
-    null : `${h < 10 ? '0' : ''}${h}:${m < 10 ? '0' : ''}${m}`;
-};
-
 const transformIndicatorData = (indicatorData) => {
   return indicatorData.map((d) => {
     const { actual, forecast, previous, releaseDate } = d;
@@ -84,7 +71,7 @@ const transformIndicatorsForSelect = (indicators) => {
   });
 };
 
-const buildOutput = ({indicatorInfo, indicatorData, indicators, perPage}) => {
+const buildOutput = ({indicatorInfo, indicatorData, indicators}) => {
   return {
     indicatorInfo,
     indicatorData: transformIndicatorData(indicatorData),
@@ -109,7 +96,7 @@ export function listCountryIndicatorData(req, res) {
       countryIndicatorsQuery()
     ]).then(([indicatorInfo, indicatorData, indicators]) => {
       return res.json(buildOutput({
-        indicatorInfo, indicatorData, indicators, perPage}));
+        indicatorInfo, indicatorData, indicators}));
     }).catch((err) => {
       console.log('Error retrieving country indicator data', err, country,
         indicator);

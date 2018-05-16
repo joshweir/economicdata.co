@@ -30,6 +30,10 @@ module.exports.up = function (done) {
            forecast: {
               bsonType: 'string',
               description: 'must be a string and is required'
+           },
+           isLatest: {
+             bsonType: 'boolean',
+             description: 'must be a boolean'
            }
         }
       }

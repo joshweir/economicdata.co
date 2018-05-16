@@ -1,4 +1,6 @@
+import CountryIndicatorData from '../models/countryIndicatorData';
 import CountryIndicatorInfo from '../models/countryIndicatorInfo';
+import { formatReleaseDate } from '../../../../app/utils/dateFormatting';
 
 const countryIndicatorInfoQuery = () => {
   return CountryIndicatorInfo
@@ -6,33 +8,50 @@ const countryIndicatorInfoQuery = () => {
   .select('country countryDisplay indicator indicatorDisplay');
 };
 
-const consolidateOutput = (data) => {
-  return data.reduce((output, item) => {
-    let index = -1;
-    for (let i = 0; i < output.length; i += 1) {
-      if (output[i].country === item.country) {
-        index = i;
-        break;
-      }
+const latestReleasesQuery = () => {
+  return CountryIndicatorData
+  .find({isLatest: true})
+  .select('countryIndicatorInfoId releaseDate actual previous');
+};
+
+const indexOfCountryInOutputArray = ({output, item}) => {
+  let index = -1;
+  for (let i = 0; i < output.length; i += 1) {
+    if (output[i].country === item.country) {
+      index = i;
+      break;
     }
-    if (index >= 0) {
-      const indicators = [
-        ...output[index].indicators,
-        {
-          value: item.indicator,
-          label: item.indicatorDisplay
-        }
-      ];
+  }
+  return index;
+};
+
+const countryAlreadyAddedToOutput = index => index >= 0;
+
+const consolidateOutput = ({indicatorInfo, latestReleases}) => {
+  return indicatorInfo.reduce((output, item) => {
+    const { indicator, indicatorDisplay, country, countryDisplay } = item;
+    const { releaseDate, actual, previous } =
+    latestReleases.filter(d => (
+      d.countryIndicatorInfoId === `${country}|${indicator}`
+    ))[0];
+    const newIndicator = {
+      value: indicator,
+      label: indicatorDisplay,
+      lastReleaseDate: formatReleaseDate(releaseDate),
+      lastActual: actual,
+      lastPrevious: previous
+    };
+    const index = indexOfCountryInOutputArray({output, item});
+    if (countryAlreadyAddedToOutput(index)) {
+      const indicators = [...output[index].indicators, newIndicator];
       /* eslint-disable no-param-reassign */
       output[index] = { ...output[index], indicators };
       /* eslint-enable no-param-reassign */
     } else {
       output.push({
-        country: item.country,
-        countryLabel: item.countryDisplay,
-        indicators: [
-          {value: item.indicator, label: item.indicatorDisplay}
-        ]
+        country,
+        countryLabel: countryDisplay,
+        indicators: [newIndicator]
       });
     }
     return output;
@@ -44,14 +63,30 @@ const consolidateOutput = (data) => {
   country: 'united-states',
   countryLabel: 'United States',
   indicators: [
-    {value: 'gdp', label: 'GDP'},
-    {value: 'cpi', label: 'CPI'}
+    {
+      value: 'gdp',
+      label: 'GDP',
+      latestReleaseDate: 'Jan 22, 2005',
+      latestActual: '0.8%',
+      latestPrevious: '0.7%'
+    },
+    {
+      value: 'cpi',
+      label: 'CPI',
+      latestReleaseDate: 'Jan 22, 2005',
+      latestActual: '0.8%',
+      latestPrevious: '0.7%'
+    }
   ]
 },
  */
 export function getMasterData(req, res) {
-  countryIndicatorInfoQuery().then((data) => {
-    return res.json(consolidateOutput(data));
+  Promise.all([
+    countryIndicatorInfoQuery(),
+    latestReleasesQuery()
+  ])
+  .then(([indicatorInfo, latestReleases]) => {
+    return res.json(consolidateOutput({indicatorInfo, latestReleases}));
   }).catch((err) => {
     console.log('Error retrieving master data', err);
     return res.status(500)

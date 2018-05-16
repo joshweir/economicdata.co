@@ -5,7 +5,8 @@ const CountryIndicatorDataSchema = new mongoose.Schema({
   releaseDate: {type: Date, required: true},
   actual: {type: String, required: true},
   previous: String,
-  forecast: String
+  forecast: String,
+  isLatest: Boolean
 }, { collection: 'countryIndicatorData' });
 
 // Compiles the schema into a model, opening (or creating, if

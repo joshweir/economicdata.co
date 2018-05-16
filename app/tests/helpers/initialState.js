@@ -34,11 +34,17 @@ export default {
         indicators: [
           {
             label: 'GDP',
-            value: 'gdp'
+            value: 'gdp',
+            lastReleaseDate: 'Jan 23, 2005',
+            lastActual: '0.8%',
+            lastPrevious: '0.7%'
           },
           {
             label: 'New Home Sales MoM',
-            value: 'new-home-sales-mom'
+            value: 'new-home-sales-mom',
+            lastReleaseDate: 'Jan 24, 2005',
+            lastActual: '1,000',
+            lastPrevious: '2,000'
           }
         ]
       },
@@ -48,11 +54,17 @@ export default {
         indicators: [
           {
             label: 'GDP Aus',
-            value: 'gdp-aus'
+            value: 'gdp-aus',
+            lastReleaseDate: 'Jan 23, 2006',
+            lastActual: '1.8%',
+            lastPrevious: '1.7%'
           },
           {
             label: 'New Home Sales MoM Aus',
-            value: 'new-home-sales-mom-aus'
+            value: 'new-home-sales-mom-aus',
+            lastReleaseDate: 'Jan 24, 2006',
+            lastActual: '1,100',
+            lastPrevious: '2,100'
           }
         ]
       }

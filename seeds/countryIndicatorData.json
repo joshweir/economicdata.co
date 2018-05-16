@@ -6,7 +6,8 @@
     },
     "actual": "0.8%",
     "forecast": "0.9%",
-    "previous": "0.7%"
+    "previous": "0.7%",
+    "isLatest": true
   },
   {
     "countryIndicatorInfoId": "united-states|gdp",
@@ -414,7 +415,8 @@
     },
     "actual": "12,250,000",
     "forecast": "13,250,000",
-    "previous": "11,250,000"
+    "previous": "11,250,000",
+    "isLatest": true
   },
   {
     "countryIndicatorInfoId": "united-states|new-home-sales-mom",
@@ -684,7 +686,8 @@
     },
     "actual": "1,250,000",
     "forecast": "1,350,000",
-    "previous": "1,450,000"
+    "previous": "1,450,000",
+    "isLatest": true
   },
   {
     "countryIndicatorInfoId": "australia|house-price-index-qoq",
@@ -819,7 +822,8 @@
     },
     "actual": "3.5%",
     "forecast": "3.6%",
-    "previous": "3.8%"
+    "previous": "3.8%",
+    "isLatest": true
   },
   {
     "countryIndicatorInfoId": "australia|gdp-qoq",
