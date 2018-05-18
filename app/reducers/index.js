@@ -3,6 +3,7 @@ import { routerReducer as routing } from 'react-router-redux';
 import user from '../modules/users/reducers';
 import message from '../modules/messages/reducers';
 import masterData from '../modules/masterData/reducers';
+import country from '../modules/country/reducers';
 import countryIndicator from '../modules/countryIndicators/reducers';
 import isFetching from '../modules/isFetching/reducers';
 
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   message,
   routing,
   masterData,
-  countryIndicator
+  countryIndicator,
+  country
 });
 
 export default rootReducer;

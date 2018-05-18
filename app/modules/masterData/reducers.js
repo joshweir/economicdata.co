@@ -11,13 +11,15 @@ const initialState = {
 const countriesIndicators = (state = []) => state;
 
 const countrySelected = handleActions({
-  FETCH_COUNTRY_INDICATORS: (state, action) => action.payload,
-  FETCH_COUNTRY_INDICATOR_DATA_SUCCESS: (state, action) => action.payload.countrySelected
+  FETCH_COUNTRY_INDICATORS: (state, {payload}) => payload,
+  FETCH_COUNTRY_INDICATOR_DATA_SUCCESS: (state, {payload}) => payload.countrySelected,
+  FETCH_COUNTRY_DATA_SUCCESS: (state, {payload}) => payload.country
 }, initialState.countrySelected);
 
 const countrySelectedIndicators = handleActions({
   FETCH_COUNTRY_INDICATORS_SUCCESS: (state, action) => action.payload,
-  FETCH_COUNTRY_INDICATOR_DATA_SUCCESS: (state, action) => action.payload.countrySelectedIndicators
+  FETCH_COUNTRY_INDICATOR_DATA_SUCCESS: (state, action) => action.payload.countrySelectedIndicators,
+  FETCH_COUNTRY_DATA_SUCCESS: (state, {payload}) => payload.indicators
 }, initialState.countrySelectedIndicators);
 
 const countryIndicatorSelected = handleActions({

@@ -66,16 +66,16 @@ const consolidateOutput = ({indicatorInfo, latestReleases}) => {
     {
       value: 'gdp',
       label: 'GDP',
-      latestReleaseDate: 'Jan 22, 2005',
-      latestActual: '0.8%',
-      latestPrevious: '0.7%'
+      lastReleaseDate: 'Jan 22, 2005',
+      lastActual: '0.8%',
+      lastPrevious: '0.7%'
     },
     {
       value: 'cpi',
       label: 'CPI',
-      latestReleaseDate: 'Jan 22, 2005',
-      latestActual: '0.8%',
-      latestPrevious: '0.7%'
+      lastReleaseDate: 'Jan 22, 2005',
+      lastActual: '0.8%',
+      lastPrevious: '0.7%'
     }
   ]
 },

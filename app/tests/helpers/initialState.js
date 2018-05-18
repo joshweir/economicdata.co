@@ -1,4 +1,24 @@
 export default {
+  country: {
+    country: 'united-states',
+    countryLabel: 'United States',
+    indicators: [
+      {
+        label: 'GDP',
+        value: 'gdp',
+        lastReleaseDate: 'Jan 23, 2005',
+        lastActual: '0.8%',
+        lastPrevious: '0.7%'
+      },
+      {
+        label: 'New Home Sales MoM',
+        value: 'new-home-sales-mom',
+        lastReleaseDate: 'Jan 24, 2005',
+        lastActual: '1,000',
+        lastPrevious: '2,000'
+      }
+    ]
+  },
   countryIndicator: {
     indicatorInfo: {
       country: 'united-states',
@@ -73,11 +93,17 @@ export default {
     countrySelectedIndicators: [
       {
         label: 'GDP',
-        value: 'gdp'
+        value: 'gdp',
+        lastReleaseDate: 'Jan 23, 2005',
+        lastActual: '0.8%',
+        lastPrevious: '0.7%'
       },
       {
         label: 'New Home Sales MoM',
-        value: 'new-home-sales-mom'
+        value: 'new-home-sales-mom',
+        lastReleaseDate: 'Jan 24, 2005',
+        lastActual: '1,000',
+        lastPrevious: '2,000'
       }
     ],
     countryIndicatorSelected: 'new-home-sales-mom'
@@ -96,6 +122,7 @@ export default {
 };
 
 export const emptyState = {
+  country: {},
   countryIndicator: {
     indicatorInfo: {},
     indicatorData: [],

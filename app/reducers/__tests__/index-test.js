@@ -2,6 +2,7 @@ import reducer from '../../reducers';
 
 describe('Root reducer', () => {
   const initialState = {
+    country: {},
     countryIndicator: {
       indicatorData: [],
       indicatorInfo: {},

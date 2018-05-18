@@ -1,9 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import BackgroundImage from '../images/fx.jpeg';
-import CountryIndicatorInfo from '../components/CountryIndicatorInfo';
-import CountryIndicatorSelection from '../components/CountryIndicatorSelection';
+import CountryIndicatorsList from '../components/CountryIndicatorsList';
+import CountrySelection from '../components/CountrySelection';
+import { fetchCountryData, buildIndicatorLink } from '../modules/country/actions';
+import { getCountriesForSelect } from '../modules/masterData/selectors';
+import { getCountry, getCountryIndicators,
+  getCountryDisplay } from '../modules/country/selectors';
 // import classNames from 'classnames/bind';
 // import { createTopic, typing, incrementCount,
 //  decrementCount, destroyTopic } from '../actions/topics';
@@ -11,51 +15,61 @@ import CountryIndicatorSelection from '../components/CountryIndicatorSelection';
 
 // const cx = classNames.bind(styles);
 
-class Country extends Component {
-  render() {
-    const { changeCountry, changeCountryIndicator, country, countries, countryIndicators, countryIndicator } = this.props;
-    return (
-      <section id="home">
-        <div className="g-flex-centered g-min-height-500--md g-bg-cover g-bg-pos-center g-bg-img-hero g-bg-black-opacity-0_5--after g-pt-110" style={{backgroundImage: `url(${BackgroundImage})`}}>
-          <div className="container text-center g-z-index-1">
-            <div className="row">
-              <div className="col-lg-8 col-md-10 mx-auto">
-                <CountryIndicatorSelection
-                  country={country}
-                  countries={countries}
-                  countryIndicator={countryIndicator}
-                  countryIndicators={countryIndicators}
-                  changeCountry={changeCountry}
-                  changeCountryIndicator={changeCountryIndicator}
-                />
-                <CountryIndicatorInfo
-                  country={country}
-                  indicator={countryIndicator}
-                />
-              </div>
+const Country = ({ fetchCountryData, country, countryDisplay, countries,
+  countrySelectedIndicators, buildIndicatorLink }) => {
+  return (
+    <section id="home">
+      <div className="g-flex-centered g-min-height-500--md g-bg-cover g-bg-pos-center g-bg-img-hero g-bg-black-opacity-0_5--after g-pt-110" style={{backgroundImage: `url(${BackgroundImage})`}}>
+        <div className="container text-center g-z-index-1">
+          <div className="row">
+            <div className="col-lg-8 col-md-10 mx-auto">
+              <h1 className="g-font-weight-700 g-font-size-22 g-font-size-36--md g-color-white g-mb-20 text-justify">
+                {countryDisplay} - Economic Data
+              </h1>
+              <CountrySelection
+                country={country}
+                countries={countries}
+                changeCountry={fetchCountryData}
+              />
+              <CountryIndicatorsList
+                countryIndicators={countrySelectedIndicators}
+                buildIndicatorLink={buildIndicatorLink}
+              />
             </div>
           </div>
         </div>
-      </section>
-    );
-  }
-}
+      </div>
+    </section>
+  );
+};
 
 Country.propTypes = {
-  /*topics: PropTypes.array.isRequired,
-  typing: PropTypes.func.isRequired,
-  createTopic: PropTypes.func.isRequired,
-  destroyTopic: PropTypes.func.isRequired,
-  incrementCount: PropTypes.func.isRequired,
-  decrementCount: PropTypes.func.isRequired,
-  newTopic: PropTypes.string*/
+  fetchCountryData: PropTypes.func.isRequired,
+  countrySelectedIndicators: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired
+    })
+  ).isRequired,
+  country: PropTypes.string.isRequired,
+  countryDisplay: PropTypes.string.isRequired,
+  countries: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired
+    })
+  ).isRequired,
+  buildIndicatorLink: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    /*topics: state.topic.topics,
-    newTopic: state.topic.newTopic*/
+    countrySelectedIndicators: getCountryIndicators(state),
+    country: getCountry(state),
+    countryDisplay: getCountryDisplay(state),
+    countries: getCountriesForSelect(state)
   };
 }
 
-export default connect(mapStateToProps, { /*createTopic, typing, incrementCount, decrementCount, destroyTopic*/ })(Country);
+export default connect(mapStateToProps,
+  { buildIndicatorLink, fetchCountryData })(Country);
