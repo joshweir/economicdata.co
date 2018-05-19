@@ -9,6 +9,7 @@ import {
   FETCH_COUNTRY_INDICATOR_DATA_SUCCESS,
   fetchCountryIndicators, fetchCountryIndicatorsSuccess,
   fetchCountryIndicatorsFailure } from '../actions';
+import { FETCH_COUNTRY_DATA_SUCCESS } from '../../country/actions';
 import rootSaga from '../sagas';
 import api from '../api';
 import { getCountriesIndicators, getCountrySelected,
@@ -138,6 +139,20 @@ describe('masterData reducer', () => {
       })
     ).toEqual({
       ...reducerInitialState, countrySelectedIndicators
+    });
+  });
+
+  test('handles FETCH_COUNTRY_DATA_SUCCESS', () => {
+    expect(
+      reducer(undefined, {
+        type: FETCH_COUNTRY_DATA_SUCCESS,
+        payload: {
+          indicators: countrySelectedIndicators,
+          country: countrySelected
+        }
+      })
+    ).toEqual({
+      ...reducerInitialState, countrySelectedIndicators, countrySelected
     });
   });
 });

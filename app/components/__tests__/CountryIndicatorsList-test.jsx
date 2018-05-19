@@ -57,6 +57,10 @@ describe('<CountryIndicatorsList />', () => {
   });
 
   test('calls dataFormat to build an indicator link for each row', () => {
-    expect(props.buildIndicatorLink.mock).toEqual(null);
+    const { countryIndicators, buildIndicatorLink } = props;
+    countryIndicators.forEach((_, i) => {
+      expect(buildIndicatorLink.mock.calls[i][0])
+      .toEqual(countryIndicators[i].valueLabelAndCountry);
+    });
   });
 });
